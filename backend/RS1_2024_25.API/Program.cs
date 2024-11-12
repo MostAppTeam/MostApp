@@ -3,15 +3,13 @@ using RS1_2024_25.API.Data;
 using RS1_2024_25.API.Helper.Auth;
 using RS1_2024_25.API.Services;
 
-
 var config = new ConfigurationBuilder()
-.AddJsonFile("appsettings.json", false)
-.Build();
+    .AddJsonFile("appsettings.json", false)
+    .Build();
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(config.GetConnectionString("db1")));
 
@@ -21,12 +19,14 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(x => x.OperationFilter<MyAuthorizationSwaggerHeader>());
 builder.Services.AddHttpContextAccessor();
 
-//dodajte vaše servise
+// Dodajte vaše servise
 builder.Services.AddTransient<MyAuthService>();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
+// Seed podaci (pozivanje metode koja dodaje podatke u bazu)
+SeedData.Initialize(app.Services);
+
 app.UseSwagger();
 app.UseSwaggerUI();
 
@@ -36,8 +36,7 @@ app.UseCors(
         .AllowAnyMethod()
         .AllowAnyHeader()
         .AllowCredentials()
-); //This needs to set everything allowed
-
+); // This needs to set everything allowed
 
 app.UseAuthorization();
 
