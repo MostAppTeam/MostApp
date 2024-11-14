@@ -37,7 +37,7 @@ app.UseCors(
         .AllowAnyHeader()
         .AllowCredentials()
 ); // This needs to set everything allowed
-
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
