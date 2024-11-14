@@ -22,6 +22,10 @@ builder.Services.AddHttpContextAccessor();
 // Dodajte vaše servise
 builder.Services.AddTransient<MyAuthService>();
 
+builder.Services.AddScoped<MyAuthService>();
+builder.Services.AddHttpContextAccessor();
+
+
 var app = builder.Build();
 
 // Seed podaci (pozivanje metode koja dodaje podatke u bazu)
@@ -37,6 +41,7 @@ app.UseCors(
         .AllowAnyHeader()
         .AllowCredentials()
 ); // This needs to set everything allowed
+
 app.UseAuthentication();
 app.UseAuthorization();
 

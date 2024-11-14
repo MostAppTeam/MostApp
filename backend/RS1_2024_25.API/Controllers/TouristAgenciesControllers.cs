@@ -1,10 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using RS1_2024_25.API.Data;
-using RS1_2024_25.API.Data.Models;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using RS1_2024_25.API.Data.Models;
+using RS1_2024_25.API.Data;
 
 [Route("api/[controller]")]
 [ApiController]
@@ -17,12 +14,28 @@ public class TouristAgenciesController : ControllerBase
         _context = context;
     }
 
+    // GET: api/TouristAgencies
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<TouristAgency>>> GetTouristAgencies()
+    public async Task<ActionResult<IEnumerable<TouristAgency>>> GetTouristAgencies([FromQuery] string name = null, [FromQuery] string sortBy = "name")
     {
-        return await _context.TouristAgencies.ToListAsync();
+        var touristAgencies = _context.TouristAgencies.AsQueryable();
+
+        // Filtriranje po imenu turističke agencije
+        if (!string.IsNullOrEmpty(name))
+        {
+            touristAgencies = touristAgencies.Where(t => t.Name.Contains(name));
+        }
+
+        // Sortiranje
+        if (sortBy == "name")
+        {
+            touristAgencies = touristAgencies.OrderBy(t => t.Name);
+        }
+
+        return Ok(await touristAgencies.ToListAsync());
     }
 
+    // GET: api/TouristAgencies/5
     [HttpGet("{id}")]
     public async Task<ActionResult<TouristAgency>> GetTouristAgency(int id)
     {
@@ -36,6 +49,7 @@ public class TouristAgenciesController : ControllerBase
         return touristAgency;
     }
 
+    // POST: api/TouristAgencies
     [HttpPost]
     public async Task<ActionResult<TouristAgency>> PostTouristAgency(TouristAgency touristAgency)
     {
@@ -45,6 +59,7 @@ public class TouristAgenciesController : ControllerBase
         return CreatedAtAction(nameof(GetTouristAgency), new { id = touristAgency.ID }, touristAgency);
     }
 
+    // PUT: api/TouristAgencies/5
     [HttpPut("{id}")]
     public async Task<IActionResult> PutTouristAgency(int id, TouristAgency touristAgency)
     {
@@ -74,6 +89,7 @@ public class TouristAgenciesController : ControllerBase
         return NoContent();
     }
 
+    // DELETE: api/TouristAgencies/5
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteTouristAgency(int id)
     {

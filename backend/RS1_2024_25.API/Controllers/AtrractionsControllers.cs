@@ -1,10 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using RS1_2024_25.API.Data;
-using RS1_2024_25.API.Data.Models;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using RS1_2024_25.API.Data.Models;
+using RS1_2024_25.API.Data;
 
 [Route("api/[controller]")]
 [ApiController]
@@ -17,12 +14,34 @@ public class AttractionsController : ControllerBase
         _context = context;
     }
 
+    // GET: api/Attractions
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<Attraction>>> GetAttractions()
+    public async Task<ActionResult<IEnumerable<Attraction>>> GetAttractions([FromQuery] string name = null, [FromQuery] int? cityId = null, [FromQuery] string sortBy = "name")
     {
-        return await _context.Attractions.ToListAsync();
+        var attractions = _context.Attractions.AsQueryable();
+
+        // Filtriranje po imenu
+        if (!string.IsNullOrEmpty(name))
+        {
+            attractions = attractions.Where(a => a.Name.Contains(name));
+        }
+
+        // Filtriranje po cityId (nije obavezno)
+        if (cityId.HasValue)
+        {
+            attractions = attractions.Where(a => a.CityID == cityId);
+        }
+
+        // Sortiranje
+        if (sortBy == "name")
+        {
+            attractions = attractions.OrderBy(a => a.Name);
+        }
+
+        return Ok(await attractions.ToListAsync());
     }
 
+    // GET: api/Attractions/5
     [HttpGet("{id}")]
     public async Task<ActionResult<Attraction>> GetAttraction(int id)
     {
@@ -36,6 +55,7 @@ public class AttractionsController : ControllerBase
         return attraction;
     }
 
+    // POST: api/Attractions
     [HttpPost]
     public async Task<ActionResult<Attraction>> PostAttraction(Attraction attraction)
     {
@@ -45,6 +65,7 @@ public class AttractionsController : ControllerBase
         return CreatedAtAction(nameof(GetAttraction), new { id = attraction.ID }, attraction);
     }
 
+    // PUT: api/Attractions/5
     [HttpPut("{id}")]
     public async Task<IActionResult> PutAttraction(int id, Attraction attraction)
     {
@@ -74,6 +95,7 @@ public class AttractionsController : ControllerBase
         return NoContent();
     }
 
+    // DELETE: api/Attractions/5
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteAttraction(int id)
     {

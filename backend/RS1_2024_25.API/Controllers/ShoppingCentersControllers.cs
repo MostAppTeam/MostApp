@@ -1,10 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using RS1_2024_25.API.Data;
-using RS1_2024_25.API.Data.Models;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using RS1_2024_25.API.Data.Models;
+using RS1_2024_25.API.Data;
 
 [Route("api/[controller]")]
 [ApiController]
@@ -17,12 +14,29 @@ public class ShoppingCentersController : ControllerBase
         _context = context;
     }
 
+    // GET: api/ShoppingCenters
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<ShoppingCenter>>> GetShoppingCenters()
+    public async Task<ActionResult<IEnumerable<ShoppingCenter>>> GetShoppingCenters([FromQuery] string name = null, [FromQuery] string sortBy = "name")
     {
-        return await _context.ShoppingCenters.ToListAsync();
+        var shoppingCenters = _context.ShoppingCenters.AsQueryable();
+
+        // Filtriranje po imenu shopping centra (nije obavezno)
+        if (!string.IsNullOrEmpty(name))
+        {
+            shoppingCenters = shoppingCenters.Where(s => s.Name.Contains(name));
+        }
+
+        // Sortiranje (nije obavezno)
+        if (sortBy == "name")
+        {
+            shoppingCenters = shoppingCenters.OrderBy(s => s.Name);
+        }
+        // Dodajte više sortiranja ako želite, kao npr. po cityId ili sličnom
+
+        return Ok(await shoppingCenters.ToListAsync());
     }
 
+    // GET: api/ShoppingCenters/5
     [HttpGet("{id}")]
     public async Task<ActionResult<ShoppingCenter>> GetShoppingCenter(int id)
     {
@@ -36,6 +50,7 @@ public class ShoppingCentersController : ControllerBase
         return shoppingCenter;
     }
 
+    // POST: api/ShoppingCenters
     [HttpPost]
     public async Task<ActionResult<ShoppingCenter>> PostShoppingCenter(ShoppingCenter shoppingCenter)
     {
@@ -45,6 +60,7 @@ public class ShoppingCentersController : ControllerBase
         return CreatedAtAction(nameof(GetShoppingCenter), new { id = shoppingCenter.ID }, shoppingCenter);
     }
 
+    // PUT: api/ShoppingCenters/5
     [HttpPut("{id}")]
     public async Task<IActionResult> PutShoppingCenter(int id, ShoppingCenter shoppingCenter)
     {
@@ -61,7 +77,7 @@ public class ShoppingCentersController : ControllerBase
         }
         catch (DbUpdateConcurrencyException)
         {
-            if (!_context.ShoppingCenters.Any(e => e.ID == id))
+            if (!ShoppingCenterExists(id))
             {
                 return NotFound();
             }
@@ -74,6 +90,7 @@ public class ShoppingCentersController : ControllerBase
         return NoContent();
     }
 
+    // DELETE: api/ShoppingCenters/5
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteShoppingCenter(int id)
     {
@@ -87,5 +104,10 @@ public class ShoppingCentersController : ControllerBase
         await _context.SaveChangesAsync();
 
         return NoContent();
+    }
+
+    private bool ShoppingCenterExists(int id)
+    {
+        return _context.ShoppingCenters.Any(e => e.ID == id);
     }
 }

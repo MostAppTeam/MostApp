@@ -1,10 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using RS1_2024_25.API.Data;
-using RS1_2024_25.API.Data.Models;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using RS1_2024_25.API.Data.Models;
+using RS1_2024_25.API.Data;
 
 [Route("api/[controller]")]
 [ApiController]
@@ -17,12 +14,28 @@ public class OffersController : ControllerBase
         _context = context;
     }
 
+    // GET: api/Offers
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<Offer>>> GetOffers()
+    public async Task<ActionResult<IEnumerable<Offer>>> GetOffers([FromQuery] string name = null, [FromQuery] string sortBy = "name")
     {
-        return await _context.Offers.ToListAsync();
+        var offers = _context.Offers.AsQueryable();
+
+        // Filtriranje po opisu ponude (nije obavezno)
+        if (!string.IsNullOrEmpty(name))
+        {
+            offers = offers.Where(o => o.Description.Contains(name));
+        }
+
+        // Sortiranje
+        if (sortBy == "name")
+        {
+            offers = offers.OrderBy(o => o.Description);
+        }
+
+        return Ok(await offers.ToListAsync());
     }
 
+    // GET: api/Offers/5
     [HttpGet("{id}")]
     public async Task<ActionResult<Offer>> GetOffer(int id)
     {
@@ -36,6 +49,7 @@ public class OffersController : ControllerBase
         return offer;
     }
 
+    // POST: api/Offers
     [HttpPost]
     public async Task<ActionResult<Offer>> PostOffer(Offer offer)
     {
@@ -45,6 +59,7 @@ public class OffersController : ControllerBase
         return CreatedAtAction(nameof(GetOffer), new { id = offer.ID }, offer);
     }
 
+    // PUT: api/Offers/5
     [HttpPut("{id}")]
     public async Task<IActionResult> PutOffer(int id, Offer offer)
     {
@@ -74,6 +89,7 @@ public class OffersController : ControllerBase
         return NoContent();
     }
 
+    // DELETE: api/Offers/5
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteOffer(int id)
     {
