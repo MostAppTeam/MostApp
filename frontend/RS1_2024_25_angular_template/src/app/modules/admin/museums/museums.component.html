@@ -1,4 +1,5 @@
 <div id="museum-container">
+  <!-- Forma za dodavanje muzeja -->
   <form (ngSubmit)="addMuseum()" id="add-museum-form">
     <h3>Dodaj Muzej</h3>
     <input [(ngModel)]="newMuseum.name" placeholder="Naziv" name="name" required />
@@ -9,10 +10,12 @@
     <button type="submit">Dodaj Muzej</button>
   </form>
 
+  <!-- Poruka povratne informacije -->
   <div *ngIf="feedbackMessage" id="feedback-message">
     {{ feedbackMessage }}
   </div>
 
+  <!-- Postojeći muzeji -->
   <h3>Postojeći Muzeji</h3>
   <div *ngIf="museums.length > 0; else noMuseumsMessage">
     <div class="museum" *ngFor="let museum of museums">
@@ -27,4 +30,10 @@
   <ng-template #noMuseumsMessage>
     <p>Nema dostupnih muzeja.</p>
   </ng-template>
+</div>
+
+<!-- Događaji -->
+<div id="events-container">
+  <h3>Događaji</h3>
+  <app-events></app-events> <!-- Ovo dodaje sadržaj EventsComponent-a -->
 </div>
