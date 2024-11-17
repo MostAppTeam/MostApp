@@ -1,0 +1,67 @@
+/* Global styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  line-height: 1.6;
+  background-color: #f4f4f4;
+}
+
+/* Main container */
+.app-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+/* Header styles */
+.app-header {
+  background-color: #4CAF50;
+  color: white;
+  padding: 1rem;
+  text-align: center;
+}
+
+.app-header h1 {
+  font-size: 2rem;
+}
+
+.app-header nav ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.app-header nav ul li {
+  display: inline;
+  margin-right: 20px;
+}
+
+.app-header nav ul li a {
+  color: white;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.app-header nav ul li a:hover {
+  text-decoration: underline;
+}
+
+/* Main content styles */
+.app-main {
+  flex: 1;
+  padding: 20px;
+  background-color: #fff;
+}
+
+/* Footer styles */
+.app-footer {
+  background-color: #333;
+  color: white;
+  text-align: center;
+  padding: 1rem;
+  margin-top: auto;
+}

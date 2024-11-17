@@ -1,6 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using RS1_2024_25.API.Data.Models;
 using RS1_2024_25.API.Data;
+using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 [Route("api/[controller]")]
 [ApiController]
@@ -26,7 +30,7 @@ public class MuseumsController : ControllerBase
             museums = museums.Where(m => m.Name.Contains(name));
         }
 
-     
+        
 
         // Sortiranje muzeja
         if (sortBy == "name")
@@ -34,9 +38,77 @@ public class MuseumsController : ControllerBase
             museums = museums.OrderBy(m => m.Name);
         }
 
-        return Ok(museums.ToList());
-
+        return Ok(await museums.ToListAsync());
     }
 
-    // Ostale metode (POST, PUT, DELETE) ostaju iste kao što su bile
+    // GET: api/Museums/5
+    [HttpGet("{id}")]
+    public async Task<ActionResult<Museum>> GetMuseumById(int id)
+    {
+        var museum = await _context.Museums.FindAsync(id);
+
+        if (museum == null)
+        {
+            return NotFound();
+        }
+
+        return Ok(museum);
+    }
+
+    // POST: api/Museums
+    [HttpPost]
+    public async Task<ActionResult<Museum>> CreateMuseum(Museum museum)
+    {
+        _context.Museums.Add(museum);
+        await _context.SaveChangesAsync();
+
+        return CreatedAtAction(nameof(GetMuseumById), new { id = museum.ID }, museum);
+    }
+
+    // PUT: api/Museums/5
+    [HttpPut("{id}")]
+    public async Task<IActionResult> UpdateMuseum(int id, Museum museum)
+    {
+        if (id != museum.ID)
+        {
+            return BadRequest("Museum ID mismatch.");
+        }
+
+        _context.Entry(museum).State = EntityState.Modified;
+
+        try
+        {
+            await _context.SaveChangesAsync();
+        }
+        catch (DbUpdateConcurrencyException)
+        {
+            if (!_context.Museums.Any(m => m.ID == id))
+            {
+                return NotFound();
+            }
+            else
+            {
+                throw;
+            }
+        }
+
+        return NoContent();
+    }
+
+    // DELETE: api/Museums/5
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> DeleteMuseum(int id)
+    {
+        var museum = await _context.Museums.FindAsync(id);
+
+        if (museum == null)
+        {
+            return NotFound();
+        }
+
+        _context.Museums.Remove(museum);
+        await _context.SaveChangesAsync();
+
+        return NoContent();
+    }
 }

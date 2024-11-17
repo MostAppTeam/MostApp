@@ -1,0 +1,30 @@
+<div id="museum-container">
+  <form (ngSubmit)="addMuseum()" id="add-museum-form">
+    <h3>Dodaj Muzej</h3>
+    <input [(ngModel)]="newMuseum.name" placeholder="Naziv" name="name" required />
+    <input [(ngModel)]="newMuseum.description" placeholder="Opis" name="description" required />
+    <input [(ngModel)]="newMuseum.location" placeholder="Lokacija" name="location" required />
+    <input [(ngModel)]="newMuseum.workingHours" placeholder="Radno Vrijeme" name="workingHours" required />
+    <input [(ngModel)]="newMuseum.imageUrl" placeholder="URL Slike" name="imageUrl" required />
+    <button type="submit">Dodaj Muzej</button>
+  </form>
+
+  <div *ngIf="feedbackMessage" id="feedback-message">
+    {{ feedbackMessage }}
+  </div>
+
+  <h3>Postojeći Muzeji</h3>
+  <div *ngIf="museums.length > 0; else noMuseumsMessage">
+    <div class="museum" *ngFor="let museum of museums">
+      <h4>{{ museum.name }}</h4>
+      <p>{{ museum.description }}</p>
+      <p><strong>Lokacija:</strong> {{ museum.location }}</p>
+      <p><strong>Radno Vrijeme:</strong> {{ museum.workingHours }}</p>
+      <a [href]="museum.imageUrl" target="_blank">Pogledaj sliku</a>
+    </div>
+  </div>
+
+  <ng-template #noMuseumsMessage>
+    <p>Nema dostupnih muzeja.</p>
+  </ng-template>
+</div>

@@ -1,7 +1,25 @@
-ovo je glavni app component
-<div style="border: 1px solid blue; position: absolute; top:50px; bottom: 0; left: 100px; right: 0">
-  <router-outlet>
+<div class="app-container">
+  <!-- Header -->
+  <header class="app-header">
+    <h1>MostApp</h1>
+    <nav>
+      <ul>
+        <li><a routerLink="/home">Home</a></li>
+        <li><a routerLink="/login">Login</a></li>
+        <li><a routerLink="/register">Register</a></li>
+        <li><a routerLink="/attractions">Attractions</a></li>
+        <li><a routerLink="/contact">Contact</a></li>
+      </ul>
+    </nav>
+  </header>
 
-  </router-outlet>
+  <!-- Main Content Area -->
+  <main class="app-main">
+    <router-outlet></router-outlet>
+  </main>
 
+  <!-- Footer -->
+  <footer class="app-footer">
+    <p>&copy; 2024 Explore Mostar. All rights reserved.</p>
+  </footer>
 </div>
