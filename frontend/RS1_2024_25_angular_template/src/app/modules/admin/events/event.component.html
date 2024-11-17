@@ -1,0 +1,38 @@
+<div id="event-container">
+  <!-- Forma za dodavanje događaja -->
+  <form (ngSubmit)="addEvent()" id="add-event-form">
+    <h3>Dodaj Event</h3>
+    <input [(ngModel)]="newEvent.name" placeholder="Naziv" name="name" required />
+    <input [(ngModel)]="newEvent.date" placeholder="Datum" name="date" required type="date" />
+    <input [(ngModel)]="newEvent.location" placeholder="Lokacija" name="location" required />
+    <textarea [(ngModel)]="newEvent.description" placeholder="Opis" name="description" required></textarea>
+    <button type="submit">Dodaj Event</button>
+  </form>
+
+  <!-- Poruka povratne informacije -->
+  <div *ngIf="feedbackMessage" id="feedback-message">
+    {{ feedbackMessage }}
+  </div>
+
+  <!-- Postojeći eventi -->
+  <h3>Postojeći Eventi</h3>
+  <div *ngIf="events.length > 0; else noEventsMessage">
+    <div class="event" *ngFor="let event of events">
+      <h4>{{ event.name }}</h4>
+      <p>{{ event.description }}</p>
+      <p><strong>Datum:</strong> {{ event.date }}</p>
+      <p><strong>Lokacija:</strong> {{ event.location }}</p>
+      <button (click)="editEvent(event)">Izmeni</button>
+      <button (click)="deleteEvent(event.id)">Obriši</button>
+    </div>
+  </div>
+
+  <ng-template #noEventsMessage>
+    <p>Nema dostupnih eventa.</p>
+  </ng-template>
+</div>
+
+<!-- Navigacija između muzeja i događaja -->
+<div id="navigation-links">
+  <button routerLink="/museums">Povratak na Muzeje</button>
+</div>
