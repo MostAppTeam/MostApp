@@ -5,6 +5,7 @@ import { MuseumsComponent } from './modules/admin/museums/museums.component';
 const routes: Routes = [
   { path: '', redirectTo: '/museums', pathMatch: 'full' },
   { path: 'museums', component: MuseumsComponent },
+
 ];
 
 @NgModule({
