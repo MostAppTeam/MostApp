@@ -14,7 +14,6 @@ namespace RS1_2024_25.API.Data
         public DbSet<MyAppUser> MyAppUsers { get; set; }
         public DbSet<MyAuthenticationToken> MyAuthenticationTokens { get; set; }
 
-        // Novi DbSet entiteti za tabele koje smo ranije kreirali
         public DbSet<Attraction> Attractions { get; set; }
         public DbSet<Museum> Museums { get; set; }
         public DbSet<ShoppingCenter> ShoppingCenters { get; set; }
@@ -28,9 +27,13 @@ namespace RS1_2024_25.API.Data
         {
             base.OnModelCreating(modelBuilder);
 
-            // Konfiguracija decimalnog polja 'Price' u 'Offer' entitetu
+            // Konfiguracija decimalnih polja
             modelBuilder.Entity<Offer>()
                 .Property(o => o.Price)
+                .HasPrecision(18, 2); // 18 ukupnih cifara, 2 decimalna mjesta
+
+            modelBuilder.Entity<Attraction>()
+                .Property(a => a.TicketPrice)
                 .HasPrecision(18, 2); // 18 ukupnih cifara, 2 decimalna mjesta
 
             // Onemogućavamo automatsko brisanje povezanih entiteta

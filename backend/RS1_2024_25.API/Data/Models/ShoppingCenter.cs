@@ -10,5 +10,8 @@ namespace RS1_2024_25.API.Data.Models
         public string WorkingHours { get; set; }
         public int CityID { get; set; }
         public City City { get; set; }
+
+        public TimeSpan OpeningTime { get; set; }
+        public TimeSpan ClosingTime { get; set; }
     }
 }

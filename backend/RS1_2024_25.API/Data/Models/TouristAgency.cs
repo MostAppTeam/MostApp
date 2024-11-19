@@ -9,5 +9,9 @@ namespace RS1_2024_25.API.Data.Models
         public string ContactInfo { get; set; }
         public int CityID { get; set; }
         public City City { get; set; }
+
+
+        public int? UserId { get; set; }
+        public User User { get; set; }
     }
 }
