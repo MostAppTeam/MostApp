@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using RS1_2024_25.API.Data;
 
@@ -11,9 +12,11 @@ using RS1_2024_25.API.Data;
 namespace RS1_2024_25.API.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241119153922_NewTabel")]
+    partial class NewTabel
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -21,35 +24,6 @@ namespace RS1_2024_25.API.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
-
-            modelBuilder.Entity("RS1_2024_25.API.Data.Models.ActivityLog", b =>
-                {
-                    b.Property<int>("ID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
-
-                    b.Property<DateTime>("ActionDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("ActionDetails")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ActionType")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("UserID")
-                        .HasColumnType("int");
-
-                    b.HasKey("ID");
-
-                    b.HasIndex("UserID");
-
-                    b.ToTable("ActivityLogs");
-                });
 
             modelBuilder.Entity("RS1_2024_25.API.Data.Models.Attraction", b =>
                 {
@@ -141,45 +115,6 @@ namespace RS1_2024_25.API.Migrations
                     b.ToTable("MyAuthenticationTokens");
                 });
 
-            modelBuilder.Entity("RS1_2024_25.API.Data.Models.Booking", b =>
-                {
-                    b.Property<int>("ID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
-
-                    b.Property<DateTime>("BookingDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("EventID")
-                        .HasColumnType("int");
-
-                    b.Property<int>("OfferID")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Status")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<decimal>("TotalPrice")
-                        .HasPrecision(18, 2)
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<int>("UserID")
-                        .HasColumnType("int");
-
-                    b.HasKey("ID");
-
-                    b.HasIndex("EventID");
-
-                    b.HasIndex("OfferID");
-
-                    b.HasIndex("UserID");
-
-                    b.ToTable("Bookings");
-                });
-
             modelBuilder.Entity("RS1_2024_25.API.Data.Models.Category", b =>
                 {
                     b.Property<int>("ID")
@@ -265,46 +200,6 @@ namespace RS1_2024_25.API.Migrations
                     b.ToTable("Events");
                 });
 
-            modelBuilder.Entity("RS1_2024_25.API.Data.Models.Media", b =>
-                {
-                    b.Property<int>("ID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
-
-                    b.Property<int>("AttractionID")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("FilePath")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("MediaType")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("MuseumID")
-                        .HasColumnType("int");
-
-                    b.Property<int>("OfferID")
-                        .HasColumnType("int");
-
-                    b.HasKey("ID");
-
-                    b.HasIndex("AttractionID");
-
-                    b.HasIndex("MuseumID");
-
-                    b.HasIndex("OfferID");
-
-                    b.ToTable("Media");
-                });
-
             modelBuilder.Entity("RS1_2024_25.API.Data.Models.Museum", b =>
                 {
                     b.Property<int>("ID")
@@ -328,38 +223,6 @@ namespace RS1_2024_25.API.Migrations
                     b.HasKey("ID");
 
                     b.ToTable("Museums");
-                });
-
-            modelBuilder.Entity("RS1_2024_25.API.Data.Models.Notification", b =>
-                {
-                    b.Property<int>("ID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
-
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<bool>("IsRead")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("Message")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("NotificationType")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("UserID")
-                        .HasColumnType("int");
-
-                    b.HasKey("ID");
-
-                    b.HasIndex("UserID");
-
-                    b.ToTable("Notifications");
                 });
 
             modelBuilder.Entity("RS1_2024_25.API.Data.Models.Offer", b =>
@@ -390,49 +253,6 @@ namespace RS1_2024_25.API.Migrations
                     b.HasIndex("TouristAgencyId");
 
                     b.ToTable("Offers");
-                });
-
-            modelBuilder.Entity("RS1_2024_25.API.Data.Models.Review", b =>
-                {
-                    b.Property<int>("ID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
-
-                    b.Property<int>("AttractionID")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Comment")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("EventID")
-                        .HasColumnType("int");
-
-                    b.Property<int>("OfferID")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Rating")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("ReviewDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("UserID")
-                        .HasColumnType("int");
-
-                    b.HasKey("ID");
-
-                    b.HasIndex("AttractionID");
-
-                    b.HasIndex("EventID");
-
-                    b.HasIndex("OfferID");
-
-                    b.HasIndex("UserID");
-
-                    b.ToTable("Reviews");
                 });
 
             modelBuilder.Entity("RS1_2024_25.API.Data.Models.ShoppingCenter", b =>
@@ -516,17 +336,6 @@ namespace RS1_2024_25.API.Migrations
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("RS1_2024_25.API.Data.Models.ActivityLog", b =>
-                {
-                    b.HasOne("RS1_2024_25.API.Data.Models.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserID")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-
-                    b.Navigation("User");
-                });
-
             modelBuilder.Entity("RS1_2024_25.API.Data.Models.Attraction", b =>
                 {
                     b.HasOne("RS1_2024_25.API.Data.Models.City", "City")
@@ -549,33 +358,6 @@ namespace RS1_2024_25.API.Migrations
                     b.Navigation("MyAppUser");
                 });
 
-            modelBuilder.Entity("RS1_2024_25.API.Data.Models.Booking", b =>
-                {
-                    b.HasOne("RS1_2024_25.API.Data.Models.Event", "Event")
-                        .WithMany()
-                        .HasForeignKey("EventID")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-
-                    b.HasOne("RS1_2024_25.API.Data.Models.Offer", "Offer")
-                        .WithMany()
-                        .HasForeignKey("OfferID")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-
-                    b.HasOne("RS1_2024_25.API.Data.Models.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserID")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-
-                    b.Navigation("Event");
-
-                    b.Navigation("Offer");
-
-                    b.Navigation("User");
-                });
-
             modelBuilder.Entity("RS1_2024_25.API.Data.Models.City", b =>
                 {
                     b.HasOne("RS1_2024_25.API.Data.Models.Country", "Country")
@@ -587,44 +369,6 @@ namespace RS1_2024_25.API.Migrations
                     b.Navigation("Country");
                 });
 
-            modelBuilder.Entity("RS1_2024_25.API.Data.Models.Media", b =>
-                {
-                    b.HasOne("RS1_2024_25.API.Data.Models.Attraction", "Attraction")
-                        .WithMany()
-                        .HasForeignKey("AttractionID")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-
-                    b.HasOne("RS1_2024_25.API.Data.Models.Museum", "Museum")
-                        .WithMany()
-                        .HasForeignKey("MuseumID")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-
-                    b.HasOne("RS1_2024_25.API.Data.Models.Offer", "Offer")
-                        .WithMany()
-                        .HasForeignKey("OfferID")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-
-                    b.Navigation("Attraction");
-
-                    b.Navigation("Museum");
-
-                    b.Navigation("Offer");
-                });
-
-            modelBuilder.Entity("RS1_2024_25.API.Data.Models.Notification", b =>
-                {
-                    b.HasOne("RS1_2024_25.API.Data.Models.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserID")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-
-                    b.Navigation("User");
-                });
-
             modelBuilder.Entity("RS1_2024_25.API.Data.Models.Offer", b =>
                 {
                     b.HasOne("RS1_2024_25.API.Data.Models.TouristAgency", "TouristAgency")
@@ -634,41 +378,6 @@ namespace RS1_2024_25.API.Migrations
                         .IsRequired();
 
                     b.Navigation("TouristAgency");
-                });
-
-            modelBuilder.Entity("RS1_2024_25.API.Data.Models.Review", b =>
-                {
-                    b.HasOne("RS1_2024_25.API.Data.Models.Attraction", "Attraction")
-                        .WithMany()
-                        .HasForeignKey("AttractionID")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-
-                    b.HasOne("RS1_2024_25.API.Data.Models.Event", "Event")
-                        .WithMany()
-                        .HasForeignKey("EventID")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-
-                    b.HasOne("RS1_2024_25.API.Data.Models.Offer", "Offer")
-                        .WithMany()
-                        .HasForeignKey("OfferID")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-
-                    b.HasOne("RS1_2024_25.API.Data.Models.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserID")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-
-                    b.Navigation("Attraction");
-
-                    b.Navigation("Event");
-
-                    b.Navigation("Offer");
-
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("RS1_2024_25.API.Data.Models.ShoppingCenter", b =>
