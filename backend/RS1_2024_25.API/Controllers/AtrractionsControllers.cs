@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using RS1_2024_25.API.Data.Models;
 using RS1_2024_25.API.Data;
+using RS1_2024_25.API.Services;
 
 [Route("api/[controller]")]
 [ApiController]
@@ -18,6 +19,9 @@ public class AttractionsController : ControllerBase
     [HttpGet]
     public async Task<ActionResult<IEnumerable<Attraction>>> GetAttractions([FromQuery] string name = null, [FromQuery] int? cityId = null, [FromQuery] string sortBy = "name")
     {
+
+      
+
         var attractions = _context.Attractions.AsQueryable();
 
         // Filtriranje po imenu
@@ -110,4 +114,6 @@ public class AttractionsController : ControllerBase
 
         return NoContent();
     }
+
+
 }

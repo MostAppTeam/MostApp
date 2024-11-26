@@ -1,0 +1,10 @@
+<div class="recommendations">
+  <h2>Your Recommendations</h2>
+  <div *ngIf="recommendations.length === 0">
+    No recommendations available.
+  </div>
+  <div *ngFor="let item of recommendations" class="recommendation-item">
+    <h3>{{ item.name || item.title }}</h3>
+    <p>{{ item.description }}</p>
+  </div>
+</div>

@@ -17,13 +17,15 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(x => x.OperationFilter<MyAuthorizationSwaggerHeader>());
-builder.Services.AddHttpContextAccessor();
 
+builder.Services.AddHttpContextAccessor();
 // Dodajte vaše servise
 builder.Services.AddTransient<MyAuthService>();
+builder.Services.AddScoped<RecommendationService>();
 
 builder.Services.AddScoped<MyAuthService>();
 builder.Services.AddHttpContextAccessor();
+
 
 
 var app = builder.Build();

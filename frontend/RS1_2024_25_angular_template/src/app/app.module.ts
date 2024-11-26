@@ -6,6 +6,9 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { MuseumsComponent } from './modules/admin/museums/museums.component';
 import {EventsComponent} from './modules/admin/events/event.component';
+import { UserRecommendationsComponent } from './modules/admin/user-recommendations/user-recommendations.component';
+//import { RecommendationService } from './user-recommendations/recommendation.service';
+
 
 @NgModule({
   declarations: [AppComponent, MuseumsComponent,EventsComponent],
