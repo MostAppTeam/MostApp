@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using RS1_2024_25.API.Data.Models;
+using RS1_2024_25.API.Data.Models.Auth;
 using System.Linq;
 
 namespace RS1_2024_25.API.Data
@@ -96,6 +97,20 @@ namespace RS1_2024_25.API.Data
                     );
                     context.SaveChanges();
                 }
+
+                if (!context.UserPreferences.Any())
+                {
+                    var testUserId = context.MyAppUsers.First(u => u.Username == "testuser").ID;
+
+                    context.UserPreferences.AddRange(
+                        new UserPreference { UserID = testUserId, PreferenceType = "Attraction", Keyword = "Old Bridge", Weight = 9 },
+                        new UserPreference { UserID = testUserId, PreferenceType = "Offer", Keyword = "City Tour", Weight = 7 },
+                        new UserPreference { UserID = testUserId, PreferenceType = "Event", Keyword = "Summer Festival", Weight = 8 }
+                    );
+                    context.SaveChanges();
+                }
+
+
             }
         }
     }

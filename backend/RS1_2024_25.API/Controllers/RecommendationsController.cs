@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using RS1_2024_25.API.Services;
 using System.Collections.Generic;
+using RS1_2024_25.API.Data.Models;
 
 [ApiController]
 [Route("api/[controller]")]
@@ -19,8 +20,15 @@ public class RecommendationsController : ControllerBase
     /// <param name="userId">ID korisnika</param>
     /// <returns>Lista preporučenih atrakcija, događaja i ponuda.</returns>
     [HttpGet("{userId}")]
-    public IActionResult GetRecommendations(int userId)
+    public ActionResult<List<RecommendationDto>> GetRecommendations(int userId)
     {
+        // Validacija ulaznog parametra
+        if (userId <= 0)
+        {
+            return BadRequest(new { message = "Invalid user ID. It must be a positive number." });
+        }
+
+        // Preuzimanje preporuka iz servisa
         var recommendations = _recommendationService.GetRecommendations(userId);
 
         if (recommendations == null || recommendations.Count == 0)

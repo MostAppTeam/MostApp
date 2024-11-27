@@ -1,9 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { RecommendationService } from './recommendation.service';
-
-
-
-
+import { RecommendationService, Recommendation } from './recommendation.service';
 
 @Component({
   selector: 'app-user-recommendations',
@@ -11,8 +7,8 @@ import { RecommendationService } from './recommendation.service';
   styleUrls: ['./user-recommendations.component.css'],
 })
 export class UserRecommendationsComponent implements OnInit {
-  recommendations: any[] = [];
-  userId = 1; // Hardkodirani ID korisnika za testiranje
+  recommendations: Recommendation[] = [];
+  userId = 1;
 
   constructor(private recommendationService: RecommendationService) {}
 
@@ -22,12 +18,8 @@ export class UserRecommendationsComponent implements OnInit {
 
   loadRecommendations(): void {
     this.recommendationService.getRecommendations(this.userId).subscribe(
-      (data: any[]) => {
-        this.recommendations = data;
-      },
-      (error: any) => {
-        console.error('Error loading recommendations', error);
-      }
+      (data) => (this.recommendations = data),
+      (error) => console.error('Error loading recommendations:', error)
     );
   }
 }
