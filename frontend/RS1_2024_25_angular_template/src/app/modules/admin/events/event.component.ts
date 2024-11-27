@@ -9,6 +9,7 @@ import { Event } from './event.model';
 })
 export class EventsComponent implements OnInit {
   events: Event[] = [];
+  filteredEvents: Event[] = []; // Filtrirani događaji
   newEvent: Omit<Event, 'id'> = {
     name: '',
     date: '',
@@ -16,6 +17,13 @@ export class EventsComponent implements OnInit {
     description: '',
   };
   feedbackMessage: string | null = null;
+  filterParams = {
+    name: '',
+    date: '',
+    location: '',
+    description: '',
+    id: null,
+  };
 
   constructor(private eventService: EventService) {}
 
@@ -28,6 +36,7 @@ export class EventsComponent implements OnInit {
     this.eventService.getEvents().subscribe(
       (data) => {
         this.events = data;
+        this.filteredEvents = [...this.events]; // Postavi početne filtrirane događaje
       },
       (error) => {
         console.error('Greška prilikom učitavanja događaja:', error);
@@ -80,6 +89,19 @@ export class EventsComponent implements OnInit {
         setTimeout(() => (this.feedbackMessage = null), 3000);
       }
     );
+  }
+
+  // Metoda za primenu filtera
+  applyFilter(): void {
+    this.filteredEvents = this.events.filter((event) => {
+      return (
+        (!this.filterParams.name || event.name.toLowerCase().includes(this.filterParams.name.toLowerCase())) &&
+        (!this.filterParams.date || event.date === this.filterParams.date) &&
+        (!this.filterParams.location || event.location.toLowerCase().includes(this.filterParams.location.toLowerCase())) &&
+        (!this.filterParams.description || event.description.toLowerCase().includes(this.filterParams.description.toLowerCase())) &&
+        (!this.filterParams.id || event.id === this.filterParams.id)
+      );
+    });
   }
 
   // Metoda za brisanje događaja
