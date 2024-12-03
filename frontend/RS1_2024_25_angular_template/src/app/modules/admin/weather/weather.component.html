@@ -1,0 +1,14 @@
+<div class="weather-container">
+  <h2>Weather in Mostar</h2>
+  <div *ngIf="errorMessage" class="error">
+    {{ errorMessage }}
+  </div>
+  <div *ngIf="temperature !== null && humidity !== null && description">
+    <p><strong>Temperature:</strong> {{ temperature }}°C</p>
+    <p><strong>Humidity:</strong> {{ humidity }}%</p>
+    <p><strong>Condition:</strong> {{ description }}</p>
+  </div>
+  <div *ngIf="temperature === null && !errorMessage">
+    <p>Loading weather data...</p>
+  </div>
+</div>

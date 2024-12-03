@@ -22,7 +22,7 @@ builder.Services.AddHttpContextAccessor();
 // Dodajte vaše servise
 builder.Services.AddTransient<MyAuthService>();
 builder.Services.AddScoped<RecommendationService>();
-
+builder.Services.AddHttpClient<WeatherService>();
 builder.Services.AddScoped<MyAuthService>();
 builder.Services.AddHttpContextAccessor();
 
