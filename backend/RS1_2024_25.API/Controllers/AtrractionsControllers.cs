@@ -16,7 +16,7 @@ public class AttractionsController : ControllerBase
 
     // GET: api/Attractions
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<Attraction>>> GetAttractions([FromQuery] string name = null, [FromQuery] int? cityId = null, [FromQuery] string sortBy = "name")
+    public async Task<ActionResult<IEnumerable<object>>> GetAttractions([FromQuery] string name = null, [FromQuery] int? cityId = null, [FromQuery] string sortBy = "name")
     {
         var attractions = _context.Attractions.AsQueryable();
 
@@ -38,21 +38,43 @@ public class AttractionsController : ControllerBase
             attractions = attractions.OrderBy(a => a.Name);
         }
 
-        return Ok(await attractions.ToListAsync());
+        // Eksplicitno vraćanje podataka, uključujući VirtualTourURL
+        var result = await attractions
+            .Select(a => new
+            {
+                a.ID,
+                a.Name,
+                a.Description,
+                a.CityID,
+                a.VirtualTourURL
+            })
+            .ToListAsync();
+
+        return Ok(result);
     }
 
     // GET: api/Attractions/5
     [HttpGet("{id}")]
-    public async Task<ActionResult<Attraction>> GetAttraction(int id)
+    public async Task<ActionResult<object>> GetAttraction(int id)
     {
-        var attraction = await _context.Attractions.FindAsync(id);
+        var attraction = await _context.Attractions
+            .Where(a => a.ID == id)
+            .Select(a => new
+            {
+                a.ID,
+                a.Name,
+                a.Description,
+                a.CityID,
+                a.VirtualTourURL
+            })
+            .FirstOrDefaultAsync();
 
         if (attraction == null)
         {
             return NotFound();
         }
 
-        return attraction;
+        return Ok(attraction);
     }
 
     // POST: api/Attractions

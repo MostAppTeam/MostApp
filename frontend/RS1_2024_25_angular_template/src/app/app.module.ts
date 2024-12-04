@@ -4,12 +4,17 @@ import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { MuseumsComponent } from './modules/admin/museums/museums.component';
-import {EventsComponent} from './modules/admin/events/event.component';
+import { AdminModule } from './modules/admin/admin.module';  // Importuj AdminModule
 
 @NgModule({
-  declarations: [AppComponent, MuseumsComponent,EventsComponent],
-  imports: [BrowserModule, FormsModule, HttpClientModule, AppRoutingModule],
+  declarations: [AppComponent], // Nema potrebe da importuješ AttractionsComponent ovde
+  imports: [
+    BrowserModule,
+    FormsModule,
+    HttpClientModule,
+    AppRoutingModule,
+    AdminModule,  // Dodaj AdminModule ovde
+  ],
   providers: [],
   bootstrap: [AppComponent],
 })

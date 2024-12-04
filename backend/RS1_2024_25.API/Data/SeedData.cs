@@ -49,8 +49,8 @@ namespace RS1_2024_25.API.Data
                     var mostarCityId = context.Cities.First(c => c.Name == "Mostar").ID;
 
                     context.Attractions.AddRange(
-                        new Attraction { Name = "Old Bridge", CityID = mostarCityId, Description = "A UNESCO World Heritage site, the Old Bridge is an iconic symbol of Mostar." },
-                        new Attraction { Name = "Blagaj Tekke", CityID = mostarCityId, Description = "A historical Dervish house located near the Buna River, known for its beautiful architecture and scenic views." }
+                        new Attraction { Name = "Old Bridge", CityID = mostarCityId, Description = "A UNESCO World Heritage site, the Old Bridge is an iconic symbol of Mostar.", VirtualTourURL= "https://www.360cities.net/image/stari-most-old-bridge-mostar/vr" },
+                        new Attraction { Name = "Blagaj Tekke", CityID = mostarCityId, Description = "A historical Dervish house located near the Buna River, known for its beautiful architecture and scenic views.",VirtualTourURL= "https://www.360cities.net/image/bosnia-and-herzegovina-blagaj-tekke-1" }
                     );
                     context.SaveChanges();
                 }
