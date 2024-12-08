@@ -7,12 +7,14 @@ import {ReservationComponent} from './reservation/reservation.component';
 import {AdminErrorPageComponent} from './admin-error-page/admin-error-page.component';
 import {CitiesComponent} from './cities/cities.component';
 import {CitiesEditComponent} from './cities/cities-edit/cities-edit.component';
+import { AttractionsComponent } from './attractions/attractions.component';
 
 const routes: Routes = [
   {
     path: '',
     component: AdminLayoutComponent,
     children: [
+<<<<<<< HEAD
       {path: '', redirectTo: 'dashboard', pathMatch: 'full'},
       //{path: 'dashboard', component: DashboardComponent},
       {path: 'cities', component: CitiesComponent},
@@ -21,8 +23,19 @@ const routes: Routes = [
       {path: 'destination', component: DestinationComponent},
       {path: 'order', component: ReservationComponent},
       {path: '**', component: AdminErrorPageComponent} // Default ruta
+=======
+      { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
+      { path: 'dashboard', component: DashboardComponent },
+      { path: 'cities', component: CitiesComponent },
+      { path: 'cities/new', component: CitiesEditComponent },
+      { path: 'cities/edit/:id', component: CitiesEditComponent },
+      { path: 'destination', component: DestinationComponent },
+      { path: 'order', component: ReservationComponent },
+      { path: 'attractions', component: AttractionsComponent },
+      { path: '**', component: AdminErrorPageComponent },
+>>>>>>> main
     ]
-  },
+  }
 ];
 
 @NgModule({

@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using RS1_2024_25.API.Data;
 
@@ -11,9 +12,11 @@ using RS1_2024_25.API.Data;
 namespace RS1_2024_25.API.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241202194320_VirtualTour")]
+    partial class VirtualTour
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -22,9 +25,6 @@ namespace RS1_2024_25.API.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-<<<<<<< HEAD
-            modelBuilder.Entity("Attraction", b =>
-=======
             modelBuilder.Entity("RS1_2024_25.API.Data.Models.ActivityLog", b =>
                 {
                     b.Property<int>("ID")
@@ -55,16 +55,12 @@ namespace RS1_2024_25.API.Migrations
                 });
 
             modelBuilder.Entity("RS1_2024_25.API.Data.Models.Attraction", b =>
->>>>>>> main
                 {
                     b.Property<int>("ID")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
-
-                    b.Property<int?>("CategoryID")
-                        .HasColumnType("int");
 
                     b.Property<int>("CityID")
                         .HasColumnType("int");
@@ -77,81 +73,15 @@ namespace RS1_2024_25.API.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-<<<<<<< HEAD
-                    b.Property<decimal?>("TicketPrice")
-                        .HasPrecision(18, 2)
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<string>("WorkingHours")
-=======
                     b.Property<string>("VirtualTourURL")
->>>>>>> main
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("ID");
-
-                    b.HasIndex("CategoryID");
 
                     b.HasIndex("CityID");
 
                     b.ToTable("Attractions");
-                });
-
-            modelBuilder.Entity("Category", b =>
-                {
-                    b.Property<int>("ID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("ID");
-
-                    b.ToTable("Categories");
-                });
-
-            modelBuilder.Entity("Offer", b =>
-                {
-                    b.Property<int>("ID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
-
-                    b.Property<int?>("CategoryID")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("OfferName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<decimal>("Price")
-                        .HasPrecision(18, 2)
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<string>("Status")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("TouristAgencyId")
-                        .HasColumnType("int");
-
-                    b.HasKey("ID");
-
-                    b.HasIndex("CategoryID");
-
-                    b.HasIndex("TouristAgencyId");
-
-                    b.ToTable("Offers");
                 });
 
             modelBuilder.Entity("RS1_2024_25.API.Data.Models.Auth.MyAppUser", b =>
@@ -218,8 +148,6 @@ namespace RS1_2024_25.API.Migrations
                     b.ToTable("MyAuthenticationTokens");
                 });
 
-<<<<<<< HEAD
-=======
             modelBuilder.Entity("RS1_2024_25.API.Data.Models.Booking", b =>
                 {
                     b.Property<int>("ID")
@@ -276,7 +204,6 @@ namespace RS1_2024_25.API.Migrations
                     b.ToTable("Categories");
                 });
 
->>>>>>> main
             modelBuilder.Entity("RS1_2024_25.API.Data.Models.City", b =>
                 {
                     b.Property<int>("ID")
@@ -410,8 +337,6 @@ namespace RS1_2024_25.API.Migrations
                     b.ToTable("Museums");
                 });
 
-<<<<<<< HEAD
-=======
             modelBuilder.Entity("RS1_2024_25.API.Data.Models.Notification", b =>
                 {
                     b.Property<int>("ID")
@@ -517,7 +442,6 @@ namespace RS1_2024_25.API.Migrations
                     b.ToTable("Reviews");
                 });
 
->>>>>>> main
             modelBuilder.Entity("RS1_2024_25.API.Data.Models.ShoppingCenter", b =>
                 {
                     b.Property<int>("ID")
@@ -533,15 +457,9 @@ namespace RS1_2024_25.API.Migrations
                     b.Property<int>("CityID")
                         .HasColumnType("int");
 
-                    b.Property<TimeSpan>("ClosingTime")
-                        .HasColumnType("time");
-
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<TimeSpan>("OpeningTime")
-                        .HasColumnType("time");
 
                     b.Property<string>("WorkingHours")
                         .IsRequired()
@@ -573,19 +491,14 @@ namespace RS1_2024_25.API.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("UserId")
-                        .HasColumnType("int");
-
                     b.HasKey("ID");
 
                     b.HasIndex("CityID");
 
-                    b.HasIndex("UserId");
-
                     b.ToTable("TouristAgencies");
                 });
 
-            modelBuilder.Entity("User", b =>
+            modelBuilder.Entity("RS1_2024_25.API.Data.Models.User", b =>
                 {
                     b.Property<int>("ID")
                         .ValueGeneratedOnAdd()
@@ -597,19 +510,7 @@ namespace RS1_2024_25.API.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("FirstName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("LastName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("PasswordHash")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Role")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -622,9 +523,6 @@ namespace RS1_2024_25.API.Migrations
                     b.ToTable("Users");
                 });
 
-<<<<<<< HEAD
-            modelBuilder.Entity("UserPreference", b =>
-=======
             modelBuilder.Entity("RS1_2024_25.API.Data.Models.ActivityLog", b =>
                 {
                     b.HasOne("RS1_2024_25.API.Data.Models.User", "User")
@@ -637,67 +535,14 @@ namespace RS1_2024_25.API.Migrations
                 });
 
             modelBuilder.Entity("RS1_2024_25.API.Data.Models.Attraction", b =>
->>>>>>> main
                 {
-                    b.Property<int>("ID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
-
-                    b.Property<string>("Keyword")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("PreferenceType")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("UserID")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Weight")
-                        .HasColumnType("int");
-
-                    b.HasKey("ID");
-
-                    b.ToTable("UserPreferences");
-                });
-
-            modelBuilder.Entity("Attraction", b =>
-                {
-                    b.HasOne("Category", "Category")
-                        .WithMany("Attractions")
-                        .HasForeignKey("CategoryID")
-                        .OnDelete(DeleteBehavior.NoAction);
-
                     b.HasOne("RS1_2024_25.API.Data.Models.City", "City")
                         .WithMany()
                         .HasForeignKey("CityID")
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
-                    b.Navigation("Category");
-
                     b.Navigation("City");
-                });
-
-            modelBuilder.Entity("Offer", b =>
-                {
-                    b.HasOne("Category", "Category")
-                        .WithMany("Offers")
-                        .HasForeignKey("CategoryID")
-                        .OnDelete(DeleteBehavior.NoAction);
-
-                    b.HasOne("RS1_2024_25.API.Data.Models.TouristAgency", "TouristAgency")
-                        .WithMany()
-                        .HasForeignKey("TouristAgencyId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-
-                    b.Navigation("Category");
-
-                    b.Navigation("TouristAgency");
                 });
 
             modelBuilder.Entity("RS1_2024_25.API.Data.Models.Auth.MyAuthenticationToken", b =>
@@ -749,8 +594,6 @@ namespace RS1_2024_25.API.Migrations
                     b.Navigation("Country");
                 });
 
-<<<<<<< HEAD
-=======
             modelBuilder.Entity("RS1_2024_25.API.Data.Models.Media", b =>
                 {
                     b.HasOne("RS1_2024_25.API.Data.Models.Attraction", "Attraction")
@@ -835,7 +678,6 @@ namespace RS1_2024_25.API.Migrations
                     b.Navigation("User");
                 });
 
->>>>>>> main
             modelBuilder.Entity("RS1_2024_25.API.Data.Models.ShoppingCenter", b =>
                 {
                     b.HasOne("RS1_2024_25.API.Data.Models.City", "City")
@@ -855,21 +697,7 @@ namespace RS1_2024_25.API.Migrations
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
-                    b.HasOne("User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.NoAction);
-
                     b.Navigation("City");
-
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("Category", b =>
-                {
-                    b.Navigation("Attractions");
-
-                    b.Navigation("Offers");
                 });
 #pragma warning restore 612, 618
         }

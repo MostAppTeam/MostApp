@@ -55,7 +55,13 @@
 .museums {
   margin-bottom: 20px;
 }
-
+.invalid {
+  border: 2px solid red;
+}
+.error-message {
+  color: red;
+  font-size: 12px;
+}
 .events {
   margin-top: 20px;
   border-top: 1px solid #ccc;

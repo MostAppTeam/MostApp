@@ -1,0 +1,15 @@
+<h2>Explore Attractions</h2>
+<div *ngIf="attractions && attractions.length > 0; else noData">
+  <div *ngFor="let attraction of attractions" class="attraction-card">
+    <h3>{{ attraction.name }}</h3>
+    <p>{{ attraction.description }}</p>
+    <div *ngIf="attraction.virtualTourURL">
+      <img [src]="attraction.virtualTourURL" alt="{{ attraction.name }}" style="max-width: 100%; height: auto;" />
+      <a [href]="attraction.virtualTourURL" target="_blank">Virtual Tour</a>
+    </div>
+  </div>
+</div>
+
+<ng-template #noData>
+  <p>No attractions available to display.</p>
+</ng-template>

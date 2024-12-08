@@ -1,0 +1,23 @@
+.attraction-card {
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: 15px;
+  margin: 10px 0;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.attraction-card h3 {
+  margin: 0 0 10px;
+  color: #007bff;
+}
+
+.attraction-card p {
+  margin: 0 0 10px;
+  font-size: 14px;
+  color: #555;
+}
+
+.attraction-card a {
+  color: #28a745;
+  text-decoration: none;
+}

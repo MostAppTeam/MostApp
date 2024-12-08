@@ -1,12 +1,54 @@
 <div id="event-container">
   <!-- Forma za dodavanje događaja -->
-  <form (ngSubmit)="addEvent()" id="add-event-form">
+  <form (ngSubmit)="addEvent()" id="add-event-form" #eventForm="ngForm">
     <h3>Dodaj Event</h3>
-    <input [(ngModel)]="newEvent.name" placeholder="Naziv" name="name" required />
-    <input [(ngModel)]="newEvent.date" placeholder="Datum" name="date" required type="date" />
-    <input [(ngModel)]="newEvent.location" placeholder="Lokacija" name="location" required />
-    <textarea [(ngModel)]="newEvent.description" placeholder="Opis" name="description" required></textarea>
-    <button type="submit">Dodaj Event</button>
+
+    <div>
+      <input
+        [(ngModel)]="newEvent.name"
+        placeholder="Naziv"
+        name="name"
+        required
+        #name="ngModel"
+        [class.invalid]="name.invalid && name.touched" />
+      <div *ngIf="name.invalid && name.touched" class="error-message">Molimo popunite naziv!</div>
+    </div>
+
+    <div>
+      <input
+        [(ngModel)]="newEvent.date"
+        placeholder="Datum"
+        name="date"
+        required
+        type="date"
+        #date="ngModel"
+        [class.invalid]="date.invalid && date.touched" />
+      <div *ngIf="date.invalid && date.touched" class="error-message">Molimo popunite datum!</div>
+    </div>
+
+    <div>
+      <input
+        [(ngModel)]="newEvent.location"
+        placeholder="Lokacija"
+        name="location"
+        required
+        #location="ngModel"
+        [class.invalid]="location.invalid && location.touched" />
+      <div *ngIf="location.invalid && location.touched" class="error-message">Molimo popunite lokaciju!</div>
+    </div>
+
+    <div>
+      <textarea
+        [(ngModel)]="newEvent.description"
+        placeholder="Opis"
+        name="description"
+        required
+        #description="ngModel"
+        [class.invalid]="description.invalid && description.touched"></textarea>
+      <div *ngIf="description.invalid && description.touched" class="error-message">Molimo popunite opis!</div>
+    </div>
+
+    <button type="submit" [disabled]="eventForm.invalid">Dodaj Event</button>
   </form>
 
   <!-- Poruka povratne informacije -->
@@ -14,10 +56,21 @@
     {{ feedbackMessage }}
   </div>
 
+  <!-- Sekcija za filtriranje događaja -->
+  <div id="filter-container">
+    <h3>Filtriraj Evente</h3>
+    <input [(ngModel)]="filterParams.name" placeholder="Naziv" name="filterName" />
+    <input [(ngModel)]="filterParams.date" placeholder="Datum" name="filterDate" type="date" />
+    <input [(ngModel)]="filterParams.location" placeholder="Lokacija" name="filterLocation" />
+    <input [(ngModel)]="filterParams.description" placeholder="Opis" name="filterDescription" />
+    <input [(ngModel)]="filterParams.id" placeholder="ID događaja" name="filterId" type="number" />
+    <button (click)="applyFilter()">Primijeni filter</button>
+  </div>
+
   <!-- Postojeći eventi -->
   <h3>Postojeći Eventi</h3>
-  <div *ngIf="events.length > 0; else noEventsMessage">
-    <div class="event" *ngFor="let event of events">
+  <div *ngIf="filteredEvents.length > 0; else noEventsMessage">
+    <div class="event" *ngFor="let event of filteredEvents">
       <h4>{{ event.name }}</h4>
       <p>{{ event.description }}</p>
       <p><strong>Datum:</strong> {{ event.date }}</p>

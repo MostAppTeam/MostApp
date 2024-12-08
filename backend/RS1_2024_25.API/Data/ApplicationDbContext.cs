@@ -22,7 +22,15 @@ namespace RS1_2024_25.API.Data
         public DbSet<Event> Events { get; set; }
         public DbSet<Category> Categories { get; set; }
         public DbSet<User> Users { get; set; }
+<<<<<<< HEAD
         public DbSet<UserPreference>UserPreferences { get; set; }
+=======
+        public DbSet<Booking> Bookings { get; set; }
+        public DbSet<Review> Reviews { get; set; }
+        public DbSet<Media> Media { get; set; }
+        public DbSet<ActivityLog> ActivityLogs { get; set; }
+        public DbSet<Notification> Notifications { get; set; }
+>>>>>>> main
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -33,8 +41,14 @@ namespace RS1_2024_25.API.Data
                 .Property(o => o.Price)
                 .HasPrecision(18, 2); // 18 ukupnih cifara, 2 decimalna mjesta
 
+<<<<<<< HEAD
             modelBuilder.Entity<Attraction>()
                 .Property(a => a.TicketPrice)
+=======
+            // Konfiguracija decimalnog polja 'TotalPrice' u 'Booking' entitetu
+            modelBuilder.Entity<Booking>()
+                .Property(b => b.TotalPrice)
+>>>>>>> main
                 .HasPrecision(18, 2); // 18 ukupnih cifara, 2 decimalna mjesta
 
             // Onemogućavamo automatsko brisanje povezanih entiteta
