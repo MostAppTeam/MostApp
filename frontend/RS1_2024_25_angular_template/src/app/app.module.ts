@@ -4,35 +4,23 @@ import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-<<<<<<< HEAD
-import { MuseumsComponent } from './modules/admin/museums/museums.component';
-import { EventsComponent } from './modules/admin/events/event.component'; // Ispravljeno ime fajla
-import { UserRecommendationsComponent } from './modules/admin/user-recommendations/user-recommendations.component';
-import { WeatherComponent } from './modules/admin/weather/weather.component'; // Ispravljena putanja
-
-@NgModule({
-  declarations: [
-    AppComponent,
-    MuseumsComponent,
-    EventsComponent, // Dodata komponenta
-    UserRecommendationsComponent,
-    WeatherComponent, // Ispravljena komponenta
-  ],
-=======
 import { AdminModule } from './modules/admin/admin.module';  // Importuj AdminModule
-
+import { UserRecommendationsComponent } from './modules/admin/user-recommendations/user-recommendations.component';
+import { EventsComponent } from './modules/admin/events/event.component'; // Ispravljeno ime fajla
+import { WeatherComponent } from './modules/admin/weather/weather.component'; // Ispravljena putanja
 @NgModule({
-  declarations: [AppComponent], // Nema potrebe da importuješ AttractionsComponent ovde
->>>>>>> main
+  declarations: [AppComponent,EventsComponent, // Dodata komponenta
+    UserRecommendationsComponent,
+    WeatherComponent,], // Ispravljena komponenta], // Nema potrebe da importuješ AttractionsComponent ovde
   imports: [
     BrowserModule,
     FormsModule,
     HttpClientModule,
     AppRoutingModule,
-<<<<<<< HEAD
-=======
-    AdminModule,  // Dodaj AdminModule ovde
->>>>>>> main
+    AdminModule,BrowserModule,
+  FormsModule,
+  HttpClientModule,
+  AppRoutingModule,  // Dodaj AdminModule ovde
   ],
   providers: [],
   bootstrap: [AppComponent],
