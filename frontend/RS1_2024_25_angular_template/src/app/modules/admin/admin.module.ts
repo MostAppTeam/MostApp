@@ -11,6 +11,7 @@ import {CitiesComponent} from './cities/cities.component';
 import {CitiesEditComponent} from './cities/cities-edit/cities-edit.component';
 import {FormsModule} from '@angular/forms';
 import {SharedModule} from '../shared/shared.module';
+import {OffersComponent} from './offers/offers.component';
 
 
 @NgModule({
@@ -22,6 +23,7 @@ import {SharedModule} from '../shared/shared.module';
     AdminErrorPageComponent,
     CitiesComponent,
     CitiesEditComponent,
+   // OffersComponent
   ],
   imports: [
     CommonModule,

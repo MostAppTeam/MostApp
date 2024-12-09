@@ -3,50 +3,68 @@ using RS1_2024_25.API.Data;
 using RS1_2024_25.API.Helper.Auth;
 using RS1_2024_25.API.Services;
 
-var config = new ConfigurationBuilder()
-    .AddJsonFile("appsettings.json", false)
-    .Build();
-
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+// Configure services and dependencies
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseSqlServer(config.GetConnectionString("db1")));
+    options.UseSqlServer(builder.Configuration.GetConnectionString("MostAppDB")));
 
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(x => x.OperationFilter<MyAuthorizationSwaggerHeader>());
-
 builder.Services.AddHttpContextAccessor();
-// Dodajte vaše servise
+
+// Register your services
 builder.Services.AddTransient<MyAuthService>();
 builder.Services.AddScoped<RecommendationService>();
-builder.Services.AddHttpClient<WeatherService>();
-builder.Services.AddScoped<MyAuthService>();
-builder.Services.AddHttpContextAccessor();
 
-
+// Configure CORS policy
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowSpecificOrigin", policy =>
+    {
+        policy.WithOrigins("http://localhost:4200")
+              .AllowAnyHeader()
+              .AllowAnyMethod();
+    });
+});
 
 var app = builder.Build();
 
-// Seed podaci (pozivanje metode koja dodaje podatke u bazu)
-SeedData.Initialize(app.Services);
+// Middleware and pipeline configuration
+if (app.Environment.IsDevelopment())
+{
+    app.UseSwagger();
+    app.UseSwaggerUI();
+}
 
-app.UseSwagger();
-app.UseSwaggerUI();
+app.UseHttpsRedirection();
 
-app.UseCors(
-    options => options
-        .SetIsOriginAllowed(x => _ = true)
-        .AllowAnyMethod()
-        .AllowAnyHeader()
-        .AllowCredentials()
-); // This needs to set everything allowed
+// Apply CORS
+app.UseCors("AllowSpecificOrigin");
 
-app.UseAuthentication();
 app.UseAuthorization();
-
 app.MapControllers();
+
+// Test database connection
+using (var scope = app.Services.CreateScope())
+{
+    var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+    try
+    {
+        if (context.Database.CanConnect())
+        {
+            Console.WriteLine("Connection to the database successful!");
+        }
+        else
+        {
+            Console.WriteLine("Failed to connect to the database.");
+        }
+    }
+    catch (Exception ex)
+    {
+        Console.WriteLine($"Database connection error: {ex.Message}");
+    }
+}
 
 app.Run();

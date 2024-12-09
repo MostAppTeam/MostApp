@@ -109,7 +109,44 @@ namespace RS1_2024_25.API.Data
                     );
                     context.SaveChanges();
                 }
+                if (!context.Categories.Any())
+                {
+                    context.Categories.AddRange(
+                        new Category { Name = "Historical" },
+                        new Category { Name = "Adventure" },
+                        new Category { Name = "Cultural" },
+                        new Category { Name = "Shopping" }
+                    );
+                    context.SaveChanges();
+                }
 
+                if (!context.Attractions.Any())
+                {
+                    // Dodajte atrakcije, povežite ih s kategorijama
+                    var historicalCategoryId = context.Categories.First(c => c.Name == "Historical").ID;
+                    var adventureCategoryId = context.Categories.First(c => c.Name == "Adventure").ID;
+
+                    context.Attractions.AddRange(
+                        new Attraction { Name = "Old Bridge", Description = "A UNESCO World Heritage site.", CategoryID = historicalCategoryId },
+                        new Attraction { Name = "Blagaj Tekke", Description = "A historical Dervish house.", CategoryID = historicalCategoryId },
+                        new Attraction { Name = "Neretva Rafting Adventure", Description = "A thrilling rafting experience.", CategoryID = adventureCategoryId }
+                    );
+                    context.SaveChanges();
+                }
+
+                if (!context.Offers.Any())
+                {
+                    // Dodajte ponude, povežite ih s kategorijama
+                    var adventureCategoryId = context.Categories.First(c => c.Name == "Adventure").ID;
+
+                    context.Offers.AddRange(
+                        new Offer { OfferName = "City Tour", Description = "A guided walking tour.", Price = 30.0m, CategoryID = adventureCategoryId },
+                        new Offer { OfferName = "Rafting Adventure", Description = "Rafting experience on the Neretva River.", Price = 70.0m, CategoryID = adventureCategoryId }
+                    );
+                    context.SaveChanges();
+                }
+
+               
 
             }
         }

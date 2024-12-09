@@ -1,0 +1,18 @@
+<div class="hero-section">
+  <h1>Explore Mostar</h1>
+  <p>
+    Welcome to MostApp - your trusted companion for exploring Mostar! Dive into the rich history, iconic landmarks, vibrant shopping spots, and exciting offers that make this city truly special.
+  </p>
+  <button class="btn-signup">Sign Up</button>
+</div>
+
+<section class="offers-section">
+  <h2>Available Offers</h2>
+  <div class="offers-container">
+    <div *ngFor="let offer of offers" class="offer-card">
+      <h3>{{ offer.offerName }}</h3>
+      <p>{{ offer.description }}</p>
+      <p class="price">Price: ${{ offer.price }}</p>
+    </div>
+  </div>
+</section>

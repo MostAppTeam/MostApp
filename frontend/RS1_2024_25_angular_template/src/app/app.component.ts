@@ -1,11 +1,27 @@
-import {Component} from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { Router, NavigationEnd } from '@angular/router';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css'] // Ispravno: "styleUrls"
+  styleUrls: ['./app.component.css']
 })
+export class AppComponent implements OnInit {
+  showNavbar = true;
+  showHeroSection = true;
+  showFooter = true;
 
-export class AppComponent {
-  title = 'RS1 - 2024-25 - template 1 ';
+  constructor(private router: Router) {}
+
+  ngOnInit(): void {
+    this.router.events.subscribe(event => {
+      if (event instanceof NavigationEnd) {
+        const route = event.urlAfterRedirects;
+        // Prikazujemo hero sekciju i footer samo za Home
+        this.showNavbar = true; // Navigacija ostaje vidljiva
+        this.showHeroSection = route === '/home';
+        this.showFooter = route === '/home';
+      }
+    });
+  }
 }
