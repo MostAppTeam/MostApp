@@ -127,9 +127,9 @@ namespace RS1_2024_25.API.Data
                     var adventureCategoryId = context.Categories.First(c => c.Name == "Adventure").ID;
 
                     context.Attractions.AddRange(
-                        new Attraction { Name = "Old Bridge", Description = "A UNESCO World Heritage site.", CategoryID = historicalCategoryId },
-                        new Attraction { Name = "Blagaj Tekke", Description = "A historical Dervish house.", CategoryID = historicalCategoryId },
-                        new Attraction { Name = "Neretva Rafting Adventure", Description = "A thrilling rafting experience.", CategoryID = adventureCategoryId }
+                        new Attraction { Name = "Old Bridge", Description = "A UNESCO World Heritage site.", VirtualTourURL="sjajsj"},
+                        new Attraction { Name = "Blagaj Tekke", Description = "A historical Dervish house.",VirtualTourURL="SAKKSK"  },
+                        new Attraction { Name = "Neretva Rafting Adventure", Description = "A thrilling rafting experience.", VirtualTourURL="AJSJAJ" }
                     );
                     context.SaveChanges();
                 }
