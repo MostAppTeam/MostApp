@@ -1,15 +1,93 @@
-#event-container {
+#events-container {
   font-family: Arial, sans-serif;
-  padding: 20px;
+  padding: 30px 20px;
   background-color: #f9f9f9;
+  margin-top: 60px; /* To create some space below the navbar */
 }
 
-#add-event-form {
+/* Event Section Heading and Description */
+#events-container h3 {
+  font-size: 1.8rem;
+  color: #333;
+  text-align: center;
+}
+/* Style for event cards */
+.event-card {
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  padding: 15px;
+  width: 100%;
+  max-width: 300px;
+  text-align: center;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  font-family: Arial, sans-serif;
   margin-bottom: 20px;
+}
+
+.event-card:hover {
+  transform: scale(1.05);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+}
+
+.event-card h4 {
+  color: #f7b731; /* Yellow for the event name */
+  font-size: 1.4rem;
+  margin-bottom: 10px;
+}
+
+.event-card p {
+  color: #555;
+  font-size: 1rem;
+  margin: 5px 0;
+}
+
+/* Add space between Edit and Delete buttons */
+.event-card button {
+  background-color: #f7b731;
+  color: white;
+  padding: 6px 10px;  /* Smaller padding for more compact buttons */
+  border: none;
+  border-radius: 3px;
+  cursor: pointer;
+  font-weight: bold;
+  margin-bottom: 15px; /* Increased bottom margin for more space below Edit button */
+  width: auto;  /* Keep buttons' width auto */
+  font-size: 0.9rem;  /* Smaller font size */
+  box-sizing: border-box;
+}
+
+/* Specific styles for the Delete button */
+.event-card button.delete-button {
+  margin-top: 20px; /* Increased margin-top for more space between Edit and Delete buttons */
+}
+
+/* Hover effect for buttons */
+.event-card button:hover {
+  background-color: #e6a722;
+}
+
+
+
+/* Existing Events Display as Cards */
+.event-cards {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: center;
+}
+
+/* Form for adding an event */
+#add-event-form {
+  margin-top: 20px;
   padding: 15px;
   border: 1px solid #ddd;
   border-radius: 5px;
   background-color: #fff;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 #add-event-form h3 {
@@ -17,8 +95,7 @@
   color: #333;
 }
 
-#add-event-form input,
-#add-event-form textarea {
+#add-event-form input, #add-event-form textarea {
   margin: 5px 0;
   padding: 8px;
   width: calc(100% - 20px);
@@ -27,7 +104,7 @@
 }
 
 #add-event-form button {
-  background-color: #007bff;
+  background-color: #f7b731;
   color: white;
   padding: 8px 12px;
   border: none;
@@ -37,61 +114,62 @@
 }
 
 #add-event-form button:hover {
-  background-color: #0056b3;
+  background-color: #e6a722;
 }
 
-#feedback-message {
-  color: green;
-  margin: 10px 0;
+#add-event-form .invalid {
+  border-color: red;
 }
 
-.event {
-  border: 1px solid #ddd;
-  padding: 15px;
-  margin: 10px 0;
-  border-radius: 5px;
-  background-color: #f1f1f1;
-}
-.museums {
-  margin-bottom: 20px;
-}
-.invalid {
-  border: 2px solid red;
-}
-.error-message {
+#add-event-form .error-message {
   color: red;
-  font-size: 12px;
+  font-size: 0.9rem;
 }
-.events {
+
+/* Event filter container */
+#filter-container {
   margin-top: 20px;
-  border-top: 1px solid #ccc;
-  padding-top: 10px;
+  padding: 15px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  background-color: #fff;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
-.event h4 {
-  margin: 0 0 5px 0;
-  font-size: 1.2em;
-}
-
-.event p {
+#filter-container input {
   margin: 5px 0;
+  padding: 8px;
+  width: calc(100% - 20px);
+  border: 1px solid #ccc;
+  border-radius: 3px;
 }
 
-.event a {
-  color: #007bff;
-  text-decoration: none;
-}
-
-.event button {
-  background-color: #dc3545;
+#filter-container button {
+  background-color: #f7b731;
   color: white;
-  padding: 5px 10px;
+  padding: 8px 12px;
   border: none;
   border-radius: 3px;
   cursor: pointer;
-  font-size: 0.9em;
+  font-weight: bold;
 }
 
-.event button:hover {
-  background-color: #c82333;
+#filter-container button:hover {
+  background-color: #e6a722;
+}
+
+/* Navigation links */
+#navigation-links button {
+  background-color: #f7b731;
+  color: white;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+#navigation-links button:hover {
+  background-color: #e6a722;
 }

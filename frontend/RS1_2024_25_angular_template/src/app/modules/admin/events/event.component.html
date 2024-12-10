@@ -1,91 +1,94 @@
+<div id="events-container">
+  <!-- Existing Events Display as Cards -->
+  <h3>Existing Events</h3>
+  <div *ngIf="filteredEvents.length > 0; else noEventsMessage" class="event-cards">
+    <div class="event-card" *ngFor="let event of filteredEvents">
+      <h4>{{ event.name }}</h4>
+      <p>{{ event.description }}</p>
+      <p><strong>Date:</strong> {{ event.date }}</p>
+      <p><strong>Location:</strong> {{ event.location }}</p>
+      <button (click)="editEvent(event)">Edit</button>
+      <button (click)="deleteEvent(event.id)">Delete</button>
+    </div>
+  </div>
+
+  <ng-template #noEventsMessage>
+    <p>No events available.</p>
+  </ng-template>
+</div>
+
+<!-- Add Event Form -->
 <div id="event-container">
-  <!-- Forma za dodavanje događaja -->
+  <!-- Form to add an event -->
   <form (ngSubmit)="addEvent()" id="add-event-form" #eventForm="ngForm">
-    <h3>Dodaj Event</h3>
+    <h3>Add Event</h3>
 
     <div>
       <input
         [(ngModel)]="newEvent.name"
-        placeholder="Naziv"
+        placeholder="Event Name"
         name="name"
         required
         #name="ngModel"
         [class.invalid]="name.invalid && name.touched" />
-      <div *ngIf="name.invalid && name.touched" class="error-message">Molimo popunite naziv!</div>
+      <div *ngIf="name.invalid && name.touched" class="error-message">Please enter the event name!</div>
     </div>
 
     <div>
       <input
         [(ngModel)]="newEvent.date"
-        placeholder="Datum"
+        placeholder="Date"
         name="date"
         required
         type="date"
         #date="ngModel"
         [class.invalid]="date.invalid && date.touched" />
-      <div *ngIf="date.invalid && date.touched" class="error-message">Molimo popunite datum!</div>
+      <div *ngIf="date.invalid && date.touched" class="error-message">Please enter the date!</div>
     </div>
 
     <div>
       <input
         [(ngModel)]="newEvent.location"
-        placeholder="Lokacija"
+        placeholder="Location"
         name="location"
         required
         #location="ngModel"
         [class.invalid]="location.invalid && location.touched" />
-      <div *ngIf="location.invalid && location.touched" class="error-message">Molimo popunite lokaciju!</div>
+      <div *ngIf="location.invalid && location.touched" class="error-message">Please enter the location!</div>
     </div>
 
     <div>
       <textarea
         [(ngModel)]="newEvent.description"
-        placeholder="Opis"
+        placeholder="Description"
         name="description"
         required
         #description="ngModel"
         [class.invalid]="description.invalid && description.touched"></textarea>
-      <div *ngIf="description.invalid && description.touched" class="error-message">Molimo popunite opis!</div>
+      <div *ngIf="description.invalid && description.touched" class="error-message">Please enter the description!</div>
     </div>
 
-    <button type="submit" [disabled]="eventForm.invalid">Dodaj Event</button>
+    <button type="submit" [disabled]="eventForm.invalid">Add Event</button>
   </form>
 
-  <!-- Poruka povratne informacije -->
+  <!-- Feedback message -->
   <div *ngIf="feedbackMessage" id="feedback-message">
     {{ feedbackMessage }}
   </div>
 
-  <!-- Sekcija za filtriranje događaja -->
+  <!-- Event Filtering Section -->
   <div id="filter-container">
-    <h3>Filtriraj Evente</h3>
-    <input [(ngModel)]="filterParams.name" placeholder="Naziv" name="filterName" />
-    <input [(ngModel)]="filterParams.date" placeholder="Datum" name="filterDate" type="date" />
-    <input [(ngModel)]="filterParams.location" placeholder="Lokacija" name="filterLocation" />
-    <input [(ngModel)]="filterParams.description" placeholder="Opis" name="filterDescription" />
-    <input [(ngModel)]="filterParams.id" placeholder="ID događaja" name="filterId" type="number" />
-    <button (click)="applyFilter()">Primijeni filter</button>
+    <h3>Filter Events</h3>
+    <input [(ngModel)]="filterParams.name" placeholder="Event Name" name="filterName" />
+    <input [(ngModel)]="filterParams.date" placeholder="Date" name="filterDate" type="date" />
+    <input [(ngModel)]="filterParams.location" placeholder="Location" name="filterLocation" />
+    <input [(ngModel)]="filterParams.description" placeholder="Description" name="filterDescription" />
+    <input [(ngModel)]="filterParams.id" placeholder="Event ID" name="filterId" type="number" />
+    <button (click)="applyFilter()">Apply Filter</button>
   </div>
-
-  <!-- Postojeći eventi -->
-  <h3>Postojeći Eventi</h3>
-  <div *ngIf="filteredEvents.length > 0; else noEventsMessage">
-    <div class="event" *ngFor="let event of filteredEvents">
-      <h4>{{ event.name }}</h4>
-      <p>{{ event.description }}</p>
-      <p><strong>Datum:</strong> {{ event.date }}</p>
-      <p><strong>Lokacija:</strong> {{ event.location }}</p>
-      <button (click)="editEvent(event)">Izmeni</button>
-      <button (click)="deleteEvent(event.id)">Obriši</button>
-    </div>
-  </div>
-
-  <ng-template #noEventsMessage>
-    <p>Nema dostupnih eventa.</p>
-  </ng-template>
 </div>
 
-<!-- Navigacija između muzeja i događaja -->
+<!-- Navigation Links -->
 <div id="navigation-links">
-  <button routerLink="/museums">Povratak na Muzeje</button>
+  <button routerLink="/museums">Back to Museums</button>
 </div>

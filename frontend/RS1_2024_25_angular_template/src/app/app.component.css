@@ -4,36 +4,41 @@ body {
   margin: 0;
   padding: 0;
 }
+/* Navigacijska traka */
+nav {
+  position: fixed; /* Fiksira navigaciju na vrhu */
+  top: 0;
+  left: 0;
+  width: 100%;
+  background-color: rgba(247, 183, 49, 0.9); /* Žućkasta boja s laganom prozirnošću */
+  color: #333; /* Tamno siva za tekst */
+  padding: 20px 0; /* Veći razmak za visinu trake */
+  text-align: center;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Lagana sjena ispod navigacije */
+  z-index: 1000; /* Navigacija ostaje iznad sadržaja */
+}
 
-/* Navigation Bar */
-.navbar {
+nav ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
   display: flex;
   justify-content: center;
-  background-color: rgba(0, 0, 0, 0.6); /* Poluprozirna sivkasta pozadina */
-  padding: 10px 0;  /* Manje paddinga za manju visinu trake */
-  position: fixed;
-  width: 100%;
-  z-index: 100;
+  gap: 30px; /* Povećan razmak između linkova */
 }
 
-.nav-list {
-  display: flex;
-  gap: 50px; /* Manji razmak između stavki */
-  list-style: none;
-}
-
-.nav-link {
-  color: white;
+nav ul li a {
   text-decoration: none;
-  font-size: 1.2rem; /* Manji font za stavke navigacije */
-  font-weight: bold;
-  letter-spacing: 1px; /* Malo manji prored između slova */
+  font-size: 1.2rem; /* Malo veći font za linkove */
+  color: #333; /* Tamno siva za linkove */
   transition: color 0.3s ease;
 }
 
-.nav-link:hover {
-  color: #fbc02d; /* Žuti hover efekt */
+nav ul li a:hover {
+  color: #ffffff; /* Bijela boja na hover */
 }
+
+
 
 /* Hero Section */
 .hero-header {

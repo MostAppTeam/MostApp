@@ -1,39 +1,42 @@
 <div id="museum-container">
-  <!-- Forma za dodavanje muzeja -->
-  <form (ngSubmit)="addMuseum()" id="add-museum-form">
-    <h3>Dodaj Muzej</h3>
-    <input [(ngModel)]="newMuseum.name" placeholder="Naziv" name="name" required />
-    <input [(ngModel)]="newMuseum.description" placeholder="Opis" name="description" required />
-    <input [(ngModel)]="newMuseum.location" placeholder="Lokacija" name="location" required />
-    <input [(ngModel)]="newMuseum.workingHours" placeholder="Radno Vrijeme" name="workingHours" required />
-    <input [(ngModel)]="newMuseum.imageUrl" placeholder="URL Slike" name="imageUrl" required />
-    <button type="submit">Dodaj Muzej</button>
-  </form>
+  <!-- Museums Section with a description -->
+  <h3>Explore Museums in Mostar</h3>
+  <p class="description-text">Discover the rich history and culture at museums in Mostar. Learn more about their exhibits, locations, and working hours.</p>
 
-  <!-- Poruka povratne informacije -->
-  <div *ngIf="feedbackMessage" id="feedback-message">
-    {{ feedbackMessage }}
-  </div>
-
-  <!-- Postojeći muzeji -->
-  <h3>Postojeći Muzeji</h3>
-  <div *ngIf="museums.length > 0; else noMuseumsMessage">
-    <div class="museum" *ngFor="let museum of museums">
+  <!-- Existing Museums -->
+  <div *ngIf="museums.length > 0; else noMuseumsMessage" class="museum-cards">
+    <div class="museum-card" *ngFor="let museum of museums">
       <h4>{{ museum.name }}</h4>
       <p>{{ museum.description }}</p>
-      <p><strong>Lokacija:</strong> {{ museum.location }}</p>
-      <p><strong>Radno Vrijeme:</strong> {{ museum.workingHours }}</p>
-      <a [href]="museum.imageUrl" target="_blank">Pogledaj sliku</a>
+      <p><strong>Location:</strong> {{ museum.location }}</p>
+      <p><strong>Working Hours:</strong> {{ museum.workingHours }}</p>
+      <a [href]="museum.imageUrl" target="_blank" class="view-image-button">View Image</a>
     </div>
   </div>
 
   <ng-template #noMuseumsMessage>
-    <p>Nema dostupnih muzeja.</p>
+    <p>No museums available.</p>
   </ng-template>
-</div>
 
-<!-- Događaji -->
-<div id="events-container">
-  <h3>Događaji</h3>
-  <app-events></app-events> <!-- Ovo dodaje sadržaj EventsComponent-a -->
+  <!-- Add Museum Form -->
+  <form (ngSubmit)="addMuseum()" id="add-museum-form">
+    <h3>Add a Museum</h3>
+    <input [(ngModel)]="newMuseum.name" placeholder="Name" name="name" required />
+    <input [(ngModel)]="newMuseum.description" placeholder="Description" name="description" required />
+    <input [(ngModel)]="newMuseum.location" placeholder="Location" name="location" required />
+    <input [(ngModel)]="newMuseum.workingHours" placeholder="Working Hours" name="workingHours" required />
+    <input [(ngModel)]="newMuseum.imageUrl" placeholder="Image URL" name="imageUrl" required />
+    <button type="submit">Add Museum</button>
+  </form>
+
+  <!-- Feedback Message -->
+  <div *ngIf="feedbackMessage" id="feedback-message">
+    {{ feedbackMessage }}
+  </div>
+
+  <!-- Events Section -->
+  <div id="events-container">
+    <h3>Events</h3>
+    <app-events></app-events> <!-- Adds the EventsComponent content -->
+  </div>
 </div>

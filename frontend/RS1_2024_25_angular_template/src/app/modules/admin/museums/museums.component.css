@@ -1,15 +1,124 @@
 #museum-container {
   font-family: Arial, sans-serif;
-  padding: 20px;
+  padding: 30px 20px;
   background-color: #f9f9f9;
+  margin-top: 60px; /* To create some space below the navbar */
 }
 
-#add-museum-form {
+/* Museums Section Heading and Description */
+#museum-container h3 {
+  font-size: 1.8rem;
+  color: #333;
+  text-align: center;
+}/* Stilizacija samo za opis muzeja */
+#museum-container p.description-text {
+  font-size: 1.1rem;
+  margin-bottom: 40px;
+  color: #555; /* Neutralno siva za opis */
+  line-height: 1.6;
+  text-align: center; /* Centrirani tekst */
+  background-color: #fdf2e9; /* Lagano žućkasta pozadina iza opisa */
+  padding: 20px;
+  border-radius: 8px; /* Zaobljeni uglovi */
+  font-family: 'Arial', sans-serif; /* Isti font */
+  width: 80%; /* Opcionalno smanjena širina */
+  margin-left: auto; /* Centriranje sa leve strane */
+  margin-right: auto; /* Centriranje sa desne strane */
+}
+
+/* Stilizacija za muzejske kartice (ne utiče na tekst opisa) */
+.museum-card {
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  padding: 15px;
+  width: 100%;
+  max-width: 300px;
+  text-align: center;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  font-family: Arial, sans-serif;
   margin-bottom: 20px;
+}
+
+.museum-card h4 {
+  color: #f7b731; /* Yellow for the museum name */
+  font-size: 1.4rem;
+  margin-bottom: 10px;
+}
+
+.museum-card p {
+  color: #555;
+  font-size: 1rem;
+  margin: 5px 0;
+}
+
+/* Existing Museums Display as Cards */
+.museum-cards {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: center;
+}
+
+.museum-card {
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  padding: 15px;
+  width: 100%;
+  max-width: 300px;
+  text-align: center;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  font-family: Arial, sans-serif;
+  margin-bottom: 20px;
+}
+
+.museum-card:hover {
+  transform: scale(1.05);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+}
+
+.museum-card h4 {
+  color: #f7b731; /* Yellow for the museum name */
+  font-size: 1.4rem;
+  margin-bottom: 10px;
+}
+
+.museum-card p {
+  color: #555;
+  font-size: 1rem;
+  margin: 5px 0;
+}
+
+.museum-card a.view-image-button {
+  display: inline-block;
+  margin-top: 10px;
+  background-color: #f7b731;
+  color: white;
+  padding: 8px 12px;
+  border: none;
+  border-radius: 3px;
+  cursor: pointer;
+  font-weight: bold;
+  text-decoration: none;
+}
+
+.museum-card a.view-image-button:hover {
+  background-color: #e6a722;
+}
+
+/* Add Museum Form */
+#add-museum-form {
+  margin-top: 20px;
   padding: 15px;
   border: 1px solid #ddd;
   border-radius: 5px;
   background-color: #fff;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 #add-museum-form h3 {
@@ -26,7 +135,7 @@
 }
 
 #add-museum-form button {
-  background-color: #007bff;
+  background-color: #f7b731;
   color: white;
   padding: 8px 12px;
   border: none;
@@ -36,7 +145,7 @@
 }
 
 #add-museum-form button:hover {
-  background-color: #0056b3;
+  background-color: #e6a722;
 }
 
 #feedback-message {
@@ -44,24 +153,7 @@
   margin: 10px 0;
 }
 
-.museum {
-  border: 1px solid #ddd;
-  padding: 15px;
-  margin: 10px 0;
-  border-radius: 5px;
-  background-color: #f1f1f1;
-}
 
-.museum h4 {
-  margin: 0 0 5px 0;
-  font-size: 1.2em;
-}
-
-.museum p {
-  margin: 5px 0;
-}
-
-.museum a {
-  color: #007bff;
-  text-decoration: none;
+#events-container {
+  display: none;
 }
