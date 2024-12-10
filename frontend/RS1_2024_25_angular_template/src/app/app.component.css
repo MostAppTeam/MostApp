@@ -1,48 +1,38 @@
-/* Import Google Fonts */
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;700&display=swap');
-
 /* Global styles */
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
 body {
   font-family: 'Poppins', sans-serif;
-  line-height: 1.6;
-  background-color: #f4f4f4; /* Globalna pozadina */
+  margin: 0;
+  padding: 0;
 }
 
 /* Navigation Bar */
 .navbar {
-  background-color: rgba(0, 0, 0, 0.8);
-  color: white;
-  position: absolute;
-  top: 0;
-  width: 100%;
-  padding: 20px 0;
-  z-index: 1000;
   display: flex;
   justify-content: center;
+  background-color: rgba(0, 0, 0, 0.6); /* Poluprozirna sivkasta pozadina */
+  padding: 10px 0;  /* Manje paddinga za manju visinu trake */
+  position: fixed;
+  width: 100%;
+  z-index: 100;
 }
 
 .nav-list {
-  list-style: none;
   display: flex;
-  gap: 60px; /* Veći razmak između stavki */
+  gap: 50px; /* Manji razmak između stavki */
+  list-style: none;
 }
 
 .nav-link {
   color: white;
   text-decoration: none;
-  font-size: 1.4rem; /* Veći i jasniji font */
-  font-weight: 700; /* Deblji font */
+  font-size: 1.2rem; /* Manji font za stavke navigacije */
+  font-weight: bold;
+  letter-spacing: 1px; /* Malo manji prored između slova */
   transition: color 0.3s ease;
 }
 
 .nav-link:hover {
-  color: #ffcc00;
+  color: #fbc02d; /* Žuti hover efekt */
 }
 
 /* Hero Section */
@@ -51,29 +41,25 @@ body {
   background-size: cover;
   background-position: center;
   height: 100vh;
-  position: relative;
+  color: white;
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
   justify-content: center;
-  padding: 0 5%; /* Smanjen padding s lijeve strane */
-  text-align: left;
-}
-
-.hero-header .overlay {
-  color: white;
-  text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.5);
+  align-items: flex-start;
+  padding: 0 10%;
 }
 
 .hero-header h1 {
-  font-size: 3.2rem;
+  font-size: 4.5rem; /* Veći tekst za "Explore Mostar" */
+  font-weight: bold;
   margin-bottom: 20px;
+  text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);
 }
 
 .hero-header p {
-  font-size: 1.3rem;
-  margin-bottom: 30px;
+  font-size: 1.5rem;
   max-width: 600px;
+  margin-bottom: 30px;
 }
 
 .hero-header .btn-explore {
@@ -91,81 +77,4 @@ body {
 .hero-header .btn-explore:hover {
   background-color: #ffc800;
   transform: scale(1.05);
-}
-
-/* Footer */
-.app-footer {
-  background-color: rgba(0, 0, 0, 0.7);
-  color: white;
-  text-align: center;
-  padding: 20px;
-  position: absolute;
-  bottom: 0;
-  width: 100%;
-  font-size: 1rem;
-}
-
-/* Specific styling for Offers Page */
-.offer-page {
-  background-color: #dcdcdc; /* Sivkasta pozadina za Offers */
-  padding: 20px;
-}
-
-.offer-page h2 {
-  font-size: 2.5rem;
-  margin-bottom: 20px;
-  color: #333;
-}
-
-.offer-page .offer-list {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-}
-
-.offer-page .offer-item {
-  background-color: white;
-  padding: 20px;
-  border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-}
-
-.offer-page .offer-item h3 {
-  font-size: 1.8rem;
-  color: #333;
-}
-
-.offer-page .offer-item p {
-  font-size: 1.2rem;
-  margin-bottom: 15px;
-}
-
-.offer-page .offer-item .price {
-  font-size: 1.5rem;
-  font-weight: bold;
-  color: #007BFF;
-}
-
-/* Add some responsive styles */
-@media (max-width: 768px) {
-  .navbar {
-    padding: 15px 0;
-  }
-
-  .nav-list {
-    flex-direction: column;
-    gap: 20px;
-  }
-
-  .hero-header h1 {
-    font-size: 2.5rem;
-  }
-
-  .hero-header p {
-    font-size: 1.1rem;
-  }
-
-  .hero-header .btn-explore {
-    font-size: 1rem;
-  }
 }
