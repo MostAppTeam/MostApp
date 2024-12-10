@@ -4,23 +4,31 @@ import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { AppRoutingModule } from './app-routing.module'; // Uključujemo rute
 import { AppComponent } from './app.component';
-import { OffersComponent } from './modules/admin/offers/offers.component';
+
+// Komponente koje se koriste u aplikaciji
+import { AdminModule } from './modules/admin/admin.module';  // Importuj AdminModule
+import { EventsComponent } from './modules/admin/events/event.component';
 import { UserRecommendationsComponent } from './modules/admin/user-recommendations/user-recommendations.component';
+import { WeatherComponent } from './modules/admin/weather/weather.component'; // Ispravljena putanja
+import { OffersComponent } from './modules/admin/offers/offers.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    OffersComponent,
-    UserRecommendationsComponent, // Home page
+    EventsComponent,            // Dodata komponenta
+    UserRecommendationsComponent,
+    WeatherComponent,          // Ispravljena komponenta
+    OffersComponent,            // Komponenta za ponude
   ],
   imports: [
     BrowserModule,
     FormsModule,
     HttpClientModule,
-    AppRoutingModule, // Rute
+    AppRoutingModule,          // Rute
+    AdminModule,               // Dodaj AdminModule ovde
   ],
   providers: [],
-  bootstrap: [AppComponent], // Pokretanje glavne komponente
+  bootstrap: [AppComponent],   // Pokretanje glavne komponente
 })
 
 export class AppModule {}

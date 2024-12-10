@@ -21,14 +21,30 @@ namespace RS1_2024_25.API.Controllers
 
         // GET: api/EventControllers
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Event>>> GetEvents([FromQuery] string name = null, [FromQuery] string sortBy = "date")
+        public async Task<ActionResult<IEnumerable<Event>>> GetEvents([FromQuery] string name = null, [FromQuery] string date = null, [FromQuery] string location = null, [FromQuery] string description = null, [FromQuery] int? id = null, [FromQuery] string sortBy = "date")
         {
             var events = _context.Events.AsQueryable();
 
-            // Filtriranje po nazivu
+            // Filtriranje
             if (!string.IsNullOrEmpty(name))
             {
                 events = events.Where(e => e.Name.Contains(name));
+            }
+            if (!string.IsNullOrEmpty(date))
+            {
+                events = events.Where(e => e.Date == date);
+            }
+            if (!string.IsNullOrEmpty(location))
+            {
+                events = events.Where(e => e.Location.Contains(location));
+            }
+            if (!string.IsNullOrEmpty(description))
+            {
+                events = events.Where(e => e.Description.Contains(description));
+            }
+            if (id.HasValue)
+            {
+                events = events.Where(e => e.ID == id.Value);
             }
 
             // Sortiranje
