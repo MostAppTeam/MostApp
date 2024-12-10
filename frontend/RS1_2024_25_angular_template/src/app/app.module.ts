@@ -5,30 +5,22 @@ import { HttpClientModule } from '@angular/common/http';
 import { AppRoutingModule } from './app-routing.module'; // Uključujemo rute
 import { AppComponent } from './app.component';
 
-// Komponente koje se koriste u aplikaciji
-import { AdminModule } from './modules/admin/admin.module';  // Importuj AdminModule
-import { EventsComponent } from './modules/admin/events/event.component';
-import { UserRecommendationsComponent } from './modules/admin/user-recommendations/user-recommendations.component';
-import { WeatherComponent } from './modules/admin/weather/weather.component'; // Ispravljena putanja
-import { OffersComponent } from './modules/admin/offers/offers.component';
+// Importujemo AdminModule, koji sadrži sve potrebne komponente
+import { AdminModule } from './modules/admin/admin.module';
 
 @NgModule({
   declarations: [
-    AppComponent,
-    EventsComponent,            // Dodata komponenta
-    UserRecommendationsComponent,
-    WeatherComponent,          // Ispravljena komponenta
-    OffersComponent,            // Komponenta za ponude
+    AppComponent, // Glavna komponenta
+    // Nema potrebe da se ovde deklariraju EventsComponent, OffersComponent itd.
   ],
   imports: [
     BrowserModule,
     FormsModule,
     HttpClientModule,
     AppRoutingModule,          // Rute
-    AdminModule,               // Dodaj AdminModule ovde
+    AdminModule,               // Dodajemo AdminModule koji već sadrži sve potrebne komponente
   ],
   providers: [],
   bootstrap: [AppComponent],   // Pokretanje glavne komponente
 })
-
 export class AppModule {}

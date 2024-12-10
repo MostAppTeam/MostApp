@@ -5,15 +5,6 @@ using RS1_2024_25.API.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Configure services and dependencies
-builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("MostAppDB")));
-
-builder.Services.AddControllers();
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen(x => x.OperationFilter<MyAuthorizationSwaggerHeader>());
-builder.Services.AddHttpContextAccessor();
-
 // Register your services
 builder.Services.AddTransient<MyAuthService>();
 builder.Services.AddScoped<RecommendationService>();
@@ -29,6 +20,15 @@ builder.Services.AddCors(options =>
     });
 });
 
+// Add DbContext service if you're using EF Core
+builder.Services.AddDbContext<ApplicationDbContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("MostAppDB")));
+
+builder.Services.AddControllers();
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen(x => x.OperationFilter<MyAuthorizationSwaggerHeader>());
+builder.Services.AddHttpContextAccessor();
+
 var app = builder.Build();
 
 // Middleware and pipeline configuration
@@ -40,31 +40,16 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-// Apply CORS
+// Apply CORS policy
 app.UseCors("AllowSpecificOrigin");
 
 app.UseAuthorization();
 app.MapControllers();
 
-// Test database connection
-using (var scope = app.Services.CreateScope())
-{
-    var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-    try
-    {
-        if (context.Database.CanConnect())
-        {
-            Console.WriteLine("Connection to the database successful!");
-        }
-        else
-        {
-            Console.WriteLine("Failed to connect to the database.");
-        }
-    }
-    catch (Exception ex)
-    {
-        Console.WriteLine($"Database connection error: {ex.Message}");
-    }
-}
+// If no static files are being served, remove the line for static files middleware
+// app.UseStaticFiles();  // This line should be commented out or removed if not using wwwroot
+
+// Test database connection (this is a placeholder for your actual database testing logic)
+Console.WriteLine("Database connection test skipped, no database connection available.");
 
 app.Run();

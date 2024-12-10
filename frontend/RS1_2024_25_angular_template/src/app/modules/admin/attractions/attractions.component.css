@@ -1,23 +1,51 @@
+/* Attractions Section */
+.attractions-section {
+  padding: 40px 20px;
+  text-align: center;
+}
+
+.attractions-section h2 {
+  font-size: 2rem;
+  margin-bottom: 30px;
+}
+
+.attractions-container {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
 .attraction-card {
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  padding: 15px;
-  margin: 10px 0;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  background-color: white;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  padding: 20px;
+  max-width: 300px;
+  text-align: left;
 }
 
 .attraction-card h3 {
-  margin: 0 0 10px;
-  color: #007bff;
+  font-size: 1.5rem;
+  margin-bottom: 10px;
+  color: #28a745; /* Možeš izabrati boju prema želji */
 }
 
 .attraction-card p {
-  margin: 0 0 10px;
-  font-size: 14px;
-  color: #555;
+  margin-bottom: 10px;
 }
 
-.attraction-card a {
-  color: #28a745;
+.attraction-card .link {
+  display: inline-block;
+  margin-top: 10px;
+  padding: 10px 20px;
+  background-color: #ffc107;
+  color: #333;
   text-decoration: none;
+  border-radius: 5px;
+  font-size: 1rem;
+}
+
+.attraction-card .link:hover {
+  background-color: #e0a800;
 }

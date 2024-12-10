@@ -50,7 +50,7 @@ public class AttractionsController : ControllerBase
                 a.Name,
                 a.Description,
                 a.CityID,
-                a.VirtualTourURL
+               // a.VirtualTourURL
             })
             .ToListAsync();
 
@@ -69,7 +69,7 @@ public class AttractionsController : ControllerBase
                 a.Name,
                 a.Description,
                 a.CityID,
-                a.VirtualTourURL
+               // a.VirtualTourURL
             })
             .FirstOrDefaultAsync();
 
