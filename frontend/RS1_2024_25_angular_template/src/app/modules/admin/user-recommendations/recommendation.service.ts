@@ -2,6 +2,8 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
+// No need to import CommonModule here.
+
 export interface Recommendation {
   id: number;
   name: string;
@@ -12,7 +14,7 @@ export interface Recommendation {
   providedIn: 'root',
 })
 export class RecommendationService {
-  private apiUrl = 'http://localhost:7000/api/recommendations'; // Pravi API URL sa Swagger-a
+  private apiUrl = 'http://localhost:7000/api/recommendations'; // API URL
 
   constructor(private http: HttpClient) {}
 

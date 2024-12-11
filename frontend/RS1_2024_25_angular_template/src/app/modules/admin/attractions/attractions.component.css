@@ -1,14 +1,31 @@
 /* Attractions Section */
 .attractions-section {
-  padding: 40px 20px;
+  max-width: 1200px;
+  margin: 40px auto;
+  padding: 20px;
   text-align: center;
 }
 
 .attractions-section h2 {
-  font-size: 2rem;
-  margin-bottom: 30px;
+  font-size: 2.5rem; /* Veliki naslov */
+  margin-bottom: 20px;
+  color: #333; /* Tamno siva za naslov */
+  font-family: 'Arial', sans-serif; /* Isti font */
 }
 
+.attractions-description {
+  font-size: 1.1rem; /* Standardna veličina opisa */
+  margin-bottom: 40px;
+  color: #555; /* Neutralno siva za opis */
+  line-height: 1.6;
+  text-align: center; /* Centrirani tekst */
+  background-color: #fdf2e9; /* Lagano žućkasta pozadina */
+  padding: 20px;
+  border-radius: 8px; /* Zaobljeni uglovi */
+  font-family: 'Arial', sans-serif; /* Isti font */
+}
+
+/* Attractions Container */
 .attractions-container {
   display: flex;
   justify-content: center;
@@ -16,36 +33,68 @@
   flex-wrap: wrap;
 }
 
+/* Attraction Card */
 .attraction-card {
-  background-color: white;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  border-radius: 8px;
+  background-color: #ffffff; /* Bijela pozadina kartica */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Lagana sjena */
+  border-radius: 10px; /* Zaobljeni uglovi */
   padding: 20px;
   max-width: 300px;
   text-align: left;
+  color: #333; /* Tamno siva za tekst */
+  font-family: 'Arial', sans-serif; /* Isti font */
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.attraction-card:hover {
+  transform: scale(1.05); /* Blago povećanje na hover */
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2); /* Naglašenija sjena */
 }
 
 .attraction-card h3 {
-  font-size: 1.5rem;
+  font-size: 1.4rem; /* Naslov kartice */
   margin-bottom: 10px;
-  color: #28a745; /* Možeš izabrati boju prema želji */
+  color: #f7b731; /* Žućkasta boja */
+  font-family: 'Arial', sans-serif; /* Isti font */
 }
 
 .attraction-card p {
+  font-size: 1rem; /* Standardna veličina teksta */
   margin-bottom: 10px;
+  color: #555; /* Neutralno siva */
+  font-family: 'Arial', sans-serif; /* Isti font */
 }
 
-.attraction-card .link {
-  display: inline-block;
-  margin-top: 10px;
-  padding: 10px 20px;
-  background-color: #ffc107;
-  color: #333;
-  text-decoration: none;
-  border-radius: 5px;
+/* Žuti naglašeni tekst */
+.attraction-highlight {
+  font-weight: bold;
+  color: #f7b731; /* Žućkasta boja */
+  font-family: 'Arial', sans-serif; /* Isti font */
+}
+
+/* Virtual Tour Button */
+.btn-virtual-tour {
+  background-color: #f7b731; /* Žućkasta boja za dugme */
+  color: #333; /* Tamno siva za tekst na dugmetu */
+  padding: 10px 15px;
+  border: none;
   font-size: 1rem;
+  cursor: pointer;
+  border-radius: 5px;
+  display: block;
+  margin-top: 10px;
+  text-align: center;
+  transition: background-color 0.3s ease;
 }
 
-.attraction-card .link:hover {
-  background-color: #e0a800;
+.btn-virtual-tour:hover {
+  background-color: #e6a722; /* Tamnija žuta na hover */
+}
+
+/* Slika unutar kartice */
+.attraction-card img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 5px;
+  margin-bottom: 10px;
 }

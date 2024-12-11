@@ -1,0 +1,83 @@
+/* Isto kao za login */
+.auth-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: #e5e5e5;
+  margin: 0;
+}
+
+.auth-box {
+  background-color: #ffffff;
+  padding: 25px 30px;
+  border-radius: 10px;
+  box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.15);
+  width: 350px;
+  text-align: center;
+  font-family: Arial, sans-serif;
+}
+
+.auth-box h2 {
+  margin-bottom: 20px;
+  font-size: 24px;
+  color: #333;
+  font-weight: bold;
+}
+
+.form-group {
+  margin-bottom: 20px;
+  text-align: left;
+}
+
+.form-group label {
+  display: block;
+  font-size: 14px;
+  margin-bottom: 5px;
+  color: #666;
+}
+
+.form-group input {
+  width: 100%;
+  padding: 10px 12px;
+  font-size: 14px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  box-sizing: border-box;
+  transition: border-color 0.3s;
+}
+
+.form-group input:focus {
+  border-color: #f5a623;
+  outline: none;
+}
+
+.btn {
+  background-color: #f5a623;
+  color: #fff;
+  border: none;
+  padding: 10px 15px;
+  font-size: 16px;
+  border-radius: 5px;
+  cursor: pointer;
+  width: 100%;
+  transition: background-color 0.3s;
+}
+
+.btn:hover {
+  background-color: #d18e1f;
+}
+
+.auth-link {
+  margin-top: 15px;
+  font-size: 14px;
+}
+
+.auth-link a {
+  color: #f5a623;
+  text-decoration: none;
+}
+
+.auth-link a:hover {
+  text-decoration: underline;
+}

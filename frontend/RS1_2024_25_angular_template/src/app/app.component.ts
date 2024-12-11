@@ -24,4 +24,10 @@ export class AppComponent implements OnInit {
       }
     });
   }
+  onLogout(): void {
+    // Obriši token ili podatke iz lokalne memorije
+    localStorage.removeItem('authToken');
+    // Preusmjeri korisnika na login stranicu
+    this.router.navigate(['/login']);
+  }
 }

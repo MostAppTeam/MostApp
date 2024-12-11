@@ -1,3 +1,4 @@
+<!-- app.component.html -->
 <div class="app-container">
   <!-- Navigation Bar -->
   <header class="navbar" *ngIf="showNavbar">
@@ -9,6 +10,9 @@
         <li><a class="nav-link" routerLink="/museums">Museums</a></li>
         <li><a class="nav-link" routerLink="/attractions">Attractions</a></li>
         <li><a class="nav-link" routerLink="/events">Events</a></li>
+        <li>
+          <button class="logout-button" (click)="onLogout()">Logout</button>
+        </li>
       </ul>
     </nav>
   </header>
@@ -22,11 +26,12 @@
         into the rich history, iconic landmarks, vibrant shopping spots, and
         exciting offers that make this city truly special.
       </p>
-      <button class="btn-explore">Sign up</button>
+
+      <button routerLink="/signup" class="btn-explore">Sign Up</button>
     </div>
   </section>
 
-  <!-- Dinamički sadržaj -->
+  <!-- Dynamic Content -->
   <router-outlet></router-outlet>
 
   <!-- Footer -->

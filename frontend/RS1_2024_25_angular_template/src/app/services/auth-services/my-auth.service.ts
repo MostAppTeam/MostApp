@@ -39,5 +39,15 @@ export class MyAuthService {
     } catch (e) {
       return null;
     }
+
+
   }
+  login(credentials: { username: string; password: string }) {
+    return this.httpClient.post<LoginTokenDto>('http://localhost:7000/auth/login', credentials);
+  }
+
+  logout() {
+    this.setLoggedInUser(null); // Briše korisničke podatke iz localStorage
+  }
+
 }

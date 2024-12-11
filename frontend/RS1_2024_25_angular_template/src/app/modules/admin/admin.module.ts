@@ -15,7 +15,8 @@ import { CitiesEditComponent } from './cities/cities-edit/cities-edit.component'
 import { AttractionsComponent } from './attractions/attractions.component';
 import { MuseumsComponent } from './museums/museums.component';
 import { EventsComponent } from './events/event.component';
-import { OffersComponent } from './offers/offers.component'; // Dodana nova komponenta
+import { OffersComponent } from './offers/offers.component';
+import { UserRecommendationsComponent } from './user-recommendations/user-recommendations.component'; // Dodana komponenta
 
 @NgModule({
   declarations: [
@@ -29,7 +30,8 @@ import { OffersComponent } from './offers/offers.component'; // Dodana nova komp
     AttractionsComponent,
     MuseumsComponent,
     EventsComponent,
-    OffersComponent,  // Dodana nova komponenta za ponude
+    OffersComponent,
+    UserRecommendationsComponent, // Dodana komponenta za korisničke preporuke
   ],
   imports: [
     CommonModule,
