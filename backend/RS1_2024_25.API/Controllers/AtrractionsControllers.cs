@@ -2,7 +2,9 @@
 using Microsoft.EntityFrameworkCore;
 using RS1_2024_25.API.Data.Models;
 using RS1_2024_25.API.Data;
-using RS1_2024_25.API.Services;
+using System.Linq;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 [Route("api/[controller]")]
 [ApiController]
@@ -17,11 +19,11 @@ public class AttractionsController : ControllerBase
 
     // GET: api/Attractions
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<object>>> GetAttractions([FromQuery] string name = null, [FromQuery] int? cityId = null, [FromQuery] string sortBy = "name")
+    public async Task<ActionResult<IEnumerable<object>>> GetAttractions(
+     [FromQuery] string name = null,
+     [FromQuery] string sortBy = "name",
+     [FromQuery] string sortDirection = "asc")
     {
-
-      
-
         var attractions = _context.Attractions.AsQueryable();
 
         // Filtriranje po imenu
@@ -30,27 +32,29 @@ public class AttractionsController : ControllerBase
             attractions = attractions.Where(a => a.Name.Contains(name));
         }
 
-        // Filtriranje po cityId (nije obavezno)
-        if (cityId.HasValue)
+        // Dinamično sortiranje po podržanim poljima
+        attractions = sortBy.ToLower() switch
         {
-            attractions = attractions.Where(a => a.CityID == cityId);
-        }
+            "name" => sortDirection.ToLower() == "desc"
+                        ? attractions.OrderByDescending(a => a.Name)
+                        : attractions.OrderBy(a => a.Name),
+            "description" => sortDirection.ToLower() == "desc"
+                        ? attractions.OrderByDescending(a => a.Description)
+                        : attractions.OrderBy(a => a.Description),
+            "virtualtoururl" => sortDirection.ToLower() == "desc"
+                        ? attractions.OrderByDescending(a => a.VirtualTourURL)
+                        : attractions.OrderBy(a => a.VirtualTourURL),
+            _ => attractions.OrderBy(a => a.Name) // Defaultno sortiranje po imenu
+        };
 
-        // Sortiranje
-        if (sortBy == "name")
-        {
-            attractions = attractions.OrderBy(a => a.Name);
-        }
-
-        // Eksplicitno vraćanje podataka, uključujući VirtualTourURL
+        // Projekcija podataka u rezultat
         var result = await attractions
             .Select(a => new
             {
                 a.ID,
                 a.Name,
                 a.Description,
-                a.CityID,
-               // a.VirtualTourURL
+                a.VirtualTourURL // Vraćanje ovog polja u odgovoru
             })
             .ToListAsync();
 
@@ -69,7 +73,7 @@ public class AttractionsController : ControllerBase
                 a.Name,
                 a.Description,
                 a.CityID,
-               // a.VirtualTourURL
+                a.VirtualTourURL
             })
             .FirstOrDefaultAsync();
 
@@ -136,6 +140,4 @@ public class AttractionsController : ControllerBase
 
         return NoContent();
     }
-
-
 }

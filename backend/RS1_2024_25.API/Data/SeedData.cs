@@ -127,9 +127,9 @@ namespace RS1_2024_25.API.Data
                     var adventureCategoryId = context.Categories.First(c => c.Name == "Adventure").ID;
 
                     context.Attractions.AddRange(
-                        new Attraction { Name = "Old Bridge", Description = "A UNESCO World Heritage site."},
-                        new Attraction { Name = "Blagaj Tekke", Description = "A historical Dervish house." },
-                        new Attraction { Name = "Neretva Rafting Adventure", Description = "A thrilling rafting experience." }
+                        new Attraction { Name = "Old Bridge", Description = "A UNESCO World Heritage site.",VirtualTourURL= "https://www.360cities.net/image/stari-most-old-bridge-mostar/vr" },
+                        new Attraction { Name = "Blagaj Tekke", Description = "A historical Dervish house.",VirtualTourURL= "https://www.360cities.net/image/bosnia-and-herzegovina-blagaj-tekke-1" }
+                        
                     );
                     context.SaveChanges();
                 }

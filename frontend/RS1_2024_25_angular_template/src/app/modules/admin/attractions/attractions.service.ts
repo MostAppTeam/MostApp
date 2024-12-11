@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { Attraction } from './attractions.model'; // Importuj model tipa Attraction
+import { Attraction } from './attractions.model';
 
 @Injectable({
   providedIn: 'root',
@@ -11,8 +11,9 @@ export class AttractionsService {
 
   constructor(private http: HttpClient) {}
 
-  // Metoda za dohvat atrakcija
-  getAttractions(): Observable<Attraction[]> {
-    return this.http.get<Attraction[]>(this.apiUrl); // Vraća Observable sa listom atrakcija
+  // Metoda za dohvat atrakcija sa parametrima za sortiranje
+  getAttractions(sortBy: string, sortDirection: string): Observable<Attraction[]> {
+    const url = `${this.apiUrl}?sortBy=${sortBy}&sortDirection=${sortDirection}`;
+    return this.http.get<Attraction[]>(url); // Vraća Observable sa listom atrakcija
   }
 }
