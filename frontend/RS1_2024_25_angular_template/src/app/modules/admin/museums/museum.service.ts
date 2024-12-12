@@ -7,27 +7,32 @@ import { Museum } from './museum.model';
   providedIn: 'root',
 })
 export class MuseumService {
-  private apiUrl = 'http://localhost:7000/api/Museums'; // Ispravljen API URL
+  private apiUrl = 'http://localhost:7000/api/Museums'; // Corrected API URL
 
   constructor(private http: HttpClient) {}
 
-  // Dobijanje svih muzeja
+  // Get all museums
   getMuseums(): Observable<Museum[]> {
-    return this.http.get<Museum[]>(this.apiUrl);
+    return this.http.get<Museum[]>(this.apiUrl, { responseType: 'json' });
   }
 
-  // Dodavanje novog muzeja
+  // Add a new museum
   createMuseum(museum: Omit<Museum, 'id'>): Observable<Museum> {
-    // Slanje bez `id` jer ga backend automatski generiše
     return this.http.post<Museum>(this.apiUrl, museum);
   }
 
-  // Ažuriranje muzeja
+  // Update a museum
   updateMuseum(museum: Museum): Observable<Museum> {
     return this.http.put<Museum>(`${this.apiUrl}/${museum.id}`, museum);
   }
 
-  // Brisanje muzeja
+  // Get sorted museums
+  getSortedMuseums(sortBy: string, sortDirection: string): Observable<Museum[]> {
+    const url = `${this.apiUrl}?sortBy=${sortBy}&sortDirection=${sortDirection}`;
+    return this.http.get<Museum[]>(url, { responseType: 'json' });
+  }
+
+  // Delete a museum
   deleteMuseum(id: number): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}/${id}`);
   }

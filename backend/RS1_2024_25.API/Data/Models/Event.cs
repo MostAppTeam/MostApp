@@ -9,7 +9,8 @@ namespace RS1_2024_25.API.Data.Models
         public string Date { get; set; }
         public string Location { get; set; }
         public string Description { get; set; }
+        // Dodano polje za geografsku dužinu
+    
 
-     
-    }
+}
 }

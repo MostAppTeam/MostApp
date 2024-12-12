@@ -1,29 +1,46 @@
-<body>
-<!-- Navigacijska traka -->
-<nav>
-  <!-- Navigacijski sadržaj -->
-</nav>
+<section class="attractions-section">
+  <h2>Explore Attractions</h2>
+  <p class="attractions-description">
+    Discover the beauty and charm of Mostar's attractions! From historic landmarks to scenic spots, let MostApp guide you to unforgettable experiences.
+  </p>
 
-<!-- Glavni sadržaj -->
-<main>
-  <section class="attractions-section">
-    <h2>Explore Attractions</h2>
-    <p class="attractions-description">
-      Discover the beauty and charm of Mostar's attractions! From historic landmarks to scenic spots, let MostApp guide you to unforgettable experiences.
-    </p>
-    <div *ngIf="attractions && attractions.length > 0; else noData" class="attractions-container">
-      <div *ngFor="let attraction of attractions" class="attraction-card">
-        <h3>{{ attraction.name }}</h3>
-        <p>{{ attraction.description }}</p>
-        <div *ngIf="attraction.virtualTourURL">
-          <img [src]="attraction.virtualTourURL" alt="{{ attraction.name }}" />
-          <a [href]="attraction.virtualTourURL" target="_blank" class="btn-virtual-tour">Virtual Tour</a>
-        </div>
+  <!-- Sorting Section -->
+  <div class="sorting-container">
+    <div class="sorting-item">
+      <label for="sort-by">Sort by:</label>
+      <select id="sort-by" [(ngModel)]="sortBy">
+        <option value="name">Name</option>
+        <option value="description">Description</option>
+        <option value="virtualtoururl">Virtual Tour</option>
+      </select>
+    </div>
+
+    <div class="sorting-item">
+      <label for="sort-direction">Direction:</label>
+      <select id="sort-direction" [(ngModel)]="sortDirection">
+        <option value="asc">Ascending</option>
+        <option value="desc">Descending</option>
+      </select>
+    </div>
+
+    <div class="sorting-item">
+      <button (click)="updateSort()">Sort</button>
+    </div>
+  </div>
+
+  <!-- Attractions List -->
+  <div *ngIf="attractions && attractions.length > 0; else noData" class="attractions-container">
+    <div *ngFor="let attraction of attractions" class="attraction-card">
+      <h3>{{ attraction.name }}</h3>
+      <p>{{ attraction.description }}</p>
+      <div *ngIf="attraction.virtualTourURL">
+        <img [src]="attraction.virtualTourURL" alt="{{ attraction.name }}" />
+        <a [href]="attraction.virtualTourURL" target="_blank" class="btn-virtual-tour">Virtual Tour</a>
       </div>
     </div>
-    <ng-template #noData>
-      <p>No attractions available to display.</p>
-    </ng-template>
-  </section>
-</main>
-</body>
+  </div>
+
+  <ng-template #noData>
+    <p>No attractions available to display.</p>
+  </ng-template>
+</section>

@@ -20,7 +20,9 @@ public class MuseumsController : ControllerBase
     // GET: api/Museums
     [HttpGet]
     public async Task<ActionResult<IEnumerable<Museum>>> GetMuseums(
-        [FromQuery] string name = null, [FromQuery] int? cityId = null, [FromQuery] string sortBy = "name")
+        [FromQuery] string name = null,
+        [FromQuery] string sortBy = "name",
+        [FromQuery] string sortDirection = "asc")
     {
         var museums = _context.Museums.AsQueryable();
 
@@ -30,13 +32,20 @@ public class MuseumsController : ControllerBase
             museums = museums.Where(m => m.Name.Contains(name));
         }
 
-        
-
-        // Sortiranje muzeja
-        if (sortBy == "name")
+        // Dinamično sortiranje
+        museums = sortBy.ToLower() switch
         {
-            museums = museums.OrderBy(m => m.Name);
-        }
+            "name" => sortDirection.ToLower() == "desc"
+                        ? museums.OrderByDescending(m => m.Name)
+                        : museums.OrderBy(m => m.Name),
+            "location" => sortDirection.ToLower() == "desc"
+                        ? museums.OrderByDescending(m => m.Location)
+                        : museums.OrderBy(m => m.Location),
+            "description" => sortDirection.ToLower() == "desc"
+                        ? museums.OrderByDescending(m => m.Description)
+                        : museums.OrderBy(m => m.Description),
+            _ => museums.OrderBy(m => m.Name) // Defaultno sortiranje
+        };
 
         return Ok(await museums.ToListAsync());
     }

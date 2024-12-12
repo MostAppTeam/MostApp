@@ -18,46 +18,69 @@ export class MuseumsComponent implements OnInit {
   };
   feedbackMessage: string | null = null;
 
+  // Default values for sorting
+  sortBy: string = 'name'; // Default sorting criterion
+  sortDirection: string = 'asc'; // Default sorting direction
+
   constructor(private museumService: MuseumService) {}
 
   ngOnInit(): void {
     this.loadMuseums();
   }
 
-  // Učitavanje muzeja sa servera
+  // Load museums from the server
   loadMuseums(): void {
     this.museumService.getMuseums().subscribe(
       (data) => {
         this.museums = data;
       },
       (error) => {
-        console.error('Greška prilikom učitavanja muzeja:', error);
-        this.feedbackMessage = 'Greška prilikom učitavanja muzeja.';
+        console.error('Error loading museums:', error);
+        this.feedbackMessage = 'Error loading museums.';
         setTimeout(() => (this.feedbackMessage = null), 3000);
       }
     );
   }
 
-  // Dodavanje novog muzeja
+  // Update sorting based on selected options
+  updateSort(): void {
+    this.loadSortedMuseums();
+  }
+
+  // Load sorted museums based on selected criteria and direction
+  loadSortedMuseums(): void {
+    this.museumService.getSortedMuseums(this.sortBy, this.sortDirection).subscribe(
+      (data) => {
+        this.museums = data;
+      },
+      (error) => {
+        console.error('Error sorting museums:', error);
+        this.feedbackMessage = 'Error loading sorted museums.';
+        setTimeout(() => (this.feedbackMessage = null), 3000);
+      }
+    );
+  }
+
+  // Adding new museum
   addMuseum(): void {
     const { name, description, location, workingHours, imageUrl } = this.newMuseum;
 
     if (name.trim() && description.trim() && location.trim() && workingHours.trim() && imageUrl.trim()) {
       this.museumService.createMuseum(this.newMuseum).subscribe(
         (response) => {
-          this.feedbackMessage = 'Muzej uspješno dodan!';
+          this.feedbackMessage = 'Museum successfully added!';
           this.newMuseum = { name: '', description: '', location: '', workingHours: '', imageUrl: '' };
-          this.loadMuseums(); // Osvežavanje liste muzeja
+          this.loadMuseums(); // Refresh museum list
           setTimeout(() => (this.feedbackMessage = null), 3000);
         },
         (error) => {
-          console.error('Greška prilikom dodavanja muzeja:', error);
-          this.feedbackMessage = 'Došlo je do greške prilikom dodavanja muzeja.';
+          console.error('Error adding museum:', error);
+          this.feedbackMessage = 'Error adding museum.';
           setTimeout(() => (this.feedbackMessage = null), 3000);
         }
       );
     } else {
-      this.feedbackMessage = 'Molimo popunite sva polja!';
+      this.feedbackMessage = 'Please fill out all fields!';
       setTimeout(() => (this.feedbackMessage = null), 3000);
     }
   }

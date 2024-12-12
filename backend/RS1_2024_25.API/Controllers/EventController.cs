@@ -78,6 +78,11 @@ namespace RS1_2024_25.API.Controllers
         [HttpPost]
         public async Task<ActionResult<Event>> PostEvent(Event @event)
         {
+
+            _context.Events.Add(@event);
+            await _context.SaveChangesAsync();
+
+            return CreatedAtAction(nameof(GetEvent), new { id = @event.ID }, @event);
             _context.Events.Add(@event);
             await _context.SaveChangesAsync();
 
@@ -92,6 +97,8 @@ namespace RS1_2024_25.API.Controllers
             {
                 return BadRequest();
             }
+
+           
 
             _context.Entry(@event).State = EntityState.Modified;
 

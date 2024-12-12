@@ -3,6 +3,30 @@
   <h3>Explore Museums in Mostar</h3>
   <p class="description-text">Discover the rich history and culture at museums in Mostar. Learn more about their exhibits, locations, and working hours.</p>
 
+  <!-- Sorting Section -->
+  <div class="sorting-container">
+    <div class="sorting-item">
+      <label for="sort-by">Sort by:</label>
+      <select id="sort-by" [(ngModel)]="sortBy">
+        <option value="name">Name</option>
+        <option value="location">Location</option>
+        <option value="description">Description</option>
+      </select>
+    </div>
+
+    <div class="sorting-item">
+      <label for="sort-direction">Direction:</label>
+      <select id="sort-direction" [(ngModel)]="sortDirection">
+        <option value="asc">Ascending</option>
+        <option value="desc">Descending</option>
+      </select>
+    </div>
+
+    <div class="sorting-item">
+      <button (click)="updateSort()">Sort</button>
+    </div>
+  </div>
+
   <!-- Existing Museums -->
   <div *ngIf="museums.length > 0; else noMuseumsMessage" class="museum-cards">
     <div class="museum-card" *ngFor="let museum of museums">

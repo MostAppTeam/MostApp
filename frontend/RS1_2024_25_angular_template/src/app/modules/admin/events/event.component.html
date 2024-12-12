@@ -84,7 +84,24 @@
     <input [(ngModel)]="filterParams.location" placeholder="Location" name="filterLocation" />
     <input [(ngModel)]="filterParams.description" placeholder="Description" name="filterDescription" />
     <input [(ngModel)]="filterParams.id" placeholder="Event ID" name="filterId" type="number" />
+
+
     <button (click)="applyFilter()">Apply Filter</button>
+    <div id="map" style="height: 500px; margin-top: 20px;"></div>
+    <div>
+      <input
+        [(ngModel)]="newEvent.location"
+        placeholder="Location (Click on map to set coordinates)"
+        name="location"
+        required
+        #location="ngModel"
+        [class.invalid]="location.invalid && location.touched" />
+      <div *ngIf="location.invalid && location.touched" class="error-message">
+        Please enter the location!
+      </div>
+    </div>
+
+
   </div>
 </div>
 
