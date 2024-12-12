@@ -8,6 +8,7 @@ import { OffersComponent } from './modules/admin/offers/offers.component';
 import { UserRecommendationsComponent } from './modules/admin/user-recommendations/user-recommendations.component';
 import { LoginComponent } from './modules/admin/login/login.component';
 import { SignUpComponent } from './sign-up/sign-up.component';
+import { ShoppingCentersComponent } from './modules/admin/shopping-centers/shopping-centers.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/home', pathMatch: 'full' },
@@ -18,6 +19,7 @@ const routes: Routes = [
   { path: 'attractions', component: AttractionsComponent },
   { path: 'login', component: LoginComponent },
   { path: 'signup', component: SignUpComponent },
+  {path: 'shopping-centers', component: ShoppingCentersComponent },
   { path: '**', redirectTo: '/home' },
 ];
 

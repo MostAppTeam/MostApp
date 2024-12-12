@@ -14,7 +14,8 @@ import { SignUpComponent } from './sign-up/sign-up.component';
   declarations: [
     AppComponent,
     LoginComponent,
-    SignUpComponent, // Glavna komponenta
+    SignUpComponent,
+     // Glavna komponenta
     // Nema potrebe da se ovde deklariraju EventsComponent, OffersComponent itd.
   ],
   imports: [

@@ -16,7 +16,8 @@ import { AttractionsComponent } from './attractions/attractions.component';
 import { MuseumsComponent } from './museums/museums.component';
 import { EventsComponent } from './events/event.component';
 import { OffersComponent } from './offers/offers.component';
-import { UserRecommendationsComponent } from './user-recommendations/user-recommendations.component'; // Dodana komponenta
+import { UserRecommendationsComponent } from './user-recommendations/user-recommendations.component';
+import{ ShoppingCentersComponent} from './shopping-centers/shopping-centers.component';// Dodana komponenta
 
 @NgModule({
   declarations: [
@@ -31,7 +32,8 @@ import { UserRecommendationsComponent } from './user-recommendations/user-recomm
     MuseumsComponent,
     EventsComponent,
     OffersComponent,
-    UserRecommendationsComponent, // Dodana komponenta za korisničke preporuke
+    UserRecommendationsComponent,
+    ShoppingCentersComponent// Dodana komponenta za korisničke preporuke
   ],
   imports: [
     CommonModule,

@@ -8,6 +8,7 @@ import {AdminErrorPageComponent} from './admin-error-page/admin-error-page.compo
 import {CitiesComponent} from './cities/cities.component';
 import {CitiesEditComponent} from './cities/cities-edit/cities-edit.component';
 import { AttractionsComponent } from './attractions/attractions.component';
+import {ShoppingCentersComponent} from './shopping-centers/shopping-centers.component';
 
 const routes: Routes = [
   {

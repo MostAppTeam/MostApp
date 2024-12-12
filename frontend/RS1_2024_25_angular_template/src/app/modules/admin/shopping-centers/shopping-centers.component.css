@@ -1,0 +1,111 @@
+/* Shopping Center Container */
+#shopping-center-container {
+  font-family: Arial, sans-serif;
+  padding: 30px 20px;
+  background-color: #f9f9f9;
+  margin-top: 60px; /* To create some space below the navbar */
+}
+
+/* Section Heading and Description */
+#shopping-center-container h3 {
+  font-size: 1.8rem;
+  color: #333;
+  text-align: center;
+}
+
+#shopping-center-container p.description-text {
+  font-size: 1.1rem;
+  margin-bottom: 40px;
+  color: #555;
+  line-height: 1.6;
+  text-align: center;
+  background-color: #fdf2e9;
+  padding: 20px;
+  border-radius: 8px;
+  width: 80%;
+  margin: 0 auto; /* Centers the description */
+}
+
+/* Shopping Center Cards */
+.shopping-center-cards {
+  margin-top: 20px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: center;
+}
+
+.shopping-center-card {
+  background-color: #fff;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  padding: 15px;
+  width: 100%;
+  max-width: 300px;
+  text-align: center;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  margin-bottom: 20px;
+}
+
+.shopping-center-card:hover {
+  transform: scale(1.05);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+}
+
+.shopping-center-card h4 {
+  color: #f7b731;
+  font-size: 1.4rem;
+  margin-bottom: 10px;
+}
+
+.shopping-center-card p {
+  color: #555;
+  font-size: 1rem;
+  margin: 5px 0;
+}
+
+/* Add Shopping Center Form */
+#add-shopping-center-form {
+  margin-top: 20px;
+  padding: 15px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  background-color: #fff;
+  max-width: 600px;
+  margin: 20px auto;
+}
+
+#add-shopping-center-form h3 {
+  margin-bottom: 10px;
+  color: #333;
+}
+
+#add-shopping-center-form input {
+  margin: 5px 0;
+  padding: 8px;
+  width: calc(100% - 20px);
+  border: 1px solid #ccc;
+  border-radius: 3px;
+}
+
+#add-shopping-center-form button {
+  background-color: #f7b731;
+  color: white;
+  padding: 8px 12px;
+  border: none;
+  border-radius: 3px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+#add-shopping-center-form button:hover {
+  background-color: #e6a722;
+}
+
+/* Feedback Message */
+#feedback-message {
+  color: green;
+  margin: 10px 0;
+  text-align: center;
+}

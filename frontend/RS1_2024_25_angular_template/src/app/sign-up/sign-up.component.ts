@@ -10,6 +10,8 @@ export class SignUpComponent {
   email = '';
   password = '';
   confirmPassword = '';
+  successMessage: string | null = null;
+  errorMessage: string | null = null;
 
   constructor(private router: Router) {}
 
@@ -17,25 +19,27 @@ export class SignUpComponent {
   onSignUp(signupForm: any): void {
     const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
 
+    // Reset messages
+    this.successMessage = null;
+    this.errorMessage = null;
+
     if (!passwordRegex.test(this.password)) {
-      alert(
-        'Password must be at least 8 characters long, and include at least one letter, one number, and one special character (@$!%*?&)'
-      );
+      this.errorMessage = 'Password must be at least 8 characters long, and include at least one letter, one number, and one special character (@$!%*?&)';
       return;
     }
 
     if (this.password !== this.confirmPassword) {
-      alert('Passwords do not match!');
+      this.errorMessage = 'Passwords do not match!';
       return;
     }
 
     if (!signupForm.valid) {
-      alert('Please fill in all fields correctly.');
+      this.errorMessage = 'Please fill in all fields correctly.';
       return;
     }
 
     // Simulate a successful registration
-    alert('Registration successful! Please log in.');
+    this.successMessage = 'Registration successful! Please log in.';
     this.router.navigate(['/login']);
   }
 }
