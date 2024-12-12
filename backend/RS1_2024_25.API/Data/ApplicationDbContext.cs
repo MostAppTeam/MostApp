@@ -1,7 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using PayPalCheckoutSdk.Orders;
 using RS1_2024_25.API.Data.Models;
 using RS1_2024_25.API.Data.Models.Auth;
 using System.Linq;
+
 
 namespace RS1_2024_25.API.Data
 {
@@ -27,9 +29,10 @@ namespace RS1_2024_25.API.Data
 
         public DbSet<Booking> Bookings { get; set; }
         public DbSet<Review> Reviews { get; set; }
-        public DbSet<Media> Media { get; set; }
+       // public DbSet<Media> Media { get; set; }
         public DbSet<ActivityLog> ActivityLogs { get; set; }
         public DbSet<Notification> Notifications { get; set; }
+        public DbSet<Order> Orders { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -45,6 +48,11 @@ namespace RS1_2024_25.API.Data
             modelBuilder.Entity<Booking>()
                 .Property(b => b.TotalPrice)
                 .HasPrecision(18, 2); // 18 ukupnih cifara, 2 decimalna mjesta
+
+            modelBuilder.Entity<Order>(entity =>
+            {
+                entity.HasKey(o => o.Id); // Definišemo primarni ključ
+            });
 
             // Onemogućavamo automatsko brisanje povezanih entiteta
             foreach (var relationship in modelBuilder.Model.GetEntityTypes().SelectMany(e => e.GetForeignKeys()))
