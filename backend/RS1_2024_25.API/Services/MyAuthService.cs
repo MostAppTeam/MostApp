@@ -89,6 +89,7 @@ namespace RS1_2024_25.API.Services
                 Username = myAuthToken.MyAppUser!.Username,
                 FirstName = myAuthToken.MyAppUser.FirstName,
                 LastName = myAuthToken.MyAppUser.LastName,
+                Email = myAuthToken.MyAppUser.Email, // Dodato povlačenje e-maila
                 IsAdmin = myAuthToken.MyAppUser.IsAdmin,
                 IsManager = myAuthToken.MyAppUser.IsManager,
                 IsLoggedIn = true
@@ -103,6 +104,7 @@ namespace RS1_2024_25.API.Services
         public string Username { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
+        public string Email { get; set; } // Dodato polje za e-mail
         public bool IsAdmin { get; set; }
         public bool IsManager { get; set; }
         public bool IsLoggedIn { get; set; }

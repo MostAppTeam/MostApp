@@ -1,53 +1,61 @@
-import {HttpClient} from "@angular/common/http";
-import {Injectable} from "@angular/core";
-import {MyAuthInfo} from "./dto/my-auth-info";
-import {LoginTokenDto} from './dto/login-token-dto';
+import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { catchError, throwError, tap } from 'rxjs';
 
-@Injectable({providedIn: 'root'})
+@Injectable({ providedIn: 'root' })
 export class MyAuthService {
-  constructor(private httpClient: HttpClient) {
-  }
+  private apiUrl = 'http://localhost:7000';
 
-  getMyAuthInfo(): MyAuthInfo | null {
-    return this.getLoginToken()?.myAuthInfo ?? null;
-  }
+  constructor(private httpClient: HttpClient) {}
 
-  isLoggedIn(): boolean {
-    return this.getMyAuthInfo() != null && this.getMyAuthInfo()!.isLoggedIn;
-  }
-
-  isAdmin(): boolean {
-    return this.getMyAuthInfo()?.isAdmin ?? false;
-  }
-
-  isManager(): boolean {
-    return this.getMyAuthInfo()?.isManager ?? false;
-  }
-
-  setLoggedInUser(x: LoginTokenDto | null) {
-    if (x == null) {
-      window.localStorage.setItem("my-auth-token", '');
-    } else {
-      window.localStorage.setItem("my-auth-token", JSON.stringify(x));
-    }
-  }
-
-  getLoginToken(): LoginTokenDto | null {
-    let tokenString = window.localStorage.getItem("my-auth-token") ?? "";
-    try {
-      return JSON.parse(tokenString);
-    } catch (e) {
-      return null;
-    }
-
-
-  }
+  // Metoda za login sa rukovanjem greškama
   login(credentials: { username: string; password: string }) {
-    return this.httpClient.post<LoginTokenDto>('http://localhost:7000/auth/login', credentials);
+    return this.httpClient
+      .post<{ token: string; myAuthInfo: any }>(`${this.apiUrl}/api/Auth/login`, credentials)
+      .pipe(
+        tap((response) => {
+          // Čuvanje tokena i korisničkih podataka nakon uspešne prijave
+          localStorage.setItem('token', response.token);
+          this.setLoggedInUser(response.myAuthInfo);
+        }),
+        catchError((error) => {
+          console.error('Login error:', error);
+          const errorMessage = error?.error?.message || 'Login failed. Please check your credentials.';
+          return throwError(() => new Error(errorMessage));
+        })
+      );
   }
 
-  logout() {
-    this.setLoggedInUser(null); // Briše korisničke podatke iz localStorage
+  // Metoda za registraciju (nije menjana)
+  register(credentials: { username: string; firstName: string; lastName: string; email: string; password: string }) {
+    return this.httpClient.post(`${this.apiUrl}/api/Auth/register`, credentials).pipe(
+      catchError((error) => {
+        console.error('Registration error:', error);
+        const errorMessage = error?.error?.message || 'Registration failed. Please try again.';
+        return throwError(() => new Error(errorMessage));
+      })
+    );
   }
 
+  // Postavljanje korisnika u localStorage
+  setLoggedInUser(user: any): void {
+    localStorage.setItem('loggedInUser', JSON.stringify(user));
+  }
+
+  // Dohvati token
+  getToken(): string | null {
+    return localStorage.getItem('token');
+  }
+
+  // Proveri da li je korisnik prijavljen
+  isLoggedIn(): boolean {
+    return !!this.getToken();
+  }
+
+  // Odjava korisnika
+  logout(): void {
+    localStorage.removeItem('token');
+    localStorage.removeItem('loggedInUser');
+    console.log('User logged out successfully');
+  }
 }

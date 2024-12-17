@@ -7,7 +7,7 @@ import { AttractionsComponent } from './modules/admin/attractions/attractions.co
 import { OffersComponent } from './modules/admin/offers/offers.component';
 import { UserRecommendationsComponent } from './modules/admin/user-recommendations/user-recommendations.component';
 import { LoginComponent } from './modules/admin/login/login.component';
-import { SignUpComponent } from './sign-up/sign-up.component';
+import { SignUpComponent } from './modules/admin/sign-up/sign-up.component';
 import { ShoppingCentersComponent } from './modules/admin/shopping-centers/shopping-centers.component';
 
 const routes: Routes = [

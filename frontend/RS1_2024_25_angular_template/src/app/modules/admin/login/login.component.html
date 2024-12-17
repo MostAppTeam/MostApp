@@ -1,9 +1,10 @@
 <div class="auth-container">
   <div class="auth-box">
     <h2>Login</h2>
+
     <!-- Prikaz poruka o uspjehu ili grešci -->
-    <div *ngIf="successMessage" class="alert success">{{ successMessage }}</div>
-    <div *ngIf="errorMessage" class="alert error">{{ errorMessage }}</div>
+    <div *ngIf="successMessage" class="alert success fade-in">{{ successMessage }}</div>
+    <div *ngIf="errorMessage" class="alert error fade-in">{{ errorMessage }}</div>
 
     <form (ngSubmit)="onLogin(loginForm)" #loginForm="ngForm">
       <div class="form-group">

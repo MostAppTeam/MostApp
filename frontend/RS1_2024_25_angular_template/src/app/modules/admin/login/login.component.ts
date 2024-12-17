@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
-import { MyAuthService } from '../../../services/auth-services/my-auth.service';
+import { NgForm } from '@angular/forms'; // Dodajemo NgForm
+import { MyAuthService } from '../../../services/auth-services/my-auth.service'; // Importovanje MyAuthService
 
 @Component({
   selector: 'app-login',
@@ -13,22 +14,38 @@ export class LoginComponent {
 
   constructor(private authService: MyAuthService, private router: Router) {}
 
-  onLogin(form: any) {
+  // onLogin metodda, pozivamo login sa servisom
+  onLogin(form: NgForm) {
+    if (!form.valid) {
+      this.errorMessage = 'Please enter both username and password.';
+      return;
+    }
+
     const loginData = {
-      username: form.value.username,
+      username: form.value.username.trim(),
       password: form.value.password
     };
 
-    // Pozivanje funkcije za autentifikaciju
     this.authService.login(loginData).subscribe({
       next: (response) => {
-        this.authService.setLoggedInUser(response); // Spremanje korisničkih podataka u localStorage
-        this.successMessage = 'Login successful!';
+        console.log('Login successful:', response); // Log za proveru odgovora
+        this.successMessage = 'Welcome! Login successful.';
         this.errorMessage = null;
-        this.router.navigate(['/home']); // Preusmjeravanje na home stranicu
+
+        // Setuj korisnika u localStorage
+        this.authService.setLoggedInUser(response.myAuthInfo);
+
+        // Spremi token
+        localStorage.setItem('token', response.token);
+
+        // Preusmeri korisnika na home
+        setTimeout(() => {
+          this.router.navigate(['/home']);
+        }, 2000);
       },
-      error: () => {
-        this.errorMessage = 'Invalid username or password.';
+      error: (err) => {
+        console.error('Login error:', err); // Log za greške
+        this.errorMessage = err?.message || 'Invalid username or password.';
         this.successMessage = null;
       }
     });

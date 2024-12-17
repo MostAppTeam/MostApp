@@ -19,7 +19,7 @@
   border: 1px solid #f5c6cb;
 }
 
-/* Same styles as Login */
+/* Authentication Container Styling */
 .auth-container {
   display: flex;
   justify-content: center;
@@ -46,6 +46,7 @@
   font-weight: bold;
 }
 
+/* Form Group Styling */
 .form-group {
   margin-bottom: 20px;
   text-align: left;
@@ -73,6 +74,7 @@
   outline: none;
 }
 
+/* Button Styling */
 .btn {
   background-color: #f5a623;
   color: #fff;
@@ -89,6 +91,7 @@
   background-color: #d18e1f;
 }
 
+/* Authentication Link Styling */
 .auth-link {
   margin-top: 15px;
   font-size: 14px;
@@ -102,3 +105,32 @@
 .auth-link a:hover {
   text-decoration: underline;
 }
+
+/* Spinner Styling */
+.spinner {
+  font-size: 16px;
+  color: #f5a623;
+  margin: 10px 0;
+  font-weight: bold;
+}
+.button-group {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px; /* Dodaje razmak između dugmadi */
+}
+/* Link za Login ispod forme */
+.auth-link {
+  margin-top: 20px;
+  font-size: 14px;
+  color: #666;
+}
+
+.auth-link a {
+  color: #f5a623; /* Boja narandžasta */
+  text-decoration: none;
+}
+
+.auth-link a:hover {
+  text-decoration: underline; /* Efekat podvlačenja pri hover-u */
+}
+

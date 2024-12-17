@@ -2,30 +2,30 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
-import { AppRoutingModule } from './app-routing.module'; // Uključujemo rute
-import { AppComponent } from './app.component';
+import { AppRoutingModule } from './app-routing.module';
 
-// Importujemo AdminModule, koji sadrži sve potrebne komponente
+import { AppComponent } from './app.component';
 import { AdminModule } from './modules/admin/admin.module';
+import { SignUpComponent } from './modules/admin/sign-up/sign-up.component'; // Import komponenti
 import { LoginComponent } from './modules/admin/login/login.component';
-import { SignUpComponent } from './sign-up/sign-up.component';
+import { MyAuthService } from './services/auth-services/my-auth.service';
 
 @NgModule({
   declarations: [
     AppComponent,
     LoginComponent,
-    SignUpComponent,
-     // Glavna komponenta
-    // Nema potrebe da se ovde deklariraju EventsComponent, OffersComponent itd.
+    SignUpComponent // Ispravno deklarisan SignUpComponent
   ],
   imports: [
     BrowserModule,
     FormsModule,
     HttpClientModule,
-    AppRoutingModule,          // Rute
-    AdminModule,               // Dodajemo AdminModule koji već sadrži sve potrebne komponente
+    AppRoutingModule,
+    AdminModule
   ],
-  providers: [],
-  bootstrap: [AppComponent],   // Pokretanje glavne komponente
+  providers: [
+    MyAuthService], // dodaj MyAuthService ovde
+
+  bootstrap: [AppComponent]
 })
 export class AppModule {}

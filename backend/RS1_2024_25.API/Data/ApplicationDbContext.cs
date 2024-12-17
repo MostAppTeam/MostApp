@@ -53,8 +53,7 @@ namespace RS1_2024_25.API.Data
             {
                 entity.HasKey(o => o.Id); // Definišemo primarni ključ
             });
-
-            // Onemogućavamo automatsko brisanje povezanih entiteta
+           
             foreach (var relationship in modelBuilder.Model.GetEntityTypes().SelectMany(e => e.GetForeignKeys()))
             {
                 relationship.DeleteBehavior = DeleteBehavior.NoAction;
