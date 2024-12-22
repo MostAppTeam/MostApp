@@ -91,6 +91,20 @@
   background-color: #e6a722; /* Tamnija žuta na hover */
 }
 
+.btn-download {
+  background-color: #4CAF50; /* Zelena boja */
+  color: white;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: bold;
+  margin-left: 10px;
+}
+
+.btn-download:hover {
+  background-color: #45a049;
+}
 
 
 
