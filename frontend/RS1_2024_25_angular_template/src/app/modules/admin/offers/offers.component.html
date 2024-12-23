@@ -6,11 +6,41 @@
 
 <!-- Glavni sadržaj -->
 <main>
+  <!-- Sekcija ponuda -->
   <section class="offers-section">
     <h2>Offers</h2>
     <p class="offers-description">
       Explore exclusive offers in Mostar with special discounts and unique experiences!
     </p>
+
+    <!-- Sekcija za filtere i sortiranje -->
+    <section class="filter-sort-section">
+      <div class="filters">
+        <input
+          type="number"
+          placeholder="Min Price"
+          [(ngModel)]="filters.minPrice"
+          class="filter-input"
+        />
+        <input
+          type="number"
+          placeholder="Max Price"
+          [(ngModel)]="filters.maxPrice"
+          class="filter-input"
+        />
+        <button (click)="applyFilters()" class="btn-filter">Apply Filters</button>
+      </div>
+      <div class="sort">
+        < <label for="sort-select" class="sort-label">Sort by Price</label>
+        <select id="sort-select" class="sort-select" [(ngModel)]="sortOrder">
+          <option value="asc">Ascending</option>
+          <option value="desc">Descending</option>
+        </select>
+        <button (click)="applySorting()" class="btn-filter">Sort</button>
+      </div>
+    </section>
+
+    <!-- Kartice s ponudama -->
     <div class="offers-container">
       <div *ngFor="let offer of offers" class="offer-card">
         <h3>{{ offer.offerName }}</h3>
@@ -19,38 +49,40 @@
         <button class="btn-book" (click)="openBookingForm(offer)">Book Now</button>
       </div>
     </div>
-
-    <!-- Forma za rezervaciju -->
-    <div *ngIf="showBookingForm" id="booking-form-modal" class="modal">
-      <div class="modal-content">
-        <h2>Complete Your Booking</h2>
-        <form id="booking-form" (ngSubmit)="submitBooking()">
-          <label for="name">Name:</label>
-          <input
-            type="text"
-            id="name"
-            [(ngModel)]="bookingData.name"
-            name="name"
-            required
-          />
-
-          <label for="guests">Guests:</label>
-          <input
-            type="number"
-            id="guests"
-            [(ngModel)]="bookingData.guests"
-            name="guests"
-            required
-          />
-
-          <div class="form-buttons">
-            <button type="submit" class="btn-submit">Proceed to Payment</button>
-            <button type="button" class="btn-download" (click)="downloadPDF()">Download PDF</button>
-            <button type="button" class="btn-cancel" (click)="closeBookingForm()">Cancel</button>
-          </div>
-        </form>
-      </div>
-    </div>
   </section>
+
+  <!-- Modal za rezervaciju -->
+  <div *ngIf="showBookingForm" id="booking-form-modal" class="modal">
+    <div class="modal-content">
+      <h2>Complete Your Booking</h2>
+      <form id="booking-form" (ngSubmit)="submitBooking()">
+        <label for="name">Name:</label>
+        <input
+          type="text"
+          id="name"
+          [(ngModel)]="bookingData.name"
+          name="name"
+          required
+        />
+        <label for="guests">Guests:</label>
+        <input
+          type="number"
+          id="guests"
+          [(ngModel)]="bookingData.guests"
+          name="guests"
+          required
+        />
+        <div class="form-buttons">
+          <button type="submit" class="btn-submit">Proceed to Payment</button>
+          <button type="button" class="btn-download" (click)="downloadPDF()">
+            Download PDF
+          </button>
+          <button type="button" class="btn-cancel" (click)="closeBookingForm()">
+            Cancel
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
 </main>
 </body>

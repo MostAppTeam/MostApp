@@ -17,21 +17,46 @@ public class OffersController : ControllerBase
 
     // GET: api/Offers
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<Offer>>> GetOffers([FromQuery] string name = null, [FromQuery] string sortBy = "name")
+    public async Task<ActionResult<IEnumerable<Offer>>> GetOffers(
+        [FromQuery] string name = null,
+        [FromQuery] string sortBy = "name",
+        [FromQuery] decimal? minPrice = null,
+        [FromQuery] decimal? maxPrice = null,
+        [FromQuery] int? categoryId = null)
     {
-        var offers = _context.Offers.AsQueryable();
+        var offers = _context.Offers
+            .Include(o => o.Category)
+            .AsQueryable();
 
-        // Filteriranje po opisu ponude (nije obavezno)
+        // Filter by name
         if (!string.IsNullOrEmpty(name))
         {
-            offers = offers.Where(o => o.Description.Contains(name));
+            offers = offers.Where(o => o.Description.Contains(name) || o.OfferName.Contains(name));
         }
 
-        // Sortiranje
+        // Filter by category
+        if (categoryId.HasValue)
+        {
+            offers = offers.Where(o => o.CategoryID == categoryId);
+        }
+
+        // Filter by price range
+        if (minPrice.HasValue)
+        {
+            offers = offers.Where(o => o.Price >= minPrice);
+        }
+        if (maxPrice.HasValue)
+        {
+            offers = offers.Where(o => o.Price <= maxPrice);
+        }
+
+        // Sorting
         offers = sortBy.ToLower() switch
         {
-            "name" => offers.OrderBy(o => o.Description),
-            _ => offers // Dodaj druge kriterije sortiranja po potrebi
+            "name" => offers.OrderBy(o => o.OfferName),
+            "price" => offers.OrderBy(o => o.Price),
+            "category" => offers.OrderBy(o => o.Category.Name),
+            _ => offers
         };
 
         return Ok(await offers.ToListAsync());
@@ -41,7 +66,9 @@ public class OffersController : ControllerBase
     [HttpGet("{id}")]
     public async Task<ActionResult<Offer>> GetOffer(int id)
     {
-        var offer = await _context.Offers.FindAsync(id);
+        var offer = await _context.Offers
+            .Include(o => o.Category)
+            .FirstOrDefaultAsync(o => o.ID == id);
 
         if (offer == null)
         {
