@@ -45,6 +45,214 @@
   font-family: 'Arial', sans-serif; /* Isti font */
   transition: transform 0.3s, box-shadow 0.3s;
 }
+/* Filter and Sort Section */
+.filter-sort-section {
+  margin-bottom: 20px;
+  display: flex;
+  flex-direction: column; /* Postavlja elemente jedan ispod drugog */
+  align-items: center; /* Poravnava centrirano horizontalno */
+  gap: 15px; /* Razmak između filtera i sortiranja */
+}
+
+.filters {
+  display: flex;
+  gap: 10px;
+  justify-content: center; /* Centrirano poravnanje filter polja */
+}
+
+.sort {
+  display: flex;
+  gap: 10px;
+  justify-content: center; /* Centrirano poravnanje za sortiranje */
+}
+
+.filter-input,
+.sort-select {
+  padding: 5px 10px;
+  font-size: 1rem;
+}
+
+.btn-filter {
+  background-color: #f7b731; /* Žuta boja */
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: bold;
+}
+.sort {
+  display: flex;
+  align-items: center;
+  gap: 10px; /* Razmak između elemenata */
+}
+
+.sort-label {
+  font-size: 1.1rem; /* Blago povećan font */
+  color: #333; /* Tamnija siva za bolju čitljivost */
+  font-family: 'Arial', sans-serif;
+}
+
+.sort-select {
+  padding: 8px 12px; /* Dodano više paddinga */
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-family: 'Arial', sans-serif;
+}
+
+.btn-sort {
+  background-color: #f7b731; /* Žućkasta boja za dugme */
+  color: white;
+  padding: 8px 15px;
+  font-size: 1rem;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+/* General Styles */
+.offers-section {
+  max-width: 1200px;
+  margin: 40px auto;
+  padding: 20px;
+  text-align: center;
+}
+
+/* Animated Heading */
+.offers-section h2 {
+  font-size: 2.5rem;
+  margin-bottom: 20px;
+  color: #333;
+  font-family: 'Arial', sans-serif;
+  animation: fadeInDown 1s ease-in-out;
+}
+
+/* Description Box */
+.offers-description {
+  font-size: 1.1rem;
+  margin-bottom: 40px;
+  color: #555;
+  background-color: #fdf2e9;
+  padding: 20px;
+  border-radius: 8px;
+  font-family: 'Arial', sans-serif;
+  animation: fadeInUp 1s ease-in-out;
+}
+
+/* Offers Container */
+.offers-container {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+/* Offer Card */
+.offer-card {
+  background-color: #ffffff;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+  padding: 20px;
+  max-width: 300px;
+  text-align: left;
+  color: #333;
+  font-family: 'Arial', sans-serif;
+  transition: transform 0.3s, box-shadow 0.3s;
+  cursor: pointer;
+  animation: fadeIn 1s ease-in-out;
+}
+
+/* Hover Effects */
+.offer-card:hover {
+  transform: scale(1.05);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+}
+
+/* Offer Title */
+.offer-card h3 {
+  font-size: 1.4rem;
+  margin-bottom: 10px;
+  color: #f7b731;
+}
+
+/* Price Tag Animation */
+.offer-card .price {
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: #4CAF50;
+  animation: bounce 1s infinite alternate;
+}
+
+/* Buttons */
+.btn-book,
+.btn-download {
+  background-color: #f7b731;
+  color: white;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-top: 10px;
+  transition: transform 0.3s ease, background-color 0.3s ease;
+}
+
+.btn-book:hover,
+.btn-download:hover {
+  transform: scale(1.1);
+  background-color: #e6a722;
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes bounce {
+  from {
+    transform: translateY(0);
+  }
+  to {
+    transform: translateY(-5px);
+  }
+}
+
+.btn-sort:hover {
+  background-color: #e6a722; /* Tamnija nijansa žute za hover */
+}
+
+.btn-filter:hover {
+  background-color: #e6a722; /* Tamnija žuta na hover */
+}
 
 .offer-card:hover {
   transform: scale(1.05); /* Blago povećanje na hover */
