@@ -7,7 +7,6 @@ import { SharedModule } from '../shared/shared.module';
 // Komponente koje se koriste u Admin modulu
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { DestinationComponent } from './destination/destination.component';
-import { AdminLayoutComponent } from './admin-layout/admin-layout.component';
 import { ReservationComponent } from './reservation/reservation.component';
 import { AdminErrorPageComponent } from './admin-error-page/admin-error-page.component';
 import { CitiesComponent } from './cities/cities.component';
@@ -17,13 +16,12 @@ import { MuseumsComponent } from './museums/museums.component';
 import { EventsComponent } from './events/event.component';
 import { OffersComponent } from './offers/offers.component';
 import { UserRecommendationsComponent } from './user-recommendations/user-recommendations.component';
-import{ ShoppingCentersComponent} from './shopping-centers/shopping-centers.component';// Dodana komponenta
+import { ShoppingCentersComponent } from './shopping-centers/shopping-centers.component';
 
 @NgModule({
   declarations: [
     DashboardComponent,
     DestinationComponent,
-    AdminLayoutComponent,
     ReservationComponent,
     AdminErrorPageComponent,
     CitiesComponent,
@@ -33,13 +31,13 @@ import{ ShoppingCentersComponent} from './shopping-centers/shopping-centers.comp
     EventsComponent,
     OffersComponent,
     UserRecommendationsComponent,
-    ShoppingCentersComponent// Dodana komponenta za korisničke preporuke
+    ShoppingCentersComponent,
   ],
   imports: [
     CommonModule,
     FormsModule,
     AdminRoutingModule,
-    SharedModule, // Dodajte SharedModule za deljenje funkcionalnosti
+    SharedModule, // Deljenje funkcionalnosti
   ],
   providers: [],
 })
