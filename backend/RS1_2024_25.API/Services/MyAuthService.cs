@@ -72,8 +72,10 @@ namespace RS1_2024_25.API.Services
 
             if (myAuthToken == null)
             {
-                Console.WriteLine("Token nije pronađen u bazi.");
+                Console.WriteLine($"Token '{authToken}' nije pronađen u bazi ili je istekao.");
+                return GetAuthInfo(null);
             }
+
 
             return GetAuthInfo(myAuthToken);
         }

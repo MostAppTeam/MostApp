@@ -8,21 +8,18 @@ export class MyAuthService {
 
   constructor(private httpClient: HttpClient) {}
 
-  // Login method with improved error handling and token management
   login(credentials: { username: string; password: string }) {
     return this.httpClient
-      .post<{ token: string; myAuthInfo: any }>(`${this.apiUrl}/api/Auth/login`, credentials)
+      .post<{ token: string; myAuthInfo: any }>(`${this.apiUrl}/auth/login`, credentials)
       .pipe(
         tap((response) => {
           if (!response.token) {
             throw new Error('Token nije dobijen od servera.');
           }
 
-          // Save token securely
           console.log('Token dobijen:', response.token);
           this.setToken(response.token);
 
-          // Save user information if available
           if (response.myAuthInfo) {
             console.log('Korisnički podaci:', response.myAuthInfo);
             this.setLoggedInUser(response.myAuthInfo);
@@ -38,6 +35,8 @@ export class MyAuthService {
       );
   }
 
+
+
   // Registration method
   register(credentials: { username: string; firstName: string; lastName: string; email: string; password: string }) {
     return this.httpClient.post(`${this.apiUrl}/api/Auth/register`, credentials).pipe(
@@ -50,7 +49,7 @@ export class MyAuthService {
   }
 
   // Store the token securely in localStorage
-  private setToken(token: string): void {
+  public setToken(token: string): void {
     localStorage.setItem('token', token);
   }
 
@@ -72,17 +71,20 @@ export class MyAuthService {
   }
 
   getLoggedInUser(): any {
+    const userData = localStorage.getItem('loggedInUser');
+    if (!userData) {
+      console.error('No user data found in localStorage');
+      return null; // ili return empty object, u zavisnosti od tvoje logike
+    }
+
     try {
-      const user = localStorage.getItem('loggedInUser');
-      if (!user) {
-        return null; // Return null if no user data is found
-      }
-      return JSON.parse(user);
+      return JSON.parse(userData);
     } catch (error) {
-      console.error('Greška prilikom parsiranja korisničkih podataka iz localStorage:', error);
-      return null;
+      console.error('Error parsing user data from localStorage:', error);
+      return null; // ili return empty object
     }
   }
+
 
 
   // Check if the user is logged in

@@ -27,21 +27,24 @@ export class LoginComponent {
 
     this.authService.login(loginData).subscribe({
       next: (response) => {
+        console.log('Login uspešan:', response);
+
         if (!response.token) {
           this.errorMessage = 'Server nije poslao validan token.';
           return;
         }
 
-        console.log('Login uspešan:', response);
         this.successMessage = 'Dobrodošli! Uspešna prijava.';
         this.errorMessage = null;
 
-        // Spremaj token i korisničke podatke
-        console.log('Čuvanje tokena i korisničkih podataka u localStorage...');
-        localStorage.setItem('token', response.token);
-        this.authService.setLoggedInUser(response.myAuthInfo);
+        this.authService.setToken(response.token);
 
-        // Preusmeravanje
+        if (response.myAuthInfo) {
+          this.authService.setLoggedInUser(response.myAuthInfo);
+        } else {
+          console.warn('Korisnički podaci nisu prisutni u odgovoru servera.');
+        }
+
         setTimeout(() => {
           this.router.navigate(['/home']);
         }, 2000);

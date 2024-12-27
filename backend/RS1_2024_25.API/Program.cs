@@ -39,7 +39,11 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseCors("AllowSpecificOrigin");
+
+// **Redoslijed je bitan**
+app.UseAuthentication();
 app.UseAuthorization();
+
 app.MapControllers();
 
 Console.WriteLine("Database connection test skipped, no database connection available.");
