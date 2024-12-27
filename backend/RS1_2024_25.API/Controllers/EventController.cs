@@ -5,6 +5,7 @@ using RS1_2024_25.API.Data;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using RS1_2024_25.API.Helper.Auth;
 
 namespace RS1_2024_25.API.Controllers
 {
@@ -76,6 +77,7 @@ namespace RS1_2024_25.API.Controllers
 
         // POST: api/EventControllers
         [HttpPost]
+        [MyAuthorization(isAdmin: true, isManager: true)]
         public async Task<ActionResult<Event>> PostEvent(Event @event)
         {
 
@@ -91,6 +93,7 @@ namespace RS1_2024_25.API.Controllers
 
         // PUT: api/EventControllers/5
         [HttpPut("{id}")]
+        [MyAuthorization(isAdmin: true, isManager: true)]
         public async Task<IActionResult> PutEvent(int id, Event @event)
         {
             if (id != @event.ID)
@@ -123,6 +126,8 @@ namespace RS1_2024_25.API.Controllers
 
         // DELETE: api/EventControllers/5
         [HttpDelete("{id}")]
+     
+        [MyAuthorization(isAdmin: true, isManager: true)]
         public async Task<IActionResult> DeleteEvent(int id)
         {
             var @event = await _context.Events.FindAsync(id);

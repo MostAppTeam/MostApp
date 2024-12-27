@@ -1,5 +1,10 @@
 <div id="events-container">
-  <!-- Existing Events Display as Cards -->
+  <!-- Display user info in the corner -->
+  <div class="user-info">
+    <p><strong>Logged in as:</strong> {{ loggedInUser?.username || 'Guest' }}</p>
+    <p><strong>Role:</strong> {{ loggedInUser?.isAdmin ? 'Admin' : loggedInUser?.isManager ? 'Manager' : 'User' }}</p>
+  </div>
+
   <h3>Existing Events</h3>
   <div *ngIf="filteredEvents.length > 0; else noEventsMessage" class="event-cards">
     <div class="event-card" *ngFor="let event of filteredEvents">
@@ -7,105 +12,43 @@
       <p>{{ event.description }}</p>
       <p><strong>Date:</strong> {{ event.date }}</p>
       <p><strong>Location:</strong> {{ event.location }}</p>
-      <button (click)="editEvent(event)">Edit</button>
-      <button (click)="deleteEvent(event.id)">Delete</button>
+
+      <button *ngIf="isAdminOrManager" (click)="editEvent(event)">Edit</button>
+      <button *ngIf="isAdminOrManager" (click)="deleteEvent(event.id)">Delete</button>
     </div>
   </div>
 
   <ng-template #noEventsMessage>
     <p>No events available.</p>
   </ng-template>
-</div>
 
-<!-- Add Event Form -->
-<div id="event-container">
-  <!-- Form to add an event -->
-  <form (ngSubmit)="addEvent()" id="add-event-form" #eventForm="ngForm">
-    <h3>Add Event</h3>
-
-    <div>
-      <input
-        [(ngModel)]="newEvent.name"
-        placeholder="Event Name"
-        name="name"
-        required
-        #name="ngModel"
-        [class.invalid]="name.invalid && name.touched" />
-      <div *ngIf="name.invalid && name.touched" class="error-message">Please enter the event name!</div>
-    </div>
-
-    <div>
-      <input
-        [(ngModel)]="newEvent.date"
-        placeholder="Date"
-        name="date"
-        required
-        type="date"
-        #date="ngModel"
-        [class.invalid]="date.invalid && date.touched" />
-      <div *ngIf="date.invalid && date.touched" class="error-message">Please enter the date!</div>
-    </div>
-
-    <div>
-      <input
-        [(ngModel)]="newEvent.location"
-        placeholder="Location"
-        name="location"
-        required
-        #location="ngModel"
-        [class.invalid]="location.invalid && location.touched" />
-      <div *ngIf="location.invalid && location.touched" class="error-message">Please enter the location!</div>
-    </div>
-
-    <div>
-      <textarea
-        [(ngModel)]="newEvent.description"
-        placeholder="Description"
-        name="description"
-        required
-        #description="ngModel"
-        [class.invalid]="description.invalid && description.touched"></textarea>
-      <div *ngIf="description.invalid && description.touched" class="error-message">Please enter the description!</div>
-    </div>
-
-    <button type="submit" [disabled]="eventForm.invalid">Add Event</button>
-  </form>
-
-  <!-- Feedback message -->
-  <div *ngIf="feedbackMessage" id="feedback-message">
-    {{ feedbackMessage }}
+  <!-- Add New Event (only for Admin/Managers) -->
+  <div *ngIf="isAdminOrManager">
+    <form (ngSubmit)="addEvent()" id="add-event-form" #eventForm="ngForm">
+      <h3>Add Event</h3>
+      <input [(ngModel)]="newEvent.name" placeholder="Event Name" name="name" required />
+      <input [(ngModel)]="newEvent.date" placeholder="Date" name="date" required type="date" />
+      <input [(ngModel)]="newEvent.location" placeholder="Location" name="location" required />
+      <textarea [(ngModel)]="newEvent.description" placeholder="Description" name="description" required></textarea>
+      <button type="submit">Add Event</button>
+    </form>
   </div>
 
-  <!-- Event Filtering Section -->
+  <!-- Filter Events -->
   <div id="filter-container">
     <h3>Filter Events</h3>
     <input [(ngModel)]="filterParams.name" placeholder="Event Name" name="filterName" />
     <input [(ngModel)]="filterParams.date" placeholder="Date" name="filterDate" type="date" />
     <input [(ngModel)]="filterParams.location" placeholder="Location" name="filterLocation" />
     <input [(ngModel)]="filterParams.description" placeholder="Description" name="filterDescription" />
-    <input [(ngModel)]="filterParams.id" placeholder="Event ID" name="filterId" type="number" />
-
-
     <button (click)="applyFilter()">Apply Filter</button>
-    <div id="map" style="height: 500px; margin-top: 20px;"></div>
-    <div>
-      <input
-        [(ngModel)]="newEvent.location"
-        placeholder="Location (Click on map to set coordinates)"
-        name="location"
-        required
-        #location="ngModel"
-        [class.invalid]="location.invalid && location.touched" />
-      <div *ngIf="location.invalid && location.touched" class="error-message">
-        Please enter the location!
-      </div>
-    </div>
-
-
   </div>
-</div>
 
-<!-- Navigation Links -->
-<div id="navigation-links">
-  <button routerLink="/museums">Back to Museums</button>
+  <!-- Feedback message -->
+  <div *ngIf="feedbackMessage" class="feedback-message">
+    <p>{{ feedbackMessage }}</p>
+  </div>
+
+  <!-- Map -->
+  <div id="map" style="height: 400px;"></div>
 </div>

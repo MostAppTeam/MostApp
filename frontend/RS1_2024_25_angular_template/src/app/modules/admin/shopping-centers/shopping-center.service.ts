@@ -18,4 +18,9 @@ export class ShoppingCenterService {
   createShoppingCenter(center: Omit<ShoppingCenter, 'id' | 'city'>): Observable<any> {
     return this.http.post<any>(this.apiUrl, center);
   }
+
+  deleteShoppingCenter(centerId: number): Observable<void> {
+    return this.http.delete<void>(`${this.apiUrl}/api/ShoppingCenters/${centerId}`);
+  }
+
 }

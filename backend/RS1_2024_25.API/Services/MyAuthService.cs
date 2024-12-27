@@ -14,14 +14,12 @@ namespace RS1_2024_25.API.Services
         private readonly ApplicationDbContext _applicationDbContext;
         private readonly IHttpContextAccessor _httpContextAccessor;
 
-        // Constructor with dependency injection
         public MyAuthService(ApplicationDbContext applicationDbContext, IHttpContextAccessor httpContextAccessor)
         {
             _applicationDbContext = applicationDbContext;
             _httpContextAccessor = httpContextAccessor;
         }
 
-        // Generisanje novog tokena za korisnika
         public async Task<MyAuthenticationToken> GenerateAuthToken(MyAppUser user, CancellationToken cancellationToken = default)
         {
             string randomToken = MyTokenGenerator.Generate(10);
@@ -30,17 +28,17 @@ namespace RS1_2024_25.API.Services
             {
                 IpAddress = _httpContextAccessor.HttpContext?.Connection.RemoteIpAddress?.ToString() ?? string.Empty,
                 Value = randomToken,
-                MyAppUser = user,
+                MyAppUser = user, // Provjerite da li je ovo pravilno mapirano
                 RecordedAt = DateTime.Now
             };
 
             _applicationDbContext.MyAuthenticationTokens.Add(authToken);
             await _applicationDbContext.SaveChangesAsync(cancellationToken);
 
+
             return authToken;
         }
 
-        // Uklanjanje tokena iz baze podataka
         public async Task<bool> RevokeAuthToken(string tokenValue, CancellationToken cancellationToken = default)
         {
             var authToken = await _applicationDbContext.MyAuthenticationTokens
@@ -55,10 +53,14 @@ namespace RS1_2024_25.API.Services
             return true;
         }
 
-        // Dohvatanje informacija o autentifikaciji korisnika
         public MyAuthInfo GetAuthInfo()
         {
             string? authToken = _httpContextAccessor.HttpContext?.Request.Headers["my-auth-token"];
+            if (!string.IsNullOrEmpty(authToken) && authToken.StartsWith("Bearer "))
+            {
+                authToken = authToken.Substring("Bearer ".Length).Trim();
+            }
+
             if (string.IsNullOrEmpty(authToken))
             {
                 return GetAuthInfo(null);
@@ -68,6 +70,11 @@ namespace RS1_2024_25.API.Services
                 .Include(x => x.MyAppUser)
                 .SingleOrDefault(x => x.Value == authToken);
 
+            if (myAuthToken == null)
+            {
+                Console.WriteLine("Token nije pronađen u bazi.");
+            }
+
             return GetAuthInfo(myAuthToken);
         }
 
@@ -75,6 +82,7 @@ namespace RS1_2024_25.API.Services
         {
             if (myAuthToken == null)
             {
+                Console.WriteLine("Token je null.");
                 return new MyAuthInfo
                 {
                     IsAdmin = false,
@@ -83,13 +91,14 @@ namespace RS1_2024_25.API.Services
                 };
             }
 
+            Console.WriteLine($"Token pronađen: {myAuthToken.Value}, Korisnik: {myAuthToken.MyAppUser?.Username}");
             return new MyAuthInfo
             {
                 UserId = myAuthToken.MyAppUserId,
                 Username = myAuthToken.MyAppUser!.Username,
                 FirstName = myAuthToken.MyAppUser.FirstName,
                 LastName = myAuthToken.MyAppUser.LastName,
-                Email = myAuthToken.MyAppUser.Email, // Dodato povlačenje e-maila
+                Email = myAuthToken.MyAppUser.Email,
                 IsAdmin = myAuthToken.MyAppUser.IsAdmin,
                 IsManager = myAuthToken.MyAppUser.IsManager,
                 IsLoggedIn = true
@@ -97,14 +106,13 @@ namespace RS1_2024_25.API.Services
         }
     }
 
-    // DTO to hold authentication information
-    public class MyAuthInfo
+        public class MyAuthInfo
     {
         public int UserId { get; set; }
         public string Username { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
-        public string Email { get; set; } // Dodato polje za e-mail
+        public string Email { get; set; }
         public bool IsAdmin { get; set; }
         public bool IsManager { get; set; }
         public bool IsLoggedIn { get; set; }

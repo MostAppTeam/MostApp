@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ShoppingCenterService } from './shopping-center.service';
 import { ShoppingCenter } from './shopping-center.model';
+import { MyAuthService } from '../../../services/auth-services/my-auth.service';
 
 @Component({
   selector: 'app-shopping-centers',
@@ -15,38 +16,61 @@ export class ShoppingCentersComponent implements OnInit {
     workingHours: '',
     openingTime: '',
     closingTime: '',
-    cityID: 1, // Pretpostavka da je ID grada 1 za Mostar
+    cityID: 1,
   };
   feedbackMessage: string | null = null;
+  isAdminOrManager: boolean = false;
+  loggedInUser: any = null;
 
-  constructor(private shoppingCenterService: ShoppingCenterService) {}
+  constructor(
+    private shoppingCenterService: ShoppingCenterService,
+    private authService: MyAuthService
+  ) {}
 
   ngOnInit(): void {
     this.loadShoppingCenters();
+    this.checkUserPermissions();
   }
 
-  // Učitavanje postojećih trgovačkih centara
+  // Check user role and permissions
+  checkUserPermissions(): void {
+    const user = this.authService.getLoggedInUser();
+    if (user) {
+      this.loggedInUser = user;
+      this.isAdminOrManager = user.isAdmin || user.isManager;
+    } else {
+      this.loggedInUser = { username: 'Guest', role: 'Guest' };
+    }
+  }
+
+  // Load shopping centers
   loadShoppingCenters(): void {
     this.shoppingCenterService.getShoppingCenters().subscribe(
       (data) => {
         this.shoppingCenters = data;
       },
       (error) => {
-        console.error('Greška prilikom učitavanja trgovačkih centara:', error);
-        this.feedbackMessage = 'Došlo je do greške.';
+        console.error('Error loading shopping centers:', error);
+        this.feedbackMessage = 'An error occurred while loading shopping centers.';
         setTimeout(() => (this.feedbackMessage = null), 3000);
       }
     );
   }
 
-  // Dodavanje novog trgovačkog centra
+  // Add a shopping center
   addShoppingCenter(): void {
+    if (!this.isAdminOrManager) {
+      this.feedbackMessage = 'You do not have permission to add shopping centers.';
+      setTimeout(() => (this.feedbackMessage = null), 3000);
+      return;
+    }
+
     const { name, address, workingHours, openingTime, closingTime } = this.newShoppingCenter;
 
     if (name && address && workingHours && openingTime && closingTime) {
       this.shoppingCenterService.createShoppingCenter(this.newShoppingCenter).subscribe(
-        (response) => {
-          this.feedbackMessage = 'Trgovački centar uspješno dodan!';
+        () => {
+          this.feedbackMessage = 'Shopping center added successfully!';
           this.newShoppingCenter = {
             name: '',
             address: '',
@@ -55,18 +79,40 @@ export class ShoppingCentersComponent implements OnInit {
             closingTime: '',
             cityID: 1,
           };
-          this.loadShoppingCenters(); // Osvježavanje liste centara
+          this.loadShoppingCenters();
           setTimeout(() => (this.feedbackMessage = null), 3000);
         },
         (error) => {
-          console.error('Greška prilikom dodavanja trgovačkog centra:', error);
-          this.feedbackMessage = 'Došlo je do greške.';
+          console.error('Error adding shopping center:', error);
+          this.feedbackMessage = 'An error occurred while adding the shopping center.';
           setTimeout(() => (this.feedbackMessage = null), 3000);
         }
       );
     } else {
-      this.feedbackMessage = 'Molimo popunite sva polja!';
+      this.feedbackMessage = 'Please fill out all fields!';
       setTimeout(() => (this.feedbackMessage = null), 3000);
     }
+  }
+
+  // Delete a shopping center
+  deleteShoppingCenter(centerId: number): void {
+    if (!this.isAdminOrManager) {
+      this.feedbackMessage = 'You do not have permission to delete shopping centers.';
+      setTimeout(() => (this.feedbackMessage = null), 3000);
+      return;
+    }
+
+    this.shoppingCenterService.deleteShoppingCenter(centerId).subscribe(
+      () => {
+        this.feedbackMessage = 'Shopping center deleted successfully!';
+        this.loadShoppingCenters();
+        setTimeout(() => (this.feedbackMessage = null), 3000);
+      },
+      (error) => {
+        console.error('Error deleting shopping center:', error);
+        this.feedbackMessage = 'An error occurred while deleting the shopping center.';
+        setTimeout(() => (this.feedbackMessage = null), 3000);
+      }
+    );
   }
 }

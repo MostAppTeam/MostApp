@@ -9,7 +9,7 @@ using RS1_2024_25.API.Services;
 using System.Threading;
 using System.Threading.Tasks;
 
-[MyAuthorization(isAdmin: true, isManager : false)]
+//[MyAuthorization(isAdmin: true, isManager : false)]
 [Route("cities")]
 public class CityDeleteEndpoint(ApplicationDbContext db) : MyEndpointBaseAsync
     .WithRequest<int>

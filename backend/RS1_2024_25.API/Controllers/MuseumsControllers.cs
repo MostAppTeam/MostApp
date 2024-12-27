@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using RS1_2024_25.API.Helper.Auth;
 
 [Route("api/[controller]")]
 [ApiController]
@@ -65,7 +66,9 @@ public class MuseumsController : ControllerBase
     }
 
     // POST: api/Museums
+   
     [HttpPost]
+    [MyAuthorization(isAdmin: true, isManager: true)]
     public async Task<ActionResult<Museum>> CreateMuseum(Museum museum)
     {
         _context.Museums.Add(museum);
@@ -76,6 +79,7 @@ public class MuseumsController : ControllerBase
 
     // PUT: api/Museums/5
     [HttpPut("{id}")]
+    [MyAuthorization(isAdmin: true, isManager: true)]
     public async Task<IActionResult> UpdateMuseum(int id, Museum museum)
     {
         if (id != museum.ID)
@@ -106,6 +110,7 @@ public class MuseumsController : ControllerBase
 
     // DELETE: api/Museums/5
     [HttpDelete("{id}")]
+    [MyAuthorization(isAdmin: true, isManager: true)]
     public async Task<IActionResult> DeleteMuseum(int id)
     {
         var museum = await _context.Museums.FindAsync(id);

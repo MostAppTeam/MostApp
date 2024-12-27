@@ -31,12 +31,16 @@ namespace RS1_2024_25.API.Endpoints.Auth
 
             var newAuthToken = await authService.GenerateAuthToken(loggedInUser, cancellationToken);
             var authInfo = authService.GetAuthInfo(newAuthToken);
+            
+            Console.WriteLine($"AuthInfo: {authInfo.Username}, {authInfo.Email}");
 
             return new LoginResponse
             {
                 Token = newAuthToken.Value,
                 MyAuthInfo = authInfo
             };
+     
+
 
         }
 

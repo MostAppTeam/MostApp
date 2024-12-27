@@ -2,112 +2,123 @@
 using Microsoft.EntityFrameworkCore;
 using RS1_2024_25.API.Data.Models;
 using RS1_2024_25.API.Data;
+using RS1_2024_25.API.Services;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using RS1_2024_25.API.Helper.Auth;
 
-[Route("api/[controller]")]
-[ApiController]
-public class ShoppingCentersController : ControllerBase
+namespace RS1_2024_25.API.Controllers
 {
-    private readonly ApplicationDbContext _context;
-
-    public ShoppingCentersController(ApplicationDbContext context)
+    [Route("api/[controller]")]
+    [ApiController]
+    public class ShoppingCentersController : ControllerBase
     {
-        _context = context;
-    }
+        private readonly ApplicationDbContext _context;
 
-    // GET: api/ShoppingCenters
-    [HttpGet]
-    public async Task<ActionResult<IEnumerable<ShoppingCenter>>> GetShoppingCenters([FromQuery] string name = null, [FromQuery] string sortBy = "name")
-    {
-        var shoppingCenters = _context.ShoppingCenters.AsQueryable();
-
-        // Filtriranje po imenu shopping centra (nije obavezno)
-        if (!string.IsNullOrEmpty(name))
+        public ShoppingCentersController(ApplicationDbContext context)
         {
-            shoppingCenters = shoppingCenters.Where(s => s.Name.Contains(name));
+            _context = context;
         }
 
-        // Sortiranje (nije obavezno)
-        if (sortBy == "name")
+        // GET: api/ShoppingCenters
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<ShoppingCenter>>> GetShoppingCenters(
+            [FromQuery] string? name = null,
+            [FromQuery] string sortBy = "name")
         {
-            shoppingCenters = shoppingCenters.OrderBy(s => s.Name);
-        }
-        // Dodajte više sortiranja ako želite, kao npr. po cityId ili sličnom
+            var shoppingCenters = _context.ShoppingCenters.AsQueryable();
 
-        return Ok(await shoppingCenters.ToListAsync());
-    }
+            // Filtriranje
+            if (!string.IsNullOrWhiteSpace(name))
+            {
+                shoppingCenters = shoppingCenters.Where(s => s.Name.Contains(name));
+            }
 
-    // GET: api/ShoppingCenters/5
-    [HttpGet("{id}")]
-    public async Task<ActionResult<ShoppingCenter>> GetShoppingCenter(int id)
-    {
-        var shoppingCenter = await _context.ShoppingCenters.FindAsync(id);
+            // Sortiranje
+            shoppingCenters = sortBy switch
+            {
+                "name" => shoppingCenters.OrderBy(s => s.Name),
+                _ => shoppingCenters.OrderBy(s => s.ID) // Defaultno sortiranje po ID-u
+            };
 
-        if (shoppingCenter == null)
-        {
-            return NotFound();
-        }
-
-        return shoppingCenter;
-    }
-
-    // POST: api/ShoppingCenters
-    [HttpPost]
-    public async Task<ActionResult<ShoppingCenter>> PostShoppingCenter(ShoppingCenter shoppingCenter)
-    {
-        _context.ShoppingCenters.Add(shoppingCenter);
-        await _context.SaveChangesAsync();
-
-        return CreatedAtAction(nameof(GetShoppingCenter), new { id = shoppingCenter.ID }, shoppingCenter);
-    }
-
-    // PUT: api/ShoppingCenters/5
-    [HttpPut("{id}")]
-    public async Task<IActionResult> PutShoppingCenter(int id, ShoppingCenter shoppingCenter)
-    {
-        if (id != shoppingCenter.ID)
-        {
-            return BadRequest();
+            return Ok(await shoppingCenters.ToListAsync());
         }
 
-        _context.Entry(shoppingCenter).State = EntityState.Modified;
-
-        try
+        // GET: api/ShoppingCenters/5
+        [HttpGet("{id}")]
+        public async Task<ActionResult<ShoppingCenter>> GetShoppingCenter(int id)
         {
+            var shoppingCenter = await _context.ShoppingCenters.FindAsync(id);
+
+            if (shoppingCenter == null)
+            {
+                return NotFound(new { Message = $"Shopping Center with ID {id} not found." });
+            }
+
+            return Ok(shoppingCenter);
+        }
+
+        // POST: api/ShoppingCenters
+        [HttpPost]
+        [MyAuthorization(isAdmin: true, isManager: true)]
+        public async Task<ActionResult<ShoppingCenter>> PostShoppingCenter(ShoppingCenter shoppingCenter)
+        {
+            if (shoppingCenter == null)
+            {
+                return BadRequest(new { Message = "Shopping Center data is invalid." });
+            }
+
+            _context.ShoppingCenters.Add(shoppingCenter);
             await _context.SaveChangesAsync();
+
+            return CreatedAtAction(nameof(GetShoppingCenter), new { id = shoppingCenter.ID }, shoppingCenter);
         }
-        catch (DbUpdateConcurrencyException)
+
+        // PUT: api/ShoppingCenters/5
+        [HttpPut("{id}")]
+        [MyAuthorization(isAdmin: true, isManager: true)]
+        public async Task<IActionResult> PutShoppingCenter(int id, ShoppingCenter shoppingCenter)
         {
-            if (!ShoppingCenterExists(id))
+            if (id != shoppingCenter.ID)
             {
-                return NotFound();
+                return BadRequest(new { Message = "Shopping Center ID in the URL does not match the ID in the payload." });
             }
-            else
+
+            if (!_context.ShoppingCenters.Any(s => s.ID == id))
             {
-                throw;
+                return NotFound(new { Message = $"Shopping Center with ID {id} not found." });
             }
+
+            _context.Entry(shoppingCenter).State = EntityState.Modified;
+
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                return StatusCode(500, new { Message = "A concurrency error occurred while updating the shopping center." });
+            }
+
+            return NoContent();
         }
 
-        return NoContent();
-    }
-
-    // DELETE: api/ShoppingCenters/5
-    [HttpDelete("{id}")]
-    public async Task<IActionResult> DeleteShoppingCenter(int id)
-    {
-        var shoppingCenter = await _context.ShoppingCenters.FindAsync(id);
-        if (shoppingCenter == null)
+        // DELETE: api/ShoppingCenters/5
+        [HttpDelete("{id}")]
+        [MyAuthorization(isAdmin: true, isManager: false)]
+        public async Task<IActionResult> DeleteShoppingCenter(int id)
         {
-            return NotFound();
+            var shoppingCenter = await _context.ShoppingCenters.FindAsync(id);
+            if (shoppingCenter == null)
+            {
+                return NotFound(new { Message = $"Shopping Center with ID {id} not found." });
+            }
+
+            _context.ShoppingCenters.Remove(shoppingCenter);
+            await _context.SaveChangesAsync();
+
+            return NoContent();
         }
-
-        _context.ShoppingCenters.Remove(shoppingCenter);
-        await _context.SaveChangesAsync();
-
-        return NoContent();
-    }
-
-    private bool ShoppingCenterExists(int id)
-    {
-        return _context.ShoppingCenters.Any(e => e.ID == id);
     }
 }
