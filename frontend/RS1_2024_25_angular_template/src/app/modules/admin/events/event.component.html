@@ -5,6 +5,17 @@
     <p><strong>Role:</strong> {{ loggedInUser?.isAdmin ? 'Admin' : loggedInUser?.isManager ? 'Manager' : 'User' }}</p>
   </div>
 
+  <!-- Sort Events -->
+  <div id="sort-container">
+    <h3>Sort Events</h3>
+    <select [(ngModel)]="sortOption" (change)="applySorting()">
+      <option value="nameAsc">Name (A-Z)</option>
+      <option value="nameDesc">Name (Z-A)</option>
+      <option value="dateAsc">Date (Newest First)</option>
+      <option value="dateDesc">Date (Oldest First)</option>
+    </select>
+  </div>
+
   <h3>Existing Events</h3>
   <div *ngIf="filteredEvents.length > 0; else noEventsMessage" class="event-cards">
     <div class="event-card" *ngFor="let event of filteredEvents">
@@ -43,6 +54,9 @@
     <input [(ngModel)]="filterParams.description" placeholder="Description" name="filterDescription" />
     <button (click)="applyFilter()">Apply Filter</button>
   </div>
+
+
+
 
   <!-- Feedback message -->
   <div *ngIf="feedbackMessage" class="feedback-message">

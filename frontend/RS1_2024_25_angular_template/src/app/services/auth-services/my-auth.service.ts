@@ -35,8 +35,6 @@ export class MyAuthService {
       );
   }
 
-
-
   // Registration method
   register(credentials: { username: string; firstName: string; lastName: string; email: string; password: string }) {
     return this.httpClient.post(`${this.apiUrl}/api/Auth/register`, credentials).pipe(
@@ -74,43 +72,37 @@ export class MyAuthService {
     const userData = localStorage.getItem('loggedInUser');
     if (!userData) {
       console.error('No user data found in localStorage');
-      return null; // ili return empty object, u zavisnosti od tvoje logike
+      return null;
     }
 
     try {
       return JSON.parse(userData);
     } catch (error) {
       console.error('Error parsing user data from localStorage:', error);
-      return null; // ili return empty object
+      return null;
     }
   }
-
-
 
   // Check if the user is logged in
   isLoggedIn(): boolean {
     return !!this.getToken();
   }
 
-  // Check if the user has a specific role
-  hasRole(role: string): boolean {
+  // Check if the user is an admin
+  isAdmin(): boolean {
     const user = this.getLoggedInUser();
-    return user?.roles?.includes(role) || false;
+    return user?.isAdmin || false;
+  }
+
+  // Check if the user is a manager
+  isManager(): boolean {
+    const user = this.getLoggedInUser();
+    return user?.isManager || false;
   }
 
   // Check if the user is both admin and manager
   isAdminAndManager(): boolean {
     const user = this.getLoggedInUser();
-    return user?.roles?.includes('Admin') && user?.roles?.includes('Manager');
-  }
-
-  // Check if the user is an admin
-  isAdmin(): boolean {
-    return this.hasRole('Admin');
-  }
-
-  // Check if the user is a manager
-  isManager(): boolean {
-    return this.hasRole('Manager');
+    return user?.isAdmin && user?.isManager;
   }
 }

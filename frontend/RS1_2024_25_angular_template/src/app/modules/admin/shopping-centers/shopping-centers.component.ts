@@ -10,6 +10,11 @@ import { MyAuthService } from '../../../services/auth-services/my-auth.service';
 })
 export class ShoppingCentersComponent implements OnInit {
   shoppingCenters: ShoppingCenter[] = [];
+  filteredShoppingCenters: ShoppingCenter[] = [];
+  searchQuery: string = '';
+  sortBy: string = 'name';
+  sortDirection: 'asc' | 'desc' = 'asc';
+
   newShoppingCenter: Omit<ShoppingCenter, 'id' | 'city'> = {
     name: '',
     address: '',
@@ -18,6 +23,7 @@ export class ShoppingCentersComponent implements OnInit {
     closingTime: '',
     cityID: 1,
   };
+
   feedbackMessage: string | null = null;
   isAdminOrManager: boolean = false;
   loggedInUser: any = null;
@@ -32,22 +38,23 @@ export class ShoppingCentersComponent implements OnInit {
     this.checkUserPermissions();
   }
 
-  // Check user role and permissions
   checkUserPermissions(): void {
     const user = this.authService.getLoggedInUser();
     if (user) {
       this.loggedInUser = user;
-      this.isAdminOrManager = user.isAdmin || user.isManager;
+      this.isAdminOrManager = this.authService.isAdmin() || this.authService.isManager();
     } else {
       this.loggedInUser = { username: 'Guest', role: 'Guest' };
+      this.isAdminOrManager = false;
     }
   }
 
-  // Load shopping centers
+  // Učitaj shopping centre
   loadShoppingCenters(): void {
-    this.shoppingCenterService.getShoppingCenters().subscribe(
+    this.shoppingCenterService.getShoppingCenters(this.sortBy, this.sortDirection).subscribe(
       (data) => {
         this.shoppingCenters = data;
+        this.applyFilters();
       },
       (error) => {
         console.error('Error loading shopping centers:', error);
@@ -57,7 +64,29 @@ export class ShoppingCentersComponent implements OnInit {
     );
   }
 
-  // Add a shopping center
+  applyFilters(): void {
+    this.filteredShoppingCenters = this.shoppingCenters
+      .filter(center => center.name.toLowerCase().includes(this.searchQuery.toLowerCase()))
+      .sort((a, b) => {
+        if (this.sortBy === 'name') {
+          return this.sortDirection === 'asc'
+            ? a.name.localeCompare(b.name)
+            : b.name.localeCompare(a.name);
+        } else if (this.sortBy === 'address') {
+          return this.sortDirection === 'asc'
+            ? a.address.localeCompare(b.address)
+            : b.address.localeCompare(a.address);
+        } else if (this.sortBy === 'workingHours') {
+          return this.sortDirection === 'asc'
+            ? a.workingHours.localeCompare(b.workingHours)
+            : b.workingHours.localeCompare(a.workingHours);
+        }
+        return 0; // Ako sortBy nije validan
+      });
+  }
+
+
+  // Dodaj shopping centar
   addShoppingCenter(): void {
     if (!this.isAdminOrManager) {
       this.feedbackMessage = 'You do not have permission to add shopping centers.';
@@ -94,7 +123,7 @@ export class ShoppingCentersComponent implements OnInit {
     }
   }
 
-  // Delete a shopping center
+  // Izbriši shopping centar
   deleteShoppingCenter(centerId: number): void {
     if (!this.isAdminOrManager) {
       this.feedbackMessage = 'You do not have permission to delete shopping centers.';

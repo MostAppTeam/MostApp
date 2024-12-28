@@ -54,6 +54,27 @@ export class EventsComponent implements OnInit {
     }
   }
 
+  sortOption: string = 'nameAsc';
+
+  applySorting(): void {
+    switch (this.sortOption) {
+      case 'nameAsc':
+        this.filteredEvents.sort((a, b) => a.name.localeCompare(b.name));
+        break;
+      case 'nameDesc':
+        this.filteredEvents.sort((a, b) => b.name.localeCompare(a.name));
+        break;
+      case 'dateAsc':
+        this.filteredEvents.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
+        break;
+      case 'dateDesc':
+        this.filteredEvents.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+        break;
+    }
+    this.updateMapMarkers();
+  }
+
+
   // Leaflet map initialization
   private initializeMap(): void {
     const mapElement = document.getElementById('map');
