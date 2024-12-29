@@ -4,7 +4,7 @@ import { catchError, throwError, tap } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
 export class MyAuthService {
-  private apiUrl = 'http://localhost:7000';
+  private apiUrl = 'https://localhost:7000';
 
   constructor(private httpClient: HttpClient) {}
 

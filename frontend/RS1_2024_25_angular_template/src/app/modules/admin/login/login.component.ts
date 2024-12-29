@@ -53,7 +53,9 @@ export class LoginComponent {
         console.error('Greška prilikom prijave:', err);
         this.errorMessage = err?.message || 'Pogrešno korisničko ime ili šifra.';
         this.successMessage = null;
+
       }
+
     });
   }
 

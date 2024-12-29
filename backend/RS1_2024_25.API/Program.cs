@@ -28,6 +28,8 @@ builder.Services.AddSwaggerGen(x =>
     x.OperationFilter<MyAuthorizationSwaggerHeader>());
 
 builder.Services.AddHttpContextAccessor();
+builder.Services.AddScoped<EmailService>();
+
 
 var app = builder.Build();
 
@@ -37,15 +39,13 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseHttpsRedirection();
-app.UseCors("AllowSpecificOrigin");
+app.UseHttpsRedirection(); // HTTPS prije ostalog
+app.UseCors("AllowSpecificOrigin"); // Omogući CORS nakon HTTPS-a
 
-// **Redoslijed je bitan**
-app.UseAuthentication();
-app.UseAuthorization();
+app.UseAuthentication(); // Prvo autentifikacija
+app.UseAuthorization();  // Zatim autorizacija
 
-app.MapControllers();
+app.MapControllers(); // Na kraju mapiranje kontrolera
 
-Console.WriteLine("Database connection test skipped, no database connection available.");
-
+Console.WriteLine("✅ Backend je pokrenut i spreman za zahtjeve.");
 app.Run();

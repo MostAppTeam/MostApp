@@ -75,7 +75,7 @@
 /* Link ispod dugmeta */
 .auth-link {
   margin-top: 15px;
-  font-size: 14px;
+  font-size: 15px;
 }
 
 .auth-link a {
@@ -120,4 +120,24 @@
     opacity: 1;
     transform: translateY(0);
   }
+}
+/* Stil za auth-links div */
+.auth-links {
+  margin-top: 20px;
+  text-align: center;
+}
+
+/* Stil za linkove unutar auth-links */
+.auth-links a {
+  color: #f5a623; /* Narandžasta boja */
+  font-size: 17px;
+  text-decoration: none;
+  margin: 0 10px; /* Razmak između linkova */
+  transition: color 0.3s ease;
+}
+
+/* Hover efekat za linkove */
+.auth-links a:hover {
+  color: #d18e1f; /* Tamnija narandžasta boja */
+  text-decoration: underline;
 }

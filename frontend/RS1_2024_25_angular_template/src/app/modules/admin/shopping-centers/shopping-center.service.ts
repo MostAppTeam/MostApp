@@ -8,7 +8,7 @@ import { MyAuthService } from '../../../services/auth-services/my-auth.service';
   providedIn: 'root',
 })
 export class ShoppingCenterService {
-  private apiUrl = 'http://localhost:7000/api/ShoppingCenters';
+  private apiUrl = 'https://localhost:7000/api/ShoppingCenters';
 
   constructor(private http: HttpClient, private authService: MyAuthService) {}
 

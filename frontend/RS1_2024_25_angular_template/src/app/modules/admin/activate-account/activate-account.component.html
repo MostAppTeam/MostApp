@@ -1,0 +1,9 @@
+<div class="form-container">
+  <div class="form-box">
+    <h2>Activate Your Account</h2>
+    <input type="email" [(ngModel)]="email" placeholder="Enter your email" />
+    <button (click)="sendActivationLink()">Send Activation Link</button>
+    <p *ngIf="successMessage" class="success">{{ successMessage }}</p>
+    <p *ngIf="errorMessage" class="error">{{ errorMessage }}</p>
+  </div>
+</div>

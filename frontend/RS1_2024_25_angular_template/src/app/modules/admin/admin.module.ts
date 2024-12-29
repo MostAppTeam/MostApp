@@ -17,6 +17,9 @@ import { EventsComponent } from './events/event.component';
 import { OffersComponent } from './offers/offers.component';
 import { UserRecommendationsComponent } from './user-recommendations/user-recommendations.component';
 import { ShoppingCentersComponent } from './shopping-centers/shopping-centers.component';
+import {ResetPasswordComponent} from './reset-password/reset-password.component';
+import {InviteFriendComponent} from './ invite-friend/invite-friend.component';
+import {ActivateAccountComponent} from './activate-account/activate-account.component';
 
 @NgModule({
   declarations: [
@@ -32,6 +35,9 @@ import { ShoppingCentersComponent } from './shopping-centers/shopping-centers.co
     OffersComponent,
     UserRecommendationsComponent,
     ShoppingCentersComponent,
+    InviteFriendComponent,
+    ActivateAccountComponent,
+    ResetPasswordComponent
   ],
   imports: [
     CommonModule,

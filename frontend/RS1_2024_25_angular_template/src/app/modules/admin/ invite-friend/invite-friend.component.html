@@ -1,0 +1,9 @@
+<div class="form-container">
+  <div class="form-box">
+    <h2>Invite a friend</h2>
+    <input type="email" [(ngModel)]="friendEmail" placeholder="Friend's email" />
+    <button (click)="sendInvite()">Send Invite</button>
+    <p *ngIf="successMessage" class="success">{{ successMessage }}</p>
+    <p *ngIf="errorMessage" class="error">{{ errorMessage }}</p>
+  </div>
+</div>

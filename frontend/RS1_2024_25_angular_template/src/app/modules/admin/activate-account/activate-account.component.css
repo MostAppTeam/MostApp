@@ -1,0 +1,136 @@
+/* Glavni kontejner za sve forme */
+.form-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: #fff5e6; /* Svijetlo narandžasta pozadina */
+  margin: 0;
+}
+
+/* Stil forme */
+.form-box {
+  background-color: #ffffff; /* Bijela pozadina */
+  padding: 25px 30px;
+  border-radius: 10px; /* Okrugli kutovi */
+  box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.15);
+  width: 350px;
+  text-align: center;
+  font-family: Arial, sans-serif;
+}
+
+/* Naslov forme */
+.form-box h2 {
+  margin-bottom: 20px;
+  font-size: 24px;
+  color: #d35400; /* Narandžasta boja */
+  font-weight: bold;
+}
+
+/* Stil za input polja */
+.form-box input {
+  width: 100%;
+  padding: 10px;
+  margin: 10px 0;
+  border: 1px solid #f5c6cb;
+  border-radius: 5px;
+  box-sizing: border-box;
+  font-size: 14px;
+}
+
+.form-box input:focus {
+  border-color: #e67e22; /* Fokusna narandžasta */
+  outline: none;
+}
+
+/* Stil za dugmadi */
+.form-box button {
+  background-color: #e67e22; /* Narandžasta */
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-top: 10px;
+  width: 100%;
+  font-size: 14px;
+}
+
+.form-box button:hover {
+  background-color: #d35400; /* Tamnija narandžasta na hover */
+}
+
+/* Linkovi za 'Forgot password?' i 'Resend Email' */
+.form-box .auth-links a {
+  color: #f5a623;
+  text-decoration: none;
+  font-size: 14px;
+  display: block;
+  margin-top: 10px;
+}
+
+.form-box .auth-links a:hover {
+  text-decoration: underline;
+}
+
+/* Poruke o uspehu ili grešci */
+.alert {
+  padding: 10px;
+  margin-top: 10px;
+  border-radius: 5px;
+  font-size: 14px;
+  text-align: center;
+}
+
+.alert.success {
+  background-color: #d4edda;
+  color: #155724;
+  border: 1px solid #c3e6cb;
+}
+
+.alert.error {
+  background-color: #f8d7da;
+  color: #721c24;
+  border: 1px solid #f5c6cb;
+}
+
+/* Animacija za fade-in poruke */
+.fade-in {
+  animation: fadeIn 0.5s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Stil za 'success' i 'error' poruke */
+.form-box p.success {
+  color: #28a745;
+}
+
+.form-box p.error {
+  color: #dc3545;
+}
+
+/* Stil za linkove ispod forme */
+.auth-link {
+  margin-top: 15px;
+  font-size: 14px;
+}
+
+.auth-link a {
+  color: #f5a623;
+  text-decoration: none;
+}
+
+.auth-link a:hover {
+  text-decoration: underline;
+}
+

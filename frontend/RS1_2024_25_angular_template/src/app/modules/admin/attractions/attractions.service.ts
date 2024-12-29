@@ -7,7 +7,7 @@ import { Attraction } from './attractions.model';
   providedIn: 'root',
 })
 export class AttractionsService {
-  private apiUrl = 'http://localhost:7000/api/Attractions'; // Backend API URL
+  private apiUrl = 'https://localhost:7000/api/Attractions'; // Backend API URL
 
   constructor(private http: HttpClient) {}
 

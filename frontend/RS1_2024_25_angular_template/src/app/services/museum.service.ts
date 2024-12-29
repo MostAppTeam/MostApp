@@ -6,7 +6,7 @@ import { Observable } from 'rxjs';
   providedIn: 'root', // Ovaj servis je dostupan svuda u aplikaciji
 })
 export class MuseumService {
-  private apiUrl = 'http://localhost:7000/api'; // Zamijeni sa stvarnim URL-om
+  private apiUrl = 'https://localhost:7000/api'; // Zamijeni sa stvarnim URL-om
 
   constructor(private http: HttpClient) {}
 
