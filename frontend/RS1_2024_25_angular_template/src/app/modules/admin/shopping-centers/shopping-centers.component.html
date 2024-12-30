@@ -1,33 +1,61 @@
 <div id="shopping-center-container">
+  <!-- Informacije o korisniku -->
   <div class="user-info">
     <p><strong>Logged in as:</strong> {{ loggedInUser?.username || 'Guest' }}</p>
-    <p><strong>Role:</strong> {{ loggedInUser?.isAdmin ? 'Admin' : loggedInUser?.isManager ? 'Manager' : 'User' }}</p>
+    <p>
+      <strong>Role:</strong>
+      {{ loggedInUser?.isAdmin ? 'Admin' : loggedInUser?.isManager ? 'Manager' : 'User' }}
+    </p>
   </div>
 
+  <!-- Filteri i sortiranje -->
   <h3>Shopping Centers in Mostar</h3>
-  <input [(ngModel)]="searchQuery" placeholder="Search by name" (input)="applyFilters()" />
+  <div class="filter-sort-container">
+    <input
+      [(ngModel)]="searchQuery"
+      placeholder="Search by name"
+      (input)="applyFilters()"
+    />
+    <select [(ngModel)]="sortBy" (change)="applyFilters()">
+      <option value="name">Name</option>
+      <option value="address">Address</option>
+      <option value="workingHours">Working Hours</option>
+    </select>
+    <select [(ngModel)]="sortDirection" (change)="applyFilters()">
+      <option value="asc">Ascending</option>
+      <option value="desc">Descending</option>
+    </select>
+  </div>
 
-  <select [(ngModel)]="sortBy" (change)="applyFilters()">
-    <option value="name">Name</option>
-    <option value="address">Address</option>
-    <option value="workingHours">Working Hours</option>
-  </select>
-
-  <select [(ngModel)]="sortDirection" (change)="applyFilters()">
-    <option value="asc">Ascending</option>
-    <option value="desc">Descending</option>
-  </select>
-
-  <div *ngIf="filteredShoppingCenters.length > 0; else noShoppingCentersMessage" class="shopping-center-cards">
-    <div class="shopping-center-card" *ngFor="let center of filteredShoppingCenters">
+  <div
+    cdkDropList
+    [cdkDropListData]="filteredShoppingCenters"
+    (cdkDropListDropped)="drop($event)"
+    class="shopping-center-cards"
+  >
+    <div
+      class="shopping-center-card"
+      *ngFor="let center of filteredShoppingCenters"
+      cdkDrag
+    >
       <h4>{{ center.name }}</h4>
       <p><strong>Address:</strong> {{ center.address }}</p>
       <p><strong>Working Hours:</strong> {{ center.workingHours }}</p>
       <p><strong>Opening:</strong> {{ center.openingTime }}</p>
       <p><strong>Closing:</strong> {{ center.closingTime }}</p>
-      <button *ngIf="isAdminOrManager" (click)="deleteShoppingCenter(center.id)">Delete</button>
+      <button *ngIf="isAdminOrManager" (click)="deleteShoppingCenter(center.id)">
+        Delete
+      </button>
     </div>
   </div>
+
+
+
+  <!-- Poruka kada nema shopping centara -->
+  <ng-container *ngIf="filteredShoppingCenters?.length === 0">
+    <p>No shopping centers available.</p>
+  </ng-container>
+
   <!-- Forma za dodavanje shopping centra (prikazuje se samo adminima ili menadžerima) -->
   <div *ngIf="isAdminOrManager" class="add-shopping-center-form">
     <h4>Add New Shopping Center</h4>
@@ -66,9 +94,4 @@
     </form>
     <p *ngIf="feedbackMessage" class="feedback">{{ feedbackMessage }}</p>
   </div>
-
-
-  <ng-template #noShoppingCentersMessage>
-    <p>No shopping centers available.</p>
-  </ng-template>
 </div>

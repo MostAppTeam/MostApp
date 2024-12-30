@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ShoppingCenterService } from './shopping-center.service';
 import { ShoppingCenter } from './shopping-center.model';
 import { MyAuthService } from '../../../services/auth-services/my-auth.service';
+import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop'; // Dodano za drag-and-drop
 
 @Component({
   selector: 'app-shopping-centers',
@@ -49,7 +50,6 @@ export class ShoppingCentersComponent implements OnInit {
     }
   }
 
-  // Učitaj shopping centre
   loadShoppingCenters(): void {
     this.shoppingCenterService.getShoppingCenters(this.sortBy, this.sortDirection).subscribe(
       (data) => {
@@ -81,12 +81,10 @@ export class ShoppingCentersComponent implements OnInit {
             ? a.workingHours.localeCompare(b.workingHours)
             : b.workingHours.localeCompare(a.workingHours);
         }
-        return 0; // Ako sortBy nije validan
+        return 0;
       });
   }
 
-
-  // Dodaj shopping centar
   addShoppingCenter(): void {
     if (!this.isAdminOrManager) {
       this.feedbackMessage = 'You do not have permission to add shopping centers.';
@@ -123,7 +121,6 @@ export class ShoppingCentersComponent implements OnInit {
     }
   }
 
-  // Izbriši shopping centar
   deleteShoppingCenter(centerId: number): void {
     if (!this.isAdminOrManager) {
       this.feedbackMessage = 'You do not have permission to delete shopping centers.';
@@ -144,4 +141,17 @@ export class ShoppingCentersComponent implements OnInit {
       }
     );
   }
+
+  drop(event: CdkDragDrop<ShoppingCenter[]>): void {
+    if (event.previousIndex !== event.currentIndex) {
+      moveItemInArray(
+        this.filteredShoppingCenters,
+        event.previousIndex,
+        event.currentIndex
+      );
+    }
+  }
+
+
+
 }

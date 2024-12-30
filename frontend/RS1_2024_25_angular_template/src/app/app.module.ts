@@ -9,6 +9,7 @@ import { AdminModule } from './modules/admin/admin.module';
 import { SignUpComponent } from './modules/admin/sign-up/sign-up.component'; // Import komponenti
 import { LoginComponent } from './modules/admin/login/login.component';
 import { MyAuthService } from './services/auth-services/my-auth.service';
+import { DragDropModule } from '@angular/cdk/drag-drop';
 
 @NgModule({
   declarations: [
@@ -21,7 +22,8 @@ import { MyAuthService } from './services/auth-services/my-auth.service';
     FormsModule,
     HttpClientModule,
     AppRoutingModule,
-    AdminModule
+    AdminModule,
+    DragDropModule
   ],
   providers: [
     MyAuthService], // dodaj MyAuthService ovde
