@@ -15,7 +15,8 @@ builder.Services.AddCors(options =>
     {
         policy.WithOrigins("http://localhost:4200")
               .AllowAnyHeader()
-              .AllowAnyMethod();
+              .AllowAnyMethod()
+        .AllowCredentials();
     });
 });
 
@@ -28,6 +29,7 @@ builder.Services.AddSwaggerGen(x =>
     x.OperationFilter<MyAuthorizationSwaggerHeader>());
 
 builder.Services.AddHttpContextAccessor();
+builder.Services.AddScoped<PayPalPaymentService>();
 builder.Services.AddScoped<EmailService>();
 
 
@@ -39,8 +41,9 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseHttpsRedirection(); // HTTPS prije ostalog
-app.UseCors("AllowSpecificOrigin"); // Omogući CORS nakon HTTPS-a
+app.UseCors("AllowSpecificOrigin"); // Omogući CORS prvo
+app.UseHttpsRedirection(); // Zatim HTTPS
+
 
 app.UseAuthentication(); // Prvo autentifikacija
 app.UseAuthorization();  // Zatim autorizacija

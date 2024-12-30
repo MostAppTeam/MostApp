@@ -137,7 +137,6 @@ public class OffersController : ControllerBase
 
         return NoContent();
     }
-
     // POST: api/Offers/create-paypal-order
     [HttpPost("create-paypal-order")]
     public async Task<IActionResult> CreatePayPalOrder([FromBody] PaymentRequest request, [FromServices] PayPalPaymentService paymentService)

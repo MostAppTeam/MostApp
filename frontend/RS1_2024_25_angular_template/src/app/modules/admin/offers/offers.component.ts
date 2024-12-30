@@ -99,21 +99,31 @@ export class OffersComponent implements OnInit {
 
     if (!selectedOffer) {
       console.error('Selected offer not found!');
-      alert('Offer not found. Please try again.');
       return;
     }
+
+    // Autosave podaci u localStorage
+    localStorage.setItem('bookingData', JSON.stringify(this.bookingData));
 
     this.offerService.createPayPalOrder(selectedOffer.offerName, selectedOffer.price).subscribe({
       next: (response) => {
         console.log('PayPal Order Created:', response);
-        window.open(response.approvalUrl, '_blank');
+        window.open(response.approvalUrl, '_blank'); // Otvori PayPal checkout
       },
       error: (error) => {
         console.error('Error creating PayPal order:', error);
-        alert('Failed to create PayPal order. Please try again.');
       },
     });
 
-    this.closeBookingForm();
+    this.closeBookingForm(); // Zatvori formu
   }
+
+  onBookingDataChange(): void {
+    console.log('Booking data changed:', this.bookingData);
+
+    // Autosave u localStorage
+    localStorage.setItem('bookingData', JSON.stringify(this.bookingData));
+  }
+
+
 }
