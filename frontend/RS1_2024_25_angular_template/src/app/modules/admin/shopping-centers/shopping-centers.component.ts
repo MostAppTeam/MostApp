@@ -151,7 +151,9 @@ export class ShoppingCentersComponent implements OnInit {
       );
     }
   }
-
+  updateSort(): void {
+    this.loadShoppingCenters();
+  }
 
 
 }

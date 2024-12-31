@@ -25,7 +25,9 @@ namespace RS1_2024_25.API.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<ShoppingCenter>>> GetShoppingCenters(
             [FromQuery] string? name = null,
-            [FromQuery] string sortBy = "name")
+            [FromQuery] string sortBy = "name",
+            [FromQuery] string sortDirection = "asc")
+
         {
             var shoppingCenters = _context.ShoppingCenters.AsQueryable();
 
@@ -40,6 +42,20 @@ namespace RS1_2024_25.API.Controllers
             {
                 "name" => shoppingCenters.OrderBy(s => s.Name),
                 _ => shoppingCenters.OrderBy(s => s.ID) // Defaultno sortiranje po ID-u
+            };
+
+            shoppingCenters = sortBy.ToLower() switch
+            {
+                "name" => sortDirection.ToLower() == "desc"
+                            ? shoppingCenters.OrderByDescending(s => s.Name)
+                            : shoppingCenters.OrderBy(s => s.Name),
+                "address" => sortDirection.ToLower() == "desc"
+                            ? shoppingCenters.OrderByDescending(s => s.Address)
+                            : shoppingCenters.OrderBy(s => s.Address),
+                "workinghours" => sortDirection.ToLower() == "desc"
+                            ? shoppingCenters.OrderByDescending(s => s.WorkingHours)
+                            : shoppingCenters.OrderBy(s => s.WorkingHours),
+                _ => shoppingCenters.OrderBy(s => s.Name)
             };
 
             return Ok(await shoppingCenters.ToListAsync());
