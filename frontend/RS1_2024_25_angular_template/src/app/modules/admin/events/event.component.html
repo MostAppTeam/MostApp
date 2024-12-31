@@ -33,6 +33,13 @@
     <p>No events available.</p>
   </ng-template>
 
+  <!-- Download PDF Button -->
+  <div class="pdf-download-container">
+    <button type="button" class="btn-download" (click)="downloadEventsPDF()">
+      Download Events Report
+    </button>
+  </div>
+
   <!-- Add New Event (only for Admin/Managers) -->
   <div *ngIf="isAdminOrManager">
     <form (ngSubmit)="addEvent()" id="add-event-form" #eventForm="ngForm">
@@ -55,9 +62,6 @@
     <button (click)="applyFilter()">Apply Filter</button>
   </div>
 
-
-
-
   <!-- Feedback message -->
   <div *ngIf="feedbackMessage" class="feedback-message">
     <p>{{ feedbackMessage }}</p>
@@ -65,4 +69,6 @@
 
   <!-- Map -->
   <div id="map" style="height: 400px;"></div>
+
+
 </div>

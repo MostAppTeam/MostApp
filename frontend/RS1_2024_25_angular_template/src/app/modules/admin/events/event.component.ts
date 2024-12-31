@@ -3,6 +3,7 @@ import { EventService } from './event.service';
 import { Event } from './event.model';
 import * as L from 'leaflet';
 import { MyAuthService } from '../../../services/auth-services/my-auth.service';
+import jsPDF from 'jspdf';
 
 @Component({
   selector: 'app-events',
@@ -227,4 +228,37 @@ export class EventsComponent implements OnInit {
       setTimeout(() => (this.feedbackMessage = null), 3000);
     }
   }
+
+downloadEventsPDF(): void {
+  const doc = new jsPDF();
+  const imgUrl = './assets/images/stari-most.PNG';
+  const img = new Image();
+  img.src = imgUrl;
+
+  img.onload = () => {
+    doc.addImage(img, 'PNG', 15, 10, 50, 30);
+    doc.setFontSize(22);
+    doc.setFont('helvetica', 'bold');
+    doc.text('Events Report', 105, 60, { align: 'center' });
+
+    doc.setFontSize(14);
+    let y = 80;
+
+    this.filteredEvents.forEach((event, index) => {
+      doc.text(`Event ${index + 1}:`, 15, y);
+      doc.text(`Name: ${event.name}`, 15, y + 10);
+      doc.text(`Date: ${event.date}`, 15, y + 20);
+      doc.text(`Location: ${event.location}`, 15, y + 30);
+      doc.text(`Description: ${event.description}`, 15, y + 40);
+      y += 50;
+    });
+
+    doc.save('Events_Report.pdf');
+  };
+
+  img.onerror = () => {
+    console.error('Failed to load image:', imgUrl);
+    alert('Failed to load image for the PDF.');
+  };
+}
 }

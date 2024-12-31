@@ -231,6 +231,26 @@
     width: 80%;
   }
 }
+.pdf-download-container {
+  text-align: center;
+  margin-top: 20px;
+}
+
+.pdf-download-container .btn-download {
+  background-color: #e6a722;
+  color: white;
+  font-size: 16px;
+  font-weight: bold;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.pdf-download-container .btn-download:hover {
+  background-color: #f7b731;;
+}
 
 /* Fade-in Animation */
 @keyframes fadeIn {
