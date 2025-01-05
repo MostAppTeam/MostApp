@@ -7,7 +7,7 @@ import { Museum } from './museum.model';
   providedIn: 'root',
 })
 export class MuseumService {
-  private apiUrl = 'http://localhost:7000/api/Museums'; // Corrected API URL
+  private apiUrl = 'https://localhost:7000/api/Museums'; // Corrected API URL
 
   constructor(private http: HttpClient) {}
 

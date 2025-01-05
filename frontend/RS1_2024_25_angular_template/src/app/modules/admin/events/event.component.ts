@@ -1,8 +1,9 @@
-
 import { Component, OnInit } from '@angular/core';
 import { EventService } from './event.service';
 import { Event } from './event.model';
 import * as L from 'leaflet';
+import { MyAuthService } from '../../../services/auth-services/my-auth.service';
+import jsPDF from 'jspdf';
 
 @Component({
   selector: 'app-events',
@@ -10,37 +11,72 @@ import * as L from 'leaflet';
   styleUrls: ['./event.component.css'],
 })
 export class EventsComponent implements OnInit {
-  events: Event[] = []; // Lista svih događaja
-  filteredEvents: Event[] = []; // Filtrirani događaji
+  events: Event[] = [];
+  filteredEvents: Event[] = [];
   newEvent: Omit<Event, 'id'> = {
     name: '',
     date: '',
     location: '',
     description: '',
-  }; // Novi događaj za dodavanje
-  feedbackMessage: string | null = null; // Poruka povratne informacije korisniku
+  };
+  feedbackMessage: string | null = null;
   filterParams = {
     name: '',
     date: '',
     location: '',
     description: '',
     id: null,
-  }; // Parametri za filtriranje događaja
+  };
 
-  private map!: L.Map; // Referenca na Leaflet mapu
-  private markers: L.Marker[] = []; // Lista markera na mapi
+  private map!: L.Map;
+  private markers: L.Marker[] = [];
+  isAdminOrManager: boolean = false;
+  loggedInUser: any = null;
 
-  constructor(private eventService: EventService) {}
+  constructor(
+    private eventService: EventService,
+    private authService: MyAuthService
+  ) {}
 
   ngOnInit(): void {
-    this.initializeMap(); // Inicijalizacija mape
-    this.loadEvents(); // Učitavanje događaja iz baze
-
-    // Primjer rute za testiranje
-    this.drawRoute('43.3438,17.8081', '43.3550,17.8100');
+    this.initializeMap();
+    this.loadEvents();
+    this.checkUserPermissions(); // Check user permissions
   }
 
-  // Inicijalizacija Leaflet mape
+  // Check user role and permissions
+  checkUserPermissions(): void {
+    const user = this.authService.getLoggedInUser();
+    if (user) {
+      this.loggedInUser = user;
+      this.isAdminOrManager = user.isAdmin || user.isManager;
+    } else {
+      this.loggedInUser = { username: 'Guest', role: 'Guest' };
+    }
+  }
+
+  sortOption: string = 'nameAsc';
+
+  applySorting(): void {
+    switch (this.sortOption) {
+      case 'nameAsc':
+        this.filteredEvents.sort((a, b) => a.name.localeCompare(b.name));
+        break;
+      case 'nameDesc':
+        this.filteredEvents.sort((a, b) => b.name.localeCompare(a.name));
+        break;
+      case 'dateAsc':
+        this.filteredEvents.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
+        break;
+      case 'dateDesc':
+        this.filteredEvents.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+        break;
+    }
+    this.updateMapMarkers();
+  }
+
+
+  // Leaflet map initialization
   private initializeMap(): void {
     const mapElement = document.getElementById('map');
     if (!mapElement) {
@@ -48,38 +84,33 @@ export class EventsComponent implements OnInit {
       return;
     }
 
-    this.map = L.map('map').setView([43.3438, 17.8081], 13); // Koordinate Mostara
+    this.map = L.map('map').setView([43.3438, 17.8081], 13); // Mostar coordinates
 
-    // Dodaj OpenStreetMap sloj
+    // OpenStreetMap layer
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       maxZoom: 19,
       attribution: '© OpenStreetMap contributors',
     }).addTo(this.map);
 
-    // Omogućavanje dodavanja markera klikom na mapu
+    // Click event for adding location
     this.map.on('click', (e: L.LeafletMouseEvent) => {
       const { lat, lng } = e.latlng;
-      this.newEvent.location = `${lat.toFixed(5)},${lng.toFixed(5)}`; // Postavljanje lokacije
+      this.newEvent.location = `${lat.toFixed(5)},${lng.toFixed(5)}`;
       const marker = L.marker([lat, lng]).addTo(this.map);
       marker.bindPopup('New Event Location').openPopup();
     });
-
-    // Test marker
-    L.marker([43.3438, 17.8081]).addTo(this.map).bindPopup('Test marker');
   }
 
-  // Ažuriranje markera na mapi prema filtriranim događajima
+  // Update markers based on filtered events
   private updateMapMarkers(): void {
-    // Ukloni prethodne markere
     this.markers.forEach((marker) => this.map.removeLayer(marker));
     this.markers = [];
 
-    // Dodaj nove markere za filtrirane događaje
     this.filteredEvents.forEach((event) => {
       const [lat, lng] = event.location.split(',').map((coord) => parseFloat(coord.trim()));
       if (isNaN(lat) || isNaN(lng)) {
         console.error(`Invalid coordinates for event: ${event.name}, location: ${event.location}`);
-        return; // Preskoči događaj s neispravnim koordinatama
+        return;
       }
 
       const marker = L.marker([lat, lng]).addTo(this.map);
@@ -88,31 +119,12 @@ export class EventsComponent implements OnInit {
     });
   }
 
-  // Crtanje rute između dvije točke
-  private drawRoute(start: string, end: string): void {
-    const [startLat, startLng] = start.split(',').map((coord) => parseFloat(coord.trim()));
-    const [endLat, endLng] = end.split(',').map((coord) => parseFloat(coord.trim()));
-
-    if (isNaN(startLat) || isNaN(startLng) || isNaN(endLat) || isNaN(endLng)) {
-      console.error('Invalid coordinates for route');
-      return;
-    }
-
-    const routeCoordinates: [number, number][] = [
-      [startLat, startLng],
-      [endLat, endLng],
-    ];
-
-    L.polyline(routeCoordinates, { color: 'blue' }).addTo(this.map);
-  }
-
-  // Učitavanje događaja iz backend-a
+  // Load events
   loadEvents(): void {
     this.eventService.getEvents().subscribe(
       (data) => {
-        console.log('Received events:', data); // Log podataka događaja
         this.events = data;
-        this.filteredEvents = [...this.events]; // Inicijalno postavi filtrirane događaje
+        this.filteredEvents = [...this.events];
         this.updateMapMarkers();
       },
       (error) => {
@@ -123,8 +135,32 @@ export class EventsComponent implements OnInit {
     );
   }
 
-  // Uređivanje postojećeg događaja
+  // Apply filters
+  applyFilter(): void {
+    if (!this.filterParams.name && !this.filterParams.date && !this.filterParams.location && !this.filterParams.description && !this.filterParams.id) {
+      this.filteredEvents = this.events;
+    } else {
+      this.filteredEvents = this.events.filter((event) => {
+        return (
+          (!this.filterParams.name || event.name.toLowerCase().includes(this.filterParams.name.toLowerCase())) &&
+          (!this.filterParams.date || event.date === this.filterParams.date) &&
+          (!this.filterParams.location || event.location.toLowerCase().includes(this.filterParams.location.toLowerCase())) &&
+          (!this.filterParams.description || event.description.toLowerCase().includes(this.filterParams.description.toLowerCase())) &&
+          (!this.filterParams.id || event.id === this.filterParams.id)
+        );
+      });
+    }
+    this.updateMapMarkers();
+  }
+
+  // Edit event
   editEvent(event: Event): void {
+    if (!this.isAdminOrManager) {
+      this.feedbackMessage = 'You do not have permission to edit events.';
+      setTimeout(() => (this.feedbackMessage = null), 3000);
+      return;
+    }
+
     const updatedEvent = { ...event, name: `${event.name} (Updated)` };
     this.eventService.updateEvent(updatedEvent).subscribe(
       () => {
@@ -140,8 +176,14 @@ export class EventsComponent implements OnInit {
     );
   }
 
-  // Brisanje događaja prema ID-u
+  // Delete event
   deleteEvent(id: number): void {
+    if (!this.isAdminOrManager) {
+      this.feedbackMessage = 'You do not have permission to delete events.';
+      setTimeout(() => (this.feedbackMessage = null), 3000);
+      return;
+    }
+
     if (confirm('Are you sure you want to delete this event?')) {
       this.eventService.deleteEvent(id).subscribe(
         () => {
@@ -158,14 +200,20 @@ export class EventsComponent implements OnInit {
     }
   }
 
-  // Dodavanje novog događaja
+  // Add event
   addEvent(): void {
+    if (!this.isAdminOrManager) {
+      this.feedbackMessage = 'You do not have permission to add events.';
+      setTimeout(() => (this.feedbackMessage = null), 3000);
+      return;
+    }
+
     const { name, date, location, description } = this.newEvent;
     if (name.trim() && date.trim() && location.trim() && description.trim()) {
       this.eventService.createEvent(this.newEvent).subscribe(
         () => {
           this.feedbackMessage = 'Event successfully added!';
-          this.newEvent = { name: '', date: '', location: '', description: '' }; // Reset forme
+          this.newEvent = { name: '', date: '', location: '', description: '' };
           this.loadEvents();
           setTimeout(() => (this.feedbackMessage = null), 3000);
         },
@@ -181,21 +229,36 @@ export class EventsComponent implements OnInit {
     }
   }
 
-  // Primjena filtera na događaje
-  applyFilter(): void {
-    if (!this.filterParams.name && !this.filterParams.date && !this.filterParams.location && !this.filterParams.description && !this.filterParams.id) {
-      this.filteredEvents = this.events;
-    } else {
-      this.filteredEvents = this.events.filter((event) => {
-        return (
-          (!this.filterParams.name || event.name.toLowerCase().includes(this.filterParams.name.toLowerCase())) &&
-          (!this.filterParams.date || event.date === this.filterParams.date) &&
-          (!this.filterParams.location || event.location.toLowerCase().includes(this.filterParams.location.toLowerCase())) &&
-          (!this.filterParams.description || event.description.toLowerCase().includes(this.filterParams.description.toLowerCase())) &&
-          (!this.filterParams.id || event.id === this.filterParams.id)
-        );
-      });
-    }
-    this.updateMapMarkers(); // Osveži markere nakon filtriranja
-  }
+downloadEventsPDF(): void {
+  const doc = new jsPDF();
+  const imgUrl = './assets/images/stari-most.PNG';
+  const img = new Image();
+  img.src = imgUrl;
+
+  img.onload = () => {
+    doc.addImage(img, 'PNG', 15, 10, 50, 30);
+    doc.setFontSize(22);
+    doc.setFont('helvetica', 'bold');
+    doc.text('Events Report', 105, 60, { align: 'center' });
+
+    doc.setFontSize(14);
+    let y = 80;
+
+    this.filteredEvents.forEach((event, index) => {
+      doc.text(`Event ${index + 1}:`, 15, y);
+      doc.text(`Name: ${event.name}`, 15, y + 10);
+      doc.text(`Date: ${event.date}`, 15, y + 20);
+      doc.text(`Location: ${event.location}`, 15, y + 30);
+      doc.text(`Description: ${event.description}`, 15, y + 40);
+      y += 50;
+    });
+
+    doc.save('Events_Report.pdf');
+  };
+
+  img.onerror = () => {
+    console.error('Failed to load image:', imgUrl);
+    alert('Failed to load image for the PDF.');
+  };
+}
 }

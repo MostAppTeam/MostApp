@@ -1,38 +1,97 @@
 <div id="shopping-center-container">
-  <!-- Naslov i opis sekcije -->
-  <h3>Shopping Centers in Mostar</h3>
-  <p class="description-text">
-    Discover the best shopping centers in Mostar, with detailed information on working hours and locations.
-  </p>
+  <!-- Informacije o korisniku -->
+  <div class="user-info">
+    <p><strong>Logged in as:</strong> {{ loggedInUser?.username || 'Guest' }}</p>
+    <p>
+      <strong>Role:</strong>
+      {{ loggedInUser?.isAdmin ? 'Admin' : loggedInUser?.isManager ? 'Manager' : 'User' }}
+    </p>
+  </div>
 
-  <!-- Prikaz postojećih trgovačkih centara -->
-  <div *ngIf="shoppingCenters.length > 0; else noShoppingCentersMessage" class="shopping-center-cards">
-    <div class="shopping-center-card" *ngFor="let center of shoppingCenters">
+  <!-- Filteri i sortiranje -->
+  <h3>Shopping Centers in Mostar</h3>
+  <div class="filter-sort-container">
+    <input
+      [(ngModel)]="searchQuery"
+      placeholder="Search by name"
+      (input)="applyFilters()"
+    />
+    <select [(ngModel)]="sortBy" (change)="applyFilters()">
+      <option value="name">Name</option>
+      <option value="address">Address</option>
+      <option value="workingHours">Working Hours</option>
+    </select>
+    <select [(ngModel)]="sortDirection" (change)="applyFilters()">
+      <option value="asc">Ascending</option>
+      <option value="desc">Descending</option>
+    </select>
+  </div>
+
+  <div
+    cdkDropList
+    [cdkDropListData]="filteredShoppingCenters"
+    (cdkDropListDropped)="drop($event)"
+    class="shopping-center-cards"
+  >
+    <div
+      class="shopping-center-card"
+      *ngFor="let center of filteredShoppingCenters"
+      cdkDrag
+    >
       <h4>{{ center.name }}</h4>
       <p><strong>Address:</strong> {{ center.address }}</p>
       <p><strong>Working Hours:</strong> {{ center.workingHours }}</p>
       <p><strong>Opening:</strong> {{ center.openingTime }}</p>
       <p><strong>Closing:</strong> {{ center.closingTime }}</p>
+      <button *ngIf="isAdminOrManager" (click)="deleteShoppingCenter(center.id)">
+        Delete
+      </button>
     </div>
   </div>
 
-  <ng-template #noShoppingCentersMessage>
+
+
+  <!-- Poruka kada nema shopping centara -->
+  <ng-container *ngIf="filteredShoppingCenters?.length === 0">
     <p>No shopping centers available.</p>
-  </ng-template>
+  </ng-container>
 
-  <!-- Forma za dodavanje novog trgovačkog centra -->
-  <form (ngSubmit)="addShoppingCenter()" id="add-shopping-center-form">
-    <h3>Add a Shopping Center</h3>
-    <input [(ngModel)]="newShoppingCenter.name" placeholder="Name" name="name" required />
-    <input [(ngModel)]="newShoppingCenter.address" placeholder="Address" name="address" required />
-    <input [(ngModel)]="newShoppingCenter.workingHours" placeholder="Working Hours" name="workingHours" required />
-    <input [(ngModel)]="newShoppingCenter.openingTime" placeholder="Opening Time" name="openingTime" required />
-    <input [(ngModel)]="newShoppingCenter.closingTime" placeholder="Closing Time" name="closingTime" required />
-    <button type="submit">Add Shopping Center</button>
-  </form>
-
-  <!-- Feedback poruka -->
-  <div *ngIf="feedbackMessage" id="feedback-message">
-    {{ feedbackMessage }}
+  <!-- Forma za dodavanje shopping centra (prikazuje se samo adminima ili menadžerima) -->
+  <div *ngIf="isAdminOrManager" class="add-shopping-center-form">
+    <h4>Add New Shopping Center</h4>
+    <form (ngSubmit)="addShoppingCenter()">
+      <input
+        [(ngModel)]="newShoppingCenter.name"
+        name="name"
+        placeholder="Name"
+        required
+      />
+      <input
+        [(ngModel)]="newShoppingCenter.address"
+        name="address"
+        placeholder="Address"
+        required
+      />
+      <input
+        [(ngModel)]="newShoppingCenter.workingHours"
+        name="workingHours"
+        placeholder="Working Hours"
+        required
+      />
+      <input
+        [(ngModel)]="newShoppingCenter.openingTime"
+        name="openingTime"
+        placeholder="Opening Time"
+        required
+      />
+      <input
+        [(ngModel)]="newShoppingCenter.closingTime"
+        name="closingTime"
+        placeholder="Closing Time"
+        required
+      />
+      <button type="submit">Add Shopping Center</button>
+    </form>
+    <p *ngIf="feedbackMessage" class="feedback">{{ feedbackMessage }}</p>
   </div>
 </div>

@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, NavigationEnd } from '@angular/router';
+import {MyAuthService} from './services/auth-services/my-auth.service';
 
 @Component({
   selector: 'app-root',
@@ -30,4 +31,5 @@ export class AppComponent implements OnInit {
     // Preusmjeri korisnika na login stranicu
     this.router.navigate(['/login']);
   }
+
 }

@@ -14,7 +14,7 @@ export interface Recommendation {
   providedIn: 'root',
 })
 export class RecommendationService {
-  private apiUrl = 'http://localhost:7000/api/recommendations'; // API URL
+  private apiUrl = 'https://localhost:7000/api/recommendations'; // API URL
 
   constructor(private http: HttpClient) {}
 

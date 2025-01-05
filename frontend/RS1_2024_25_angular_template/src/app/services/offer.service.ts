@@ -7,7 +7,7 @@ import { Offer } from '../modules/admin/offers/offer.model';
   providedIn: 'root',
 })
 export class OfferService {
-  private apiUrl = 'http://localhost:7000/api/offers';
+  private apiUrl = 'https://localhost:7000/api/offers';
 
   constructor(private http: HttpClient) {}
 

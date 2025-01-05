@@ -6,7 +6,7 @@ import { Observable } from 'rxjs';
   providedIn: 'root', // Ovaj servis je dostupan svuda u aplikaciji
 })
 export class EventService {
-  private apiUrl = 'http://localhost:7000/api'; // Endpoint za Event API
+  private apiUrl = 'https://localhost:7000/api'; // Endpoint za Event API
 
   constructor(private http: HttpClient) {}
 

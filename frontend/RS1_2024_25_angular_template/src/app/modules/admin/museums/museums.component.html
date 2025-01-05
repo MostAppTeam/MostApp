@@ -42,8 +42,9 @@
     <p>No museums available.</p>
   </ng-template>
 
-  <!-- Add Museum Form -->
-  <form (ngSubmit)="addMuseum()" id="add-museum-form">
+
+  <!-- Add Museum Form visible only to admins/managers -->
+  <form *ngIf="isAdmin || isManager" (ngSubmit)="addMuseum()" id="add-museum-form">
     <h3>Add a Museum</h3>
     <input [(ngModel)]="newMuseum.name" placeholder="Name" name="name" required />
     <input [(ngModel)]="newMuseum.description" placeholder="Description" name="description" required />
@@ -58,9 +59,5 @@
     {{ feedbackMessage }}
   </div>
 
-  <!-- Events Section -->
-  <div id="events-container">
-    <h3>Events</h3>
-    <app-events></app-events> <!-- Adds the EventsComponent content -->
-  </div>
+
 </div>

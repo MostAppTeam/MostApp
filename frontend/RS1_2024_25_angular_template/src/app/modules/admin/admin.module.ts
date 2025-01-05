@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { AdminRoutingModule } from './admin-routing.module';
 import { SharedModule } from '../shared/shared.module';
+import { DragDropModule } from '@angular/cdk/drag-drop'
 
 // Komponente koje se koriste u Admin modulu
 import { DashboardComponent } from './dashboard/dashboard.component';
@@ -17,6 +18,10 @@ import { EventsComponent } from './events/event.component';
 import { OffersComponent } from './offers/offers.component';
 import { UserRecommendationsComponent } from './user-recommendations/user-recommendations.component';
 import { ShoppingCentersComponent } from './shopping-centers/shopping-centers.component';
+import {ResetPasswordComponent} from './reset-password/reset-password.component';
+import {InviteFriendComponent} from './ invite-friend/invite-friend.component';
+import {ActivateAccountComponent} from './activate-account/activate-account.component';
+
 
 @NgModule({
   declarations: [
@@ -32,12 +37,17 @@ import { ShoppingCentersComponent } from './shopping-centers/shopping-centers.co
     OffersComponent,
     UserRecommendationsComponent,
     ShoppingCentersComponent,
+    InviteFriendComponent,
+    ActivateAccountComponent,
+    ResetPasswordComponent,
+
   ],
   imports: [
     CommonModule,
     FormsModule,
     AdminRoutingModule,
-    SharedModule, // Deljenje funkcionalnosti
+    SharedModule,
+    DragDropModule// Deljenje funkcionalnosti
   ],
   providers: [],
 })

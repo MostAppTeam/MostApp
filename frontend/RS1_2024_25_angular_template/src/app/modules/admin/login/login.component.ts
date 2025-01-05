@@ -14,10 +14,9 @@ export class LoginComponent {
 
   constructor(private authService: MyAuthService, private router: Router) {}
 
-  // onLogin metodda, pozivamo login sa servisom
   onLogin(form: NgForm) {
     if (!form.valid) {
-      this.errorMessage = 'Please enter both username and password.';
+      this.errorMessage = 'Molimo unesite korisničko ime i šifru.';
       return;
     }
 
@@ -28,26 +27,36 @@ export class LoginComponent {
 
     this.authService.login(loginData).subscribe({
       next: (response) => {
-        console.log('Login successful:', response); // Log za proveru odgovora
-        this.successMessage = 'Welcome! Login successful.';
+        console.log('Login uspešan:', response);
+
+        if (!response.token) {
+          this.errorMessage = 'Server nije poslao validan token.';
+          return;
+        }
+
+        this.successMessage = 'Dobrodošli! Uspešna prijava.';
         this.errorMessage = null;
 
-        // Setuj korisnika u localStorage
-        this.authService.setLoggedInUser(response.myAuthInfo);
+        this.authService.setToken(response.token);
 
-        // Spremi token
-        localStorage.setItem('token', response.token);
+        if (response.myAuthInfo) {
+          this.authService.setLoggedInUser(response.myAuthInfo);
+        } else {
+          console.warn('Korisnički podaci nisu prisutni u odgovoru servera.');
+        }
 
-        // Preusmeri korisnika na home
         setTimeout(() => {
           this.router.navigate(['/home']);
         }, 2000);
       },
       error: (err) => {
-        console.error('Login error:', err); // Log za greške
-        this.errorMessage = err?.message || 'Invalid username or password.';
+        console.error('Greška prilikom prijave:', err);
+        this.errorMessage = err?.message || 'Pogrešno korisničko ime ili šifra.';
         this.successMessage = null;
+
       }
+
     });
   }
+
 }

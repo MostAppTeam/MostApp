@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using RS1_2024_25.API.Data.Models;
 using RS1_2024_25.API.Data;
 using RS1_2024_25.API.Services;
+using RS1_2024_25.API.Helper.Auth;
 
 [Route("api/[controller]")]
 [ApiController]
@@ -80,6 +81,7 @@ public class OffersController : ControllerBase
 
     // POST: api/Offers
     [HttpPost]
+    [MyAuthorization(isAdmin: true, isManager: true)]
     public async Task<ActionResult<Offer>> PostOffer(Offer offer)
     {
         _context.Offers.Add(offer);
@@ -90,6 +92,7 @@ public class OffersController : ControllerBase
 
     // PUT: api/Offers/{id}
     [HttpPut("{id}")]
+    [MyAuthorization(isAdmin: true, isManager: true)]
     public async Task<IActionResult> PutOffer(int id, Offer offer)
     {
         if (id != offer.ID)
@@ -120,6 +123,7 @@ public class OffersController : ControllerBase
 
     // DELETE: api/Offers/{id}
     [HttpDelete("{id}")]
+    [MyAuthorization(isAdmin: true, isManager: true)]
     public async Task<IActionResult> DeleteOffer(int id)
     {
         var offer = await _context.Offers.FindAsync(id);
@@ -133,7 +137,6 @@ public class OffersController : ControllerBase
 
         return NoContent();
     }
-
     // POST: api/Offers/create-paypal-order
     [HttpPost("create-paypal-order")]
     public async Task<IActionResult> CreatePayPalOrder([FromBody] PaymentRequest request, [FromServices] PayPalPaymentService paymentService)

@@ -7,22 +7,30 @@ import { Offer } from './offer.model';
   providedIn: 'root',
 })
 export class OfferService {
-  private apiUrl = 'http://localhost:7000/api/Offers';
+  private apiUrl = 'https://localhost:7000/api/Offers';
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) {
+  }
 
-  getOffers(filters: { minPrice?: number; maxPrice?: number; category?: string; sortBy?: string } = {}): Observable<Offer[]> {
+  getOffers(filters: {
+    minPrice?: number;
+    maxPrice?: number;
+    category?: string;
+    sortBy?: string
+  } = {}): Observable<Offer[]> {
     let params = new HttpParams();
 
-    if (filters.minPrice) params = params.append('minPrice', filters.minPrice.toString());
-    if (filters.maxPrice) params = params.append('maxPrice', filters.maxPrice.toString());
+    if (filters.minPrice != null) params = params.append('minPrice', filters.minPrice.toString());
+    if (filters.maxPrice != null) params = params.append('maxPrice', filters.maxPrice.toString());
     if (filters.category) params = params.append('category', filters.category);
     if (filters.sortBy) params = params.append('sortBy', filters.sortBy);
 
-    return this.http.get<Offer[]>(this.apiUrl, { params });
+    return this.http.get<Offer[]>(this.apiUrl, {params});
   }
 
-  createPayPalOrder(offerName: string, price: number): Observable<any> {
-    return this.http.post<any>(`${this.apiUrl}/createPayPalOrder`, { offerName, price });
+  // Kreiranje PayPal narudžbe
+  createPayPalOrder(offerName: string, amount: number): Observable<any> {
+    const body = { offerName, amount };
+    return this.http.post<any>(`${this.apiUrl}/create-paypal-order`, body);
   }
 }

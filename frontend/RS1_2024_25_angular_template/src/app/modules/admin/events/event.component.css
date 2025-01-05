@@ -173,3 +173,93 @@
 #navigation-links button:hover {
   background-color: #e6a722;
 }
+/* Sort Container */
+#sort-container {
+  margin-top: 20px;
+  padding: 20px;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  background-color: #fdfdfd;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  animation: fadeIn 0.8s ease-in-out;
+}
+
+/* Sort Container Heading */
+#sort-container h3 {
+  margin-bottom: 15px;
+  color: #444;
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+/* Sort Dropdown */
+#sort-container select {
+  width: 60%;
+  padding: 10px;
+  margin-top: 10px;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: #fff;
+  color: #555;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* Hover and Focus Effects */
+#sort-container select:hover {
+  border-color: #f7b731;
+}
+
+#sort-container select:focus {
+  outline: none;
+  border-color: #f7b731;
+  box-shadow: 0 0 5px rgba(247, 183, 49, 0.5);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  #sort-container {
+    padding: 15px;
+    max-width: 90%;
+  }
+
+  #sort-container select {
+    width: 80%;
+  }
+}
+.pdf-download-container {
+  text-align: center;
+  margin-top: 20px;
+}
+
+.pdf-download-container .btn-download {
+  background-color: #e6a722;
+  color: white;
+  font-size: 16px;
+  font-weight: bold;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.pdf-download-container .btn-download:hover {
+  background-color: #f7b731;;
+}
+
+/* Fade-in Animation */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

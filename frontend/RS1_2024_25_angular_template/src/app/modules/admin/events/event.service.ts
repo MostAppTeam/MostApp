@@ -7,7 +7,7 @@ import { Event } from './event.model';
   providedIn: 'root',
 })
 export class EventService {
-  private apiUrl = 'http://localhost:7000/api/Event'; // Endpoint za Event API
+  private apiUrl = 'https://localhost:7000/api/Event'; // Endpoint za Event API
 
   constructor(private http: HttpClient) {}
 

@@ -103,6 +103,9 @@ export class OffersComponent implements OnInit {
       return;
     }
 
+    // Autosave podaci u localStorage
+    localStorage.setItem('bookingData', JSON.stringify(this.bookingData));
+
     this.offerService.createPayPalOrder(selectedOffer.offerName, selectedOffer.price).subscribe({
       next: (response) => {
         console.log('PayPal Order Created:', response);
@@ -116,4 +119,13 @@ export class OffersComponent implements OnInit {
 
     this.closeBookingForm();
   }
+
+  onBookingDataChange(): void {
+    console.log('Booking data changed:', this.bookingData);
+
+    // Autosave u localStorage
+    localStorage.setItem('bookingData', JSON.stringify(this.bookingData));
+  }
+
+
 }

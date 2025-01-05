@@ -2,6 +2,11 @@
   <div class="auth-box">
     <h2>Login</h2>
 
+    <!-- Poruka o grešci za neaktivirani nalog -->
+    <div *ngIf="errorMessage?.includes('activate')" class="alert error">
+      Nalog nije aktiviran. Molimo vas da proverite svoj email za aktivacijski link.
+    </div>
+
     <!-- Prikaz poruka o uspjehu ili grešci -->
     <div *ngIf="successMessage" class="alert success fade-in">{{ successMessage }}</div>
     <div *ngIf="errorMessage" class="alert error fade-in">{{ errorMessage }}</div>
@@ -31,6 +36,11 @@
       </div>
       <button type="submit" class="btn" [disabled]="loginForm.invalid">Login</button>
     </form>
+
+    <div class="auth-links">
+      <a routerLink="/reset-password">Forgot Password?</a>
+      <a routerLink="/activate-account">Resend Activation Link</a>
+    </div>
     <p class="auth-link">
       Don't have an account? <a href="/signup">Sign up</a>
     </p>

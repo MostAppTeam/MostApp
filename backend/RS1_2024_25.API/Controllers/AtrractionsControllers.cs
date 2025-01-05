@@ -5,6 +5,7 @@ using RS1_2024_25.API.Data;
 using System.Linq;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using RS1_2024_25.API.Helper.Auth;
 
 [Route("api/[controller]")]
 [ApiController]
@@ -85,8 +86,8 @@ public class AttractionsController : ControllerBase
         return Ok(attraction);
     }
 
-    // POST: api/Attractions
     [HttpPost]
+    [MyAuthorization(isAdmin: true, isManager: true)]
     public async Task<ActionResult<Attraction>> PostAttraction(Attraction attraction)
     {
         _context.Attractions.Add(attraction);
@@ -97,6 +98,7 @@ public class AttractionsController : ControllerBase
 
     // PUT: api/Attractions/5
     [HttpPut("{id}")]
+    [MyAuthorization(isAdmin: true, isManager: true)]
     public async Task<IActionResult> PutAttraction(int id, Attraction attraction)
     {
         if (id != attraction.ID)
@@ -127,6 +129,7 @@ public class AttractionsController : ControllerBase
 
     // DELETE: api/Attractions/5
     [HttpDelete("{id}")]
+    [MyAuthorization(isAdmin: true, isManager: true)]
     public async Task<IActionResult> DeleteAttraction(int id)
     {
         var attraction = await _context.Attractions.FindAsync(id);

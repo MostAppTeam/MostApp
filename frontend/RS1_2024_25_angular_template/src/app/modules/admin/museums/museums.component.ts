@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { MuseumService } from './museum.service';
 import { Museum } from './museum.model';
+import { MyAuthService} from '../../../services/auth-services/my-auth.service';// Pretpostavka da postoji AuthService za provjeru uloga
 
 @Component({
   selector: 'app-museums',
@@ -19,16 +20,26 @@ export class MuseumsComponent implements OnInit {
   feedbackMessage: string | null = null;
 
   // Default values for sorting
-  sortBy: string = 'name'; // Default sorting criterion
-  sortDirection: string = 'asc'; // Default sorting direction
+  sortBy: string = 'name';
+  sortDirection: string = 'asc';
 
-  constructor(private museumService: MuseumService) {}
+  // User role flags
+  isAdmin: boolean = false;
+  isManager: boolean = false;
+
+  constructor(
+    private museumService: MuseumService,
+    private authService: MyAuthService // Dodano za provjeru uloga
+  ) {}
 
   ngOnInit(): void {
     this.loadMuseums();
+
+    // Provjera korisničkih uloga
+    this.isAdmin = this.authService.isAdmin();
+    this.isManager = this.authService.isManager();
   }
 
-  // Load museums from the server
   loadMuseums(): void {
     this.museumService.getMuseums().subscribe(
       (data) => {
@@ -42,12 +53,10 @@ export class MuseumsComponent implements OnInit {
     );
   }
 
-  // Update sorting based on selected options
   updateSort(): void {
     this.loadSortedMuseums();
   }
 
-  // Load sorted museums based on selected criteria and direction
   loadSortedMuseums(): void {
     this.museumService.getSortedMuseums(this.sortBy, this.sortDirection).subscribe(
       (data) => {
@@ -61,8 +70,13 @@ export class MuseumsComponent implements OnInit {
     );
   }
 
-  // Adding new museum
   addMuseum(): void {
+    if (!this.isAdmin && !this.isManager) {
+      this.feedbackMessage = 'You do not have permission to add a museum.';
+      setTimeout(() => (this.feedbackMessage = null), 3000);
+      return;
+    }
+
     const { name, description, location, workingHours, imageUrl } = this.newMuseum;
 
     if (name.trim() && description.trim() && location.trim() && workingHours.trim() && imageUrl.trim()) {
@@ -70,7 +84,7 @@ export class MuseumsComponent implements OnInit {
         (response) => {
           this.feedbackMessage = 'Museum successfully added!';
           this.newMuseum = { name: '', description: '', location: '', workingHours: '', imageUrl: '' };
-          this.loadMuseums(); // Refresh museum list
+          this.loadMuseums();
           setTimeout(() => (this.feedbackMessage = null), 3000);
         },
         (error) => {
@@ -84,4 +98,29 @@ export class MuseumsComponent implements OnInit {
       setTimeout(() => (this.feedbackMessage = null), 3000);
     }
   }
+
+  deleteMuseum(id: number): void {
+    if (!this.isAdmin && !this.isManager) {
+      this.feedbackMessage = 'You do not have permission to delete a museum.';
+      setTimeout(() => (this.feedbackMessage = null), 3000);
+      return;
+    }
+
+    if (confirm('Are you sure you want to delete this museum?')) {
+      this.museumService.deleteMuseum(id).subscribe(
+        () => {
+          this.feedbackMessage = 'Museum successfully deleted!';
+          this.loadMuseums();
+          setTimeout(() => (this.feedbackMessage = null), 3000);
+        },
+        (error) => {
+          console.error('Error deleting museum:', error);
+          this.feedbackMessage = 'Error deleting museum.';
+          setTimeout(() => (this.feedbackMessage = null), 3000);
+        }
+      );
+    }
+  }
+
+  protected readonly MyAuthService = MyAuthService;
 }

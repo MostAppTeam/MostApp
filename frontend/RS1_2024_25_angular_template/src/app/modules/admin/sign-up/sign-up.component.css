@@ -94,7 +94,7 @@
 /* Authentication Link Styling */
 .auth-link {
   margin-top: 15px;
-  font-size: 14px;
+  font-size: 15px;
 }
 
 .auth-link a {
@@ -118,19 +118,24 @@
   justify-content: space-between;
   gap: 10px; /* Dodaje razmak između dugmadi */
 }
-/* Link za Login ispod forme */
-.auth-link {
+/* Stil za auth-links div */
+.auth-links {
   margin-top: 20px;
-  font-size: 14px;
-  color: #666;
+  text-align: center;
 }
 
-.auth-link a {
-  color: #f5a623; /* Boja narandžasta */
+/* Stil za link unutar auth-links */
+.auth-links a {
+  color: #f5a623; /* Narandžasta boja */
+  font-size: 18px;
   text-decoration: none;
+  transition: color 0.3s ease;
 }
 
-.auth-link a:hover {
-  text-decoration: underline; /* Efekat podvlačenja pri hover-u */
+/* Hover efekat za linkove */
+.auth-links a:hover {
+  color: #d18e1f; /* Tamnija narandžasta boja */
+  text-decoration: underline;
 }
+
 
