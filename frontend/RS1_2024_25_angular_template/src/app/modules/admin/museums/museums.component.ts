@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { MuseumService } from './museum.service';
 import { Museum } from './museum.model';
-import { MyAuthService} from '../../../services/auth-services/my-auth.service';// Pretpostavka da postoji AuthService za provjeru uloga
+import { MyAuthService } from '../../../services/auth-services/my-auth.service';
+import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop'; // Dodano za drag-and-drop
 
 @Component({
   selector: 'app-museums',
@@ -29,7 +30,7 @@ export class MuseumsComponent implements OnInit {
 
   constructor(
     private museumService: MuseumService,
-    private authService: MyAuthService // Dodano za provjeru uloga
+    private authService: MyAuthService
   ) {}
 
   ngOnInit(): void {
@@ -119,6 +120,12 @@ export class MuseumsComponent implements OnInit {
           setTimeout(() => (this.feedbackMessage = null), 3000);
         }
       );
+    }
+  }
+
+  drop(event: CdkDragDrop<Museum[]>): void {
+    if (event.previousIndex !== event.currentIndex) {
+      moveItemInArray(this.museums, event.previousIndex, event.currentIndex);
     }
   }
 

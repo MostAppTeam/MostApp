@@ -27,9 +27,15 @@
     </div>
   </div>
 
-  <!-- Existing Museums -->
-  <div *ngIf="museums.length > 0; else noMuseumsMessage" class="museum-cards">
-    <div class="museum-card" *ngFor="let museum of museums">
+  <!-- Existing Museums with drag-and-drop -->
+  <div
+    cdkDropList
+    [cdkDropListData]="museums"
+    (cdkDropListDropped)="drop($event)"
+    *ngIf="museums.length > 0; else noMuseumsMessage"
+    class="museum-cards">
+
+    <div class="museum-card" *ngFor="let museum of museums" cdkDrag>
       <h4>{{ museum.name }}</h4>
       <p>{{ museum.description }}</p>
       <p><strong>Location:</strong> {{ museum.location }}</p>
@@ -58,6 +64,4 @@
   <div *ngIf="feedbackMessage" id="feedback-message">
     {{ feedbackMessage }}
   </div>
-
-
 </div>
