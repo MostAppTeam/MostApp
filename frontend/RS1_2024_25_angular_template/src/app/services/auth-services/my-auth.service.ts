@@ -45,16 +45,17 @@ export class MyAuthService {
       })
     );
   }
-
-  // Store the token securely in localStorage
   public setToken(token: string): void {
+    console.log('Spremanje tokena:', token);  // Provjera
     localStorage.setItem('token', token);
   }
 
-  // Retrieve the token from localStorage
   getToken(): string | null {
-    return localStorage.getItem('token');
+    const token = localStorage.getItem('token');
+    console.log('Dohvaćeni token:', token);  // Provjera
+    return token;
   }
+
 
   // Remove token and user data during logout
   logout(): void {
