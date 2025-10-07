@@ -1,7 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { MuseumService } from './museum.service';
 import { Museum } from './museum.model';
-import { MyAuthService} from '../../../services/auth-services/my-auth.service';// Pretpostavka da postoji AuthService za provjeru uloga
+import { MyAuthService } from '../../../services/auth-services/my-auth.service';
+
+// PDF dodaci
+import jsPDF from 'jspdf';
+import autoTable from 'jspdf-autotable';
 
 @Component({
   selector: 'app-museums',
@@ -81,7 +85,7 @@ export class MuseumsComponent implements OnInit {
 
     if (name.trim() && description.trim() && location.trim() && workingHours.trim() && imageUrl.trim()) {
       this.museumService.createMuseum(this.newMuseum).subscribe(
-        (response) => {
+        () => {
           this.feedbackMessage = 'Museum successfully added!';
           this.newMuseum = { name: '', description: '', location: '', workingHours: '', imageUrl: '' };
           this.loadMuseums();
@@ -120,6 +124,133 @@ export class MuseumsComponent implements OnInit {
         }
       );
     }
+  }
+
+
+  private async imageUrlToDataUrl(url: string): Promise<string | null> {
+    try {
+      const res = await fetch(url, { mode: 'cors' });
+      const blob = await res.blob();
+      return await new Promise((resolve) => {
+        const reader = new FileReader();
+        reader.onload = () => resolve(reader.result as string);
+        reader.onerror = () => resolve(null);
+        reader.readAsDataURL(blob);
+      });
+    } catch {
+      return null;
+    }
+  }
+
+  private addHeaderFooter(doc: jsPDF) {
+    const pageWidth = doc.internal.pageSize.getWidth();
+    const pageHeight = doc.internal.pageSize.getHeight();
+
+    // Header line + title
+    doc.setDrawColor(230);
+    doc.line(14, 16, pageWidth - 14, 16);
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(12);
+    doc.text('MostApp — Museums', 14, 12);
+
+    // Footer with pagination
+    const pageCount = (doc as any).internal.getNumberOfPages?.() || 1;
+    for (let i = 1; i <= pageCount; i++) {
+      doc.setPage(i);
+      doc.setDrawColor(230);
+      doc.line(14, pageHeight - 14, pageWidth - 14, pageHeight - 14);
+      doc.setFont('helvetica', 'normal');
+      doc.setFontSize(10);
+      doc.text(`Page ${i} of ${pageCount}`, pageWidth - 20, pageHeight - 10, { align: 'right' });
+    }
+  }
+
+
+  async downloadMuseumPdf(museum: Museum) {
+    const doc = new jsPDF();
+
+    // Naslov
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(18);
+    doc.text(museum.name || 'Museum', 14, 28);
+
+    // Detalji
+    doc.setFont('helvetica', 'normal');
+    doc.setFontSize(12);
+    const startY = 36;
+    const detailLines = [
+      `Location: ${museum.location || '-'}`,
+      `Working Hours: ${museum.workingHours || '-'}`,
+      '',
+      museum.description || '',
+    ];
+
+    let cursorY = startY;
+    detailLines.forEach((line) => {
+      const wrapped = doc.splitTextToSize(line, 180);
+      doc.text(wrapped, 14, cursorY);
+      cursorY += wrapped.length * 7;
+    });
+
+
+    if (museum.imageUrl) {
+      const dataUrl = await this.imageUrlToDataUrl(museum.imageUrl);
+      if (dataUrl) {
+        try {
+          const imgW = 160;
+          const imgH = 90;
+          const pageHeight = doc.internal.pageSize.getHeight();
+          if (cursorY + imgH + 20 > pageHeight) {
+            doc.addPage();
+            cursorY = 28;
+          }
+          doc.addImage(dataUrl, 'JPEG', 14, cursorY + 4, imgW, imgH, undefined, 'FAST');
+          cursorY += imgH + 16;
+        } catch {
+
+        }
+      }
+    }
+
+    this.addHeaderFooter(doc);
+    doc.save(`Museum_${(museum.name || 'item').replace(/\s+/g, '_')}.pdf`);
+  }
+
+  downloadAllMuseumsPdf() {
+    const doc = new jsPDF();
+
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(16);
+    doc.text('Museums — Listing', 14, 24);
+
+    const rows = this.museums.map((m, idx) => [
+      idx + 1,
+      m.name || '',
+      m.location || '',
+      m.workingHours || '',
+      m.description || '',
+    ]);
+
+    autoTable(doc, {
+      startY: 30,
+      head: [['#', 'Name', 'Location', 'Working Hours', 'Description']],
+      body: rows,
+      styles: { font: 'helvetica', fontSize: 10, cellPadding: 3 },
+      headStyles: { fillColor: [247, 183, 49] }, // #f7b731
+      columnStyles: {
+        0: { cellWidth: 10 },
+        1: { cellWidth: 40 },
+        2: { cellWidth: 40 },
+        3: { cellWidth: 35 },
+        4: { cellWidth: 60 },
+      },
+      didDrawPage: () => {
+        this.addHeaderFooter(doc);
+      },
+      margin: { left: 14, right: 14 },
+    });
+
+    doc.save('Museums_All.pdf');
   }
 
   protected readonly MyAuthService = MyAuthService;

@@ -165,6 +165,21 @@
 #add-museum-form button:hover {
   background-color: #e6a722;
 }
+/* dugme stil — isto kao event .event-card button */
+.btn-download {
+  background-color: #f7b731;
+  color: white;
+  padding: 8px 12px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: bold;
+  margin-top: 10px;
+}
+
+.btn-download:hover {
+  background-color: #e6a722;
+}
 
 #feedback-message {
   color: green;
