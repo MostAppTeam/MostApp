@@ -8,4 +8,5 @@ export interface Offer {
   categoryID?: any;
   category?: any;
   status?: string;
+  imageUrl?: string;
 }

@@ -9,6 +9,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddTransient<MyAuthService>();
 builder.Services.AddScoped<RecommendationService>();
 
+
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowSpecificOrigin", policy =>
@@ -23,10 +24,19 @@ builder.Services.AddCors(options =>
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("MostAppDB")));
 
-builder.Services.AddControllers();
+
+
+builder.Services.AddControllers()
+    .AddJsonOptions(x =>
+        x.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.IgnoreCycles);
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(x =>
-    x.OperationFilter<MyAuthorizationSwaggerHeader>());
+{
+    x.OperationFilter<MyAuthorizationSwaggerHeader>(); // Već imaš ovu liniju
+    x.OperationFilter<Swagger>(); // Dodaj ovu liniju za podršku file upload-a
+});
+
 
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<PayPalPaymentService>();
@@ -48,7 +58,11 @@ app.UseHttpsRedirection(); // Zatim HTTPS
 app.UseAuthentication(); // Prvo autentifikacija
 app.UseAuthorization();  // Zatim autorizacija
 
+app.UseStaticFiles();
+
 app.MapControllers(); // Na kraju mapiranje kontrolera
+
+
 
 Console.WriteLine("✅ Backend je pokrenut i spreman za zahtjeve.");
 app.Run();

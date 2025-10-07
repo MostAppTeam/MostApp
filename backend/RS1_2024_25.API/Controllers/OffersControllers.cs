@@ -178,4 +178,32 @@ public class OffersController : ControllerBase
     {
         public string OrderId { get; set; } // "token" koji PayPal vraća
     }
+
+    [HttpPost("upload-image")]
+public async Task<IActionResult> UploadImage([FromForm] IFormFile file)
+{
+    if (file == null || file.Length == 0)
+        return BadRequest("No file uploaded.");
+
+    // Kreiraj folder ako ne postoji
+    var uploadPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images", "offers");
+    if (!Directory.Exists(uploadPath))
+        Directory.CreateDirectory(uploadPath);
+
+    // Kreiraj jedinstveno ime slike
+    var fileName = $"{Guid.NewGuid()}{Path.GetExtension(file.FileName)}";
+    var filePath = Path.Combine(uploadPath, fileName);
+
+    // Snimi fajl
+    using (var stream = new FileStream(filePath, FileMode.Create))
+    {
+        await file.CopyToAsync(stream);
+    }
+
+    // Vrati relativni put koji možeš upisati u bazu
+    var relativePath = $"/images/offers/{fileName}";
+
+    return Ok(new { imageUrl = relativePath });
+}
+
 }

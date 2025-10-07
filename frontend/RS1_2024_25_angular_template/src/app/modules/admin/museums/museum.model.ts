@@ -4,5 +4,5 @@ export interface Museum {
   description: string;
   location: string;
   workingHours: string;
-  imageUrl: string;
+  imageUrl?: string;
 }

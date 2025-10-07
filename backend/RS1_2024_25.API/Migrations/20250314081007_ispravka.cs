@@ -1,29 +1,22 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore.Migrations;
+﻿using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
 namespace RS1_2024_25.API.Migrations
 {
     /// <inheritdoc />
-    public partial class addmigrationAddEmailUser : Migration
+    public partial class ispravka : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-          
 
-
-            
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-           
 
-
-            
         }
     }
 }

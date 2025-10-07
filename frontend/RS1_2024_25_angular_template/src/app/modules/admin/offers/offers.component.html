@@ -6,6 +6,18 @@
 
 <!-- Glavni sadržaj -->
 <main>
+  <!-- Sekcija za upload slike -->
+  <!--<div class="upload-section">
+    <h3>Upload Offer Image</h3>
+    <input type="file" (change)="onFileSelected($event)" />
+    <button class="btn-upload" (click)="uploadImage()">Upload Image</button>
+
+    <div *ngIf="uploadedImageUrl">
+      <p>Uploaded Image Preview:</p>
+      <img [src]="uploadedImageUrl" alt="Uploaded offer" width="250" />
+    </div>
+  </div>*/-->
+
   <!-- Sekcija ponuda -->
   <section class="offers-section">
     <h2>Offers</h2>
@@ -44,6 +56,10 @@
     <div class="offers-container">
       <div *ngFor="let offer of offers" class="offer-card">
         <h3>{{ offer.offerName }}</h3>
+        <!-- Dodaj ispod naziva -->
+        <img *ngIf="offer.imageUrl" [src]="getOfferImageUrl(offer)" alt="Offer image" width="250" />
+
+
         <p>{{ offer.description }}</p>
         <p class="price">Price: €{{ offer.price }}</p>
         <button class="btn-book" (click)="openBookingForm(offer)">Book Now</button>

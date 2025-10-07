@@ -13,6 +13,10 @@ export class OffersComponent implements OnInit {
   showBookingForm: boolean = false;
   bookingData: { name: string; guests: number } = { name: '', guests: 0 };
   selectedOfferId: number | null = null;
+  selectedFile: File | null = null;
+  uploadedImageUrl: string | null = null;
+  selectedShoppingCenterId: number | null = null;
+
 
   filters: { minPrice?: number; maxPrice?: number } = {};
   sortOrder: string = 'asc'; // Defaultno sortiranje
@@ -43,6 +47,9 @@ export class OffersComponent implements OnInit {
 
   applySorting(): void {
     this.sortOffers();
+  }
+  onFileSelected(event: any): void {
+    this.selectedFile = event.target.files[0];
   }
 
   sortOffers(): void {
@@ -123,6 +130,37 @@ export class OffersComponent implements OnInit {
 
     // Autosave u localStorage
     localStorage.setItem('bookingData', JSON.stringify(this.bookingData));
+  }
+
+  uploadImage(): void {
+    if (!this.selectedFile) {
+      alert('Please select an image to upload!');
+      return;
+    }
+
+    this.offerService.uploadImage(this.selectedFile).subscribe({
+      next: (response) => {
+        this.uploadedImageUrl = response.imageUrl;
+        alert('Image uploaded successfully!');
+        console.log('Uploaded image:', response.imageUrl);
+
+        // Update offer u listi
+        if (this.selectedOfferId) {
+          const offer = this.offers.find(o => o.id === this.selectedOfferId);
+          if (offer) {
+            offer.imageUrl = response.imageUrl;
+          }
+        }
+      },
+      error: (err) => {
+        console.error('Image upload failed:', err);
+        alert('Image upload failed!');
+      }
+    });
+
+  }
+  getOfferImageUrl(offer: Offer): string {
+    return `https://localhost:7000${offer.imageUrl}`;
   }
 
 

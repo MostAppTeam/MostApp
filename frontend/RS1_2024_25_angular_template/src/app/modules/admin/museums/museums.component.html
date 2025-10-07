@@ -31,10 +31,15 @@
   <div *ngIf="museums.length > 0; else noMuseumsMessage" class="museum-cards">
     <div class="museum-card" *ngFor="let museum of museums">
       <h4>{{ museum.name }}</h4>
+      <img *ngIf="museum.imageUrl"[src]="getMuseumImageUrl(museum)"
+           alt="Museum Image" width="250" />
+
       <p>{{ museum.description }}</p>
       <p><strong>Location:</strong> {{ museum.location }}</p>
       <p><strong>Working Hours:</strong> {{ museum.workingHours }}</p>
-      <a [href]="museum.imageUrl" target="_blank" class="view-image-button">View Image</a>
+
+
+
     </div>
   </div>
 
@@ -51,6 +56,8 @@
     <input [(ngModel)]="newMuseum.location" placeholder="Location" name="location" required />
     <input [(ngModel)]="newMuseum.workingHours" placeholder="Working Hours" name="workingHours" required />
     <input [(ngModel)]="newMuseum.imageUrl" placeholder="Image URL" name="imageUrl" required />
+    <input type="file" (change)="onFileSelected($event)">
+
     <button type="submit">Add Museum</button>
   </form>
 

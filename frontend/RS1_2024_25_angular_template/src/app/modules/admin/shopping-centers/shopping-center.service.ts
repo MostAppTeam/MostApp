@@ -44,11 +44,19 @@ export class ShoppingCenterService {
     );
   }
 
+
   // Brisanje shopping centra
   deleteShoppingCenter(centerId: number): Observable<void> {
     return this.http.delete<void>(
       `${this.apiUrl}/${centerId}`,
       { headers: this.getAuthHeaders() }
     );
+  }
+
+  uploadImage(file: File): Observable<{ imageUrl: string }> {
+    const formData = new FormData();
+    formData.append('file', file, file.name);
+
+    return this.http.post<{ imageUrl: string }>(`${this.apiUrl}/upload-image`, formData);
   }
 }

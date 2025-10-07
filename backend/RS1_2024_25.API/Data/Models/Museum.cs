@@ -9,6 +9,7 @@ namespace RS1_2024_25.API.Data.Models
         public string Location { get; set; }
         public string Description { get; set; }
 
-      
+        public string? ImageUrl { get; set; }
+        
     }
 }

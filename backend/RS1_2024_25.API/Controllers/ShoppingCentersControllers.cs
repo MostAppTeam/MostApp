@@ -136,5 +136,30 @@ namespace RS1_2024_25.API.Controllers
 
             return NoContent();
         }
+
+        [HttpPost("upload-image")]
+        [MyAuthorization(isAdmin: true, isManager: true)]
+        public async Task<IActionResult> UploadImage([FromForm] IFormFile file)
+        {
+            if (file == null || file.Length == 0)
+                return BadRequest("No file uploaded.");
+
+            var uploadPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images", "shoppingcenters");
+            if (!Directory.Exists(uploadPath))
+                Directory.CreateDirectory(uploadPath);
+
+            var fileName = $"{Guid.NewGuid()}{Path.GetExtension(file.FileName)}";
+            var filePath = Path.Combine(uploadPath, fileName);
+
+            using (var stream = new FileStream(filePath, FileMode.Create))
+            {
+                await file.CopyToAsync(stream);
+            }
+
+            var relativePath = $"/images/shoppingcenters/{fileName}";
+
+            return Ok(new { imageUrl = relativePath });
+        }
+
     }
 }

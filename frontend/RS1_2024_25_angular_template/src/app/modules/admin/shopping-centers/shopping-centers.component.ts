@@ -15,6 +15,11 @@ export class ShoppingCentersComponent implements OnInit {
   searchQuery: string = '';
   sortBy: string = 'name';
   sortDirection: 'asc' | 'desc' = 'asc';
+  selectedFile: File | null = null;
+  selectedShoppingCenterId: number | null = null;
+
+  uploadedImageUrl: string | null = null;
+
 
   newShoppingCenter: Omit<ShoppingCenter, 'id' | 'city'> = {
     name: '',
@@ -153,6 +158,45 @@ export class ShoppingCentersComponent implements OnInit {
   }
   updateSort(): void {
     this.loadShoppingCenters();
+  }
+
+  onFileSelected(event: any): void {
+    this.selectedFile = event.target.files[0];
+  }
+
+  selectShoppingCenter(centerId: number): void {
+    this.selectedShoppingCenterId = centerId;
+  }
+  getShoppingCenterImageUrl(center: ShoppingCenter): string {
+    if (!center.imageUrl) return '';
+    return `https://localhost:7000${center.imageUrl}`;
+  }
+
+  uploadImage(): void {
+    if (!this.selectedFile) {
+      alert('Please select an image to upload!');
+      return;
+    }
+
+    this.shoppingCenterService.uploadImage(this.selectedFile).subscribe({
+      next: (response) => {
+        this.uploadedImageUrl = response.imageUrl;
+        alert('Image uploaded successfully!');
+        console.log('Uploaded image:', response.imageUrl);
+
+        // Update u listi shopping centara
+        if (this.selectedShoppingCenterId) {
+          const sc = this.shoppingCenters.find(s => s.id === this.selectedShoppingCenterId);
+          if (sc) {
+            sc.imageUrl = response.imageUrl;
+          }
+        }
+      },
+      error: (err) => {
+        console.error('Image upload failed:', err);
+        alert('Image upload failed!');
+      }
+    });
   }
 
 

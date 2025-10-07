@@ -16,21 +16,34 @@ export class MuseumsComponent implements OnInit {
     location: '',
     workingHours: '',
     imageUrl: '',
+
   };
   feedbackMessage: string | null = null;
+
+  selectedFile: File | null = null;
+  selectedMuseumId: number | null = null;
+  uploadedImageUrl: string | null = null;
+
 
   // Default values for sorting
   sortBy: string = 'name';
   sortDirection: string = 'asc';
 
-  // User role flags
   isAdmin: boolean = false;
   isManager: boolean = false;
+
+
+
+  onFileSelected(event: any) {
+    this.selectedFile = event.target.files[0];
+  }
+
 
   constructor(
     private museumService: MuseumService,
     private authService: MyAuthService // Dodano za provjeru uloga
-  ) {}
+  ) {
+  }
 
   ngOnInit(): void {
     this.loadMuseums();
@@ -77,27 +90,33 @@ export class MuseumsComponent implements OnInit {
       return;
     }
 
-    const { name, description, location, workingHours, imageUrl } = this.newMuseum;
+    const formData = new FormData();
+    formData.append("name", this.newMuseum.name);
+    formData.append("description", this.newMuseum.description);
+    formData.append("location", this.newMuseum.location);
+    formData.append("workingHours", this.newMuseum.workingHours);
 
-    if (name.trim() && description.trim() && location.trim() && workingHours.trim() && imageUrl.trim()) {
-      this.museumService.createMuseum(this.newMuseum).subscribe(
-        (response) => {
-          this.feedbackMessage = 'Museum successfully added!';
-          this.newMuseum = { name: '', description: '', location: '', workingHours: '', imageUrl: '' };
-          this.loadMuseums();
-          setTimeout(() => (this.feedbackMessage = null), 3000);
-        },
-        (error) => {
-          console.error('Error adding museum:', error);
-          this.feedbackMessage = 'Error adding museum.';
-          setTimeout(() => (this.feedbackMessage = null), 3000);
-        }
-      );
-    } else {
-      this.feedbackMessage = 'Please fill out all fields!';
-      setTimeout(() => (this.feedbackMessage = null), 3000);
+    if (this.selectedFile) {
+      formData.append("file", this.selectedFile);
     }
+
+    this.museumService.createMuseum(formData).subscribe(
+      (response) => {
+        this.feedbackMessage = 'Museum successfully added!';
+        this.newMuseum = {name: '', description: '', location: '', workingHours: '', imageUrl: ''};
+        this.loadMuseums();
+        setTimeout(() => (this.feedbackMessage = null), 3000);
+      },
+      (error) => {
+        console.error('Error adding museum:', error);
+        this.feedbackMessage = 'Error adding museum.';
+        setTimeout(() => (this.feedbackMessage = null), 3000);
+      }
+    );
   }
+
+
+
 
   deleteMuseum(id: number): void {
     if (!this.isAdmin && !this.isManager) {
@@ -121,6 +140,42 @@ export class MuseumsComponent implements OnInit {
       );
     }
   }
+  selectMuseum(museumId: number): void {
+    this.selectedMuseumId = museumId;
+  }
+
+
+  uploadImage(): void {
+    if (!this.selectedFile) {
+      alert('Please select an image to upload!');
+      return;
+    }
+
+    this.museumService.uploadImage(this.selectedFile).subscribe({
+      next: (response) => {
+        this.uploadedImageUrl = response.imageUrl;
+        alert('Image uploaded successfully!');
+        console.log('Uploaded image:', response.imageUrl);
+
+        // update muzeja u listi
+        if (this.selectedMuseumId) {
+          const museum = this.museums.find(m => m.id === this.selectedMuseumId);
+          if (museum) {
+            museum.imageUrl = response.imageUrl;
+          }
+        }
+      },
+      error: (err) => {
+        console.error('Image upload failed:', err);
+        alert('Image upload failed!');
+      }
+    });
+  }
+  getMuseumImageUrl(museum: Museum): string {
+    if (!museum.imageUrl) return '';
+    return `https://localhost:7000${museum.imageUrl}`;
+  }
+
 
   protected readonly MyAuthService = MyAuthService;
 }

@@ -7,4 +7,5 @@ export interface ShoppingCenter {
   closingTime: string;
   cityID: number;
   city?: any; // Ostavljen kao `any` dok se ne definiše struktura
+  imageUrl?: string;
 }

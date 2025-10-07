@@ -31,11 +31,16 @@ export class MuseumService {
     });
   }
 
-  createMuseum(museum: Omit<Museum, 'id'>): Observable<Museum> {
+ /* createMuseum(museum: Omit<Museum, 'id'>): Observable<Museum> {
     const headers = this.getAuthHeaders();
     console.log('Zaglavlje za kreiranje muzeja:', headers); // Debug ispis
     return this.http.post<Museum>(this.apiUrl, museum, { headers });
+  }*/
+
+  createMuseum(museumData: FormData): Observable<Museum> {
+    return this.http.post<Museum>(this.apiUrl, museumData);
   }
+
 
 
   updateMuseum(museum: Museum): Observable<Museum> {
@@ -56,6 +61,14 @@ export class MuseumService {
     const url = `${this.apiUrl}?sortBy=${sortBy}&sortDirection=${sortDirection}`;
     return this.http.get<Museum[]>(url, {responseType: 'json'});
   }
+
+  uploadImage(file: File): Observable<{ imageUrl: string }> {
+    const formData = new FormData();
+    formData.append('file', file, file.name);
+
+    return this.http.post<{ imageUrl: string }>(`${this.apiUrl}/upload-image`, formData);
+  }
+
 
 }
 

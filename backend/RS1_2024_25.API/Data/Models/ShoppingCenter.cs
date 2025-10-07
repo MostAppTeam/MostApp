@@ -13,5 +13,8 @@ namespace RS1_2024_25.API.Data.Models
 
         public TimeSpan OpeningTime { get; set; }
         public TimeSpan ClosingTime { get; set; }
+
+        public string? ImageUrl { get; set; }
+
     }
 }

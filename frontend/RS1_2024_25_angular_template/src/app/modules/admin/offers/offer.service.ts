@@ -33,4 +33,10 @@ export class OfferService {
     const body = { offerName, amount };
     return this.http.post<any>(`${this.apiUrl}/create-paypal-order`, body);
   }
+  uploadImage(file: File): Observable<{ imageUrl: string }> {
+    const formData = new FormData();
+    formData.append('file', file, file.name);
+
+    return this.http.post<{ imageUrl: string }>(`${this.apiUrl}/upload-image`, formData);
+  }
 }

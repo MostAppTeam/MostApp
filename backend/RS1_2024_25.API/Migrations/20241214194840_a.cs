@@ -15,12 +15,7 @@ namespace RS1_2024_25.API.Migrations
                 name: "TicketPrice",
                 table: "Attractions");
 
-            migrationBuilder.AddColumn<string>(
-                name: "Email",
-                table: "MyAppUsers",
-                type: "nvarchar(max)",
-                nullable: false,
-                defaultValue: "");
+        
         }
            
 
