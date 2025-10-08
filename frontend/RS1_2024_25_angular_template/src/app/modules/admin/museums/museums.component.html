@@ -1,9 +1,12 @@
 <div id="museum-container">
-  <!-- Museums Section with a description -->
+  <!-- Heading + opis -->
   <h3>Explore Museums in Mostar</h3>
-  <p class="description-text">Discover the rich history and culture at museums in Mostar. Learn more about their exhibits, locations, and working hours.</p>
+  <p class="description-text">
+    Discover the rich history and culture at museums in Mostar. Learn more about their exhibits,
+    locations, and working hours.
+  </p>
 
-  <!-- Sorting Section -->
+
   <div class="sorting-container">
     <div class="sorting-item">
       <label for="sort-by">Sort by:</label>
@@ -25,9 +28,16 @@
     <div class="sorting-item">
       <button (click)="updateSort()">Sort</button>
     </div>
+
+    >
+    <div class="sorting-item">
+      <button class="btn-download" (click)="downloadAllMuseumsPdf()">
+        Download ALL as PDF
+      </button>
+    </div>
   </div>
 
-  <!-- Existing Museums -->
+
   <div *ngIf="museums.length > 0; else noMuseumsMessage" class="museum-cards">
     <div class="museum-card" *ngFor="let museum of museums">
       <h4>{{ museum.name }}</h4>
@@ -38,8 +48,17 @@
       <p><strong>Location:</strong> {{ museum.location }}</p>
       <p><strong>Working Hours:</strong> {{ museum.workingHours }}</p>
 
+<<<<<<< HEAD
 
 
+=======
+      <a [href]="museum.imageUrl" target="_blank" class="view-image-button">View Image</a>
+
+
+      <button class="btn-download" (click)="downloadMuseumPdf(museum)">
+        Download PDF
+      </button>
+>>>>>>> a8c0947860e85dc5de82ae06212ee537833e193a
     </div>
   </div>
 
@@ -47,8 +66,6 @@
     <p>No museums available.</p>
   </ng-template>
 
-
-  <!-- Add Museum Form visible only to admins/managers -->
   <form *ngIf="isAdmin || isManager" (ngSubmit)="addMuseum()" id="add-museum-form">
     <h3>Add a Museum</h3>
     <input [(ngModel)]="newMuseum.name" placeholder="Name" name="name" required />
@@ -61,10 +78,13 @@
     <button type="submit">Add Museum</button>
   </form>
 
-  <!-- Feedback Message -->
+
   <div *ngIf="feedbackMessage" id="feedback-message">
     {{ feedbackMessage }}
   </div>
 
-
+  <div id="events-container">
+    <h3>Events</h3>
+    <app-events></app-events>
+  </div>
 </div>
