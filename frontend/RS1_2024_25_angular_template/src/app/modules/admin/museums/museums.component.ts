@@ -20,14 +20,12 @@ export class MuseumsComponent implements OnInit {
     location: '',
     workingHours: '',
     imageUrl: '',
-
   };
   feedbackMessage: string | null = null;
 
   selectedFile: File | null = null;
   selectedMuseumId: number | null = null;
   uploadedImageUrl: string | null = null;
-
 
   // Default values for sorting
   sortBy: string = 'name';
@@ -36,23 +34,10 @@ export class MuseumsComponent implements OnInit {
   isAdmin: boolean = false;
   isManager: boolean = false;
 
-
-
-  onFileSelected(event: any) {
-    this.selectedFile = event.target.files[0];
-  }
-
-
   constructor(
     private museumService: MuseumService,
-<<<<<<< HEAD
-    private authService: MyAuthService // Dodano za provjeru uloga
-  ) {
-  }
-=======
     private authService: MyAuthService
   ) {}
->>>>>>> a8c0947860e85dc5de82ae06212ee537833e193a
 
   ngOnInit(): void {
     this.loadMuseums();
@@ -62,11 +47,13 @@ export class MuseumsComponent implements OnInit {
     this.isManager = this.authService.isManager();
   }
 
+  onFileSelected(event: any) {
+    this.selectedFile = event.target.files[0];
+  }
+
   loadMuseums(): void {
     this.museumService.getMuseums().subscribe(
-      (data) => {
-        this.museums = data;
-      },
+      (data) => (this.museums = data),
       (error) => {
         console.error('Error loading museums:', error);
         this.feedbackMessage = 'Error loading museums.';
@@ -81,9 +68,7 @@ export class MuseumsComponent implements OnInit {
 
   loadSortedMuseums(): void {
     this.museumService.getSortedMuseums(this.sortBy, this.sortDirection).subscribe(
-      (data) => {
-        this.museums = data;
-      },
+      (data) => (this.museums = data),
       (error) => {
         console.error('Error sorting museums:', error);
         this.feedbackMessage = 'Error loading sorted museums.';
@@ -99,42 +84,32 @@ export class MuseumsComponent implements OnInit {
       return;
     }
 
-    const formData = new FormData();
-    formData.append("name", this.newMuseum.name);
-    formData.append("description", this.newMuseum.description);
-    formData.append("location", this.newMuseum.location);
-    formData.append("workingHours", this.newMuseum.workingHours);
-
-<<<<<<< HEAD
-    if (this.selectedFile) {
-      formData.append("ImageFile", this.selectedFile); // <--- isto ime kao DTO
-      formData.append("file", this.selectedFile);
-=======
-    if (name.trim() && description.trim() && location.trim() && workingHours.trim() && imageUrl.trim()) {
-      this.museumService.createMuseum(this.newMuseum).subscribe(
-        () => {
-          this.feedbackMessage = 'Museum successfully added!';
-          this.newMuseum = { name: '', description: '', location: '', workingHours: '', imageUrl: '' };
-          this.loadMuseums();
-          setTimeout(() => (this.feedbackMessage = null), 3000);
-        },
-        (error) => {
-          console.error('Error adding museum:', error);
-          this.feedbackMessage = 'Error adding museum.';
-          setTimeout(() => (this.feedbackMessage = null), 3000);
-        }
-      );
-    } else {
+    if (
+      !this.newMuseum.name.trim() ||
+      !this.newMuseum.description.trim() ||
+      !this.newMuseum.location.trim() ||
+      !this.newMuseum.workingHours.trim()
+    ) {
       this.feedbackMessage = 'Please fill out all fields!';
       setTimeout(() => (this.feedbackMessage = null), 3000);
->>>>>>> a8c0947860e85dc5de82ae06212ee537833e193a
+      return;
     }
 
+    const formData = new FormData();
+    formData.append('name', this.newMuseum.name);
+    formData.append('description', this.newMuseum.description);
+    formData.append('location', this.newMuseum.location);
+    formData.append('workingHours', this.newMuseum.workingHours);
+
+    if (this.selectedFile) {
+      formData.append('ImageFile', this.selectedFile); // ime mora odgovarati backend DTO-u
+    }
 
     this.museumService.createMuseum(formData).subscribe(
-      (response) => {
+      () => {
         this.feedbackMessage = 'Museum successfully added!';
-        this.newMuseum = {name: '', description: '', location: '', workingHours: '', imageUrl: ''};
+        this.newMuseum = { name: '', description: '', location: '', workingHours: '', imageUrl: '' };
+        this.selectedFile = null;
         this.loadMuseums();
         setTimeout(() => (this.feedbackMessage = null), 3000);
       },
@@ -145,9 +120,6 @@ export class MuseumsComponent implements OnInit {
       }
     );
   }
-
-
-
 
   deleteMuseum(id: number): void {
     if (!this.isAdmin && !this.isManager) {
@@ -171,10 +143,10 @@ export class MuseumsComponent implements OnInit {
       );
     }
   }
+
   selectMuseum(museumId: number): void {
     this.selectedMuseumId = museumId;
   }
-
 
   uploadImage(): void {
     if (!this.selectedFile) {
@@ -188,12 +160,9 @@ export class MuseumsComponent implements OnInit {
         alert('Image uploaded successfully!');
         console.log('Uploaded image:', response.imageUrl);
 
-        // update muzeja u listi
         if (this.selectedMuseumId) {
           const museum = this.museums.find(m => m.id === this.selectedMuseumId);
-          if (museum) {
-            museum.imageUrl = response.imageUrl;
-          }
+          if (museum) museum.imageUrl = response.imageUrl;
         }
       },
       error: (err) => {
@@ -202,12 +171,10 @@ export class MuseumsComponent implements OnInit {
       }
     });
   }
+
   getMuseumImageUrl(museum: Museum): string {
-    if (!museum.imageUrl) return '';
-    return `https://localhost:7000${museum.imageUrl}`;
+    return museum.imageUrl ? `https://localhost:7000${museum.imageUrl}` : '';
   }
-
-
 
   private async imageUrlToDataUrl(url: string): Promise<string | null> {
     try {
@@ -228,7 +195,7 @@ export class MuseumsComponent implements OnInit {
     const pageWidth = doc.internal.pageSize.getWidth();
     const pageHeight = doc.internal.pageSize.getHeight();
 
-    // Header line + title
+    // Header
     doc.setDrawColor(230);
     doc.line(14, 16, pageWidth - 14, 16);
     doc.setFont('helvetica', 'bold');
@@ -247,16 +214,12 @@ export class MuseumsComponent implements OnInit {
     }
   }
 
-
   async downloadMuseumPdf(museum: Museum) {
     const doc = new jsPDF();
-
-    // Naslov
     doc.setFont('helvetica', 'bold');
     doc.setFontSize(18);
     doc.text(museum.name || 'Museum', 14, 28);
 
-    // Detalji
     doc.setFont('helvetica', 'normal');
     doc.setFontSize(12);
     const startY = 36;
@@ -274,7 +237,6 @@ export class MuseumsComponent implements OnInit {
       cursorY += wrapped.length * 7;
     });
 
-
     if (museum.imageUrl) {
       const dataUrl = await this.imageUrlToDataUrl(museum.imageUrl);
       if (dataUrl) {
@@ -288,9 +250,7 @@ export class MuseumsComponent implements OnInit {
           }
           doc.addImage(dataUrl, 'JPEG', 14, cursorY + 4, imgW, imgH, undefined, 'FAST');
           cursorY += imgH + 16;
-        } catch {
-
-        }
+        } catch {}
       }
     }
 
@@ -300,7 +260,6 @@ export class MuseumsComponent implements OnInit {
 
   downloadAllMuseumsPdf() {
     const doc = new jsPDF();
-
     doc.setFont('helvetica', 'bold');
     doc.setFontSize(16);
     doc.text('Museums — Listing', 14, 24);
@@ -318,22 +277,12 @@ export class MuseumsComponent implements OnInit {
       head: [['#', 'Name', 'Location', 'Working Hours', 'Description']],
       body: rows,
       styles: { font: 'helvetica', fontSize: 10, cellPadding: 3 },
-      headStyles: { fillColor: [247, 183, 49] }, // #f7b731
-      columnStyles: {
-        0: { cellWidth: 10 },
-        1: { cellWidth: 40 },
-        2: { cellWidth: 40 },
-        3: { cellWidth: 35 },
-        4: { cellWidth: 60 },
-      },
-      didDrawPage: () => {
-        this.addHeaderFooter(doc);
-      },
+      headStyles: { fillColor: [247, 183, 49] },
+      columnStyles: { 0: { cellWidth: 10 }, 1: { cellWidth: 40 }, 2: { cellWidth: 40 }, 3: { cellWidth: 35 }, 4: { cellWidth: 60 } },
+      didDrawPage: () => this.addHeaderFooter(doc),
       margin: { left: 14, right: 14 },
     });
 
     doc.save('Museums_All.pdf');
   }
-
-  protected readonly MyAuthService = MyAuthService;
 }

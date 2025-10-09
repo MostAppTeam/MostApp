@@ -6,7 +6,6 @@
     locations, and working hours.
   </p>
 
-
   <div class="sorting-container">
     <div class="sorting-item">
       <label for="sort-by">Sort by:</label>
@@ -29,7 +28,6 @@
       <button (click)="updateSort()">Sort</button>
     </div>
 
-    >
     <div class="sorting-item">
       <button class="btn-download" (click)="downloadAllMuseumsPdf()">
         Download ALL as PDF
@@ -37,28 +35,23 @@
     </div>
   </div>
 
-
   <div *ngIf="museums.length > 0; else noMuseumsMessage" class="museum-cards">
     <div class="museum-card" *ngFor="let museum of museums">
       <h4>{{ museum.name }}</h4>
-      <img *ngIf="museum.imageUrl"[src]="getMuseumImageUrl(museum)"
-           alt="Museum Image" width="250" />
+      <img
+        *ngIf="museum.imageUrl"
+        [src]="getMuseumImageUrl(museum)"
+        alt="Museum Image"
+        width="250"
+      />
 
       <p>{{ museum.description }}</p>
       <p><strong>Location:</strong> {{ museum.location }}</p>
       <p><strong>Working Hours:</strong> {{ museum.workingHours }}</p>
 
-<<<<<<< HEAD
-
-
-=======
-      <a [href]="museum.imageUrl" target="_blank" class="view-image-button">View Image</a>
-
-
       <button class="btn-download" (click)="downloadMuseumPdf(museum)">
         Download PDF
       </button>
->>>>>>> a8c0947860e85dc5de82ae06212ee537833e193a
     </div>
   </div>
 
@@ -73,18 +66,12 @@
     <input [(ngModel)]="newMuseum.location" placeholder="Location" name="location" required />
     <input [(ngModel)]="newMuseum.workingHours" placeholder="Working Hours" name="workingHours" required />
     <input [(ngModel)]="newMuseum.imageUrl" placeholder="Image URL" name="imageUrl" required />
-    <input type="file" (change)="onFileSelected($event)">
+    <input type="file" (change)="onFileSelected($event)" />
 
     <button type="submit">Add Museum</button>
   </form>
 
-
   <div *ngIf="feedbackMessage" id="feedback-message">
     {{ feedbackMessage }}
-  </div>
-
-  <div id="events-container">
-    <h3>Events</h3>
-    <app-events></app-events>
   </div>
 </div>
