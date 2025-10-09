@@ -106,6 +106,7 @@ export class OffersComponent implements OnInit {
 
     if (!selectedOffer) {
       console.error('Selected offer not found!');
+      alert('Offer not found. Please try again.');
       return;
     }
 
@@ -115,14 +116,15 @@ export class OffersComponent implements OnInit {
     this.offerService.createPayPalOrder(selectedOffer.offerName, selectedOffer.price).subscribe({
       next: (response) => {
         console.log('PayPal Order Created:', response);
-        window.open(response.approvalUrl, '_blank'); // Otvori PayPal checkout
+        window.open(response.approvalUrl, '_blank');
       },
       error: (error) => {
         console.error('Error creating PayPal order:', error);
+        alert('Failed to create PayPal order. Please try again.');
       },
     });
 
-    this.closeBookingForm(); // Zatvori formu
+    this.closeBookingForm();
   }
 
   onBookingDataChange(): void {
