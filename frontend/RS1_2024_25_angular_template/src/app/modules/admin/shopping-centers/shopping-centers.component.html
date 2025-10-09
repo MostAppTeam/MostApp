@@ -59,42 +59,19 @@
     <p>No shopping centers available.</p>
   </ng-container>
 
-  <!-- Forma za dodavanje shopping centra (prikazuje se samo adminima ili menadžerima) -->
   <div *ngIf="isAdminOrManager" class="add-shopping-center-form">
     <h4>Add New Shopping Center</h4>
     <form (ngSubmit)="addShoppingCenter()">
-      <input
-        [(ngModel)]="newShoppingCenter.name"
-        name="name"
-        placeholder="Name"
-        required
-      />
-      <input
-        [(ngModel)]="newShoppingCenter.address"
-        name="address"
-        placeholder="Address"
-        required
-      />
-      <input
-        [(ngModel)]="newShoppingCenter.workingHours"
-        name="workingHours"
-        placeholder="Working Hours"
-        required
-      />
-      <input
-        [(ngModel)]="newShoppingCenter.openingTime"
-        name="openingTime"
-        placeholder="Opening Time"
-        required
-      />
-      <input
-        [(ngModel)]="newShoppingCenter.closingTime"
-        name="closingTime"
-        placeholder="Closing Time"
-        required
-      />
+      <input [(ngModel)]="newShoppingCenter.name" name="name" placeholder="Name" required />
+      <input [(ngModel)]="newShoppingCenter.address" name="address" placeholder="Address" required />
+      <input [(ngModel)]="newShoppingCenter.workingHours" name="workingHours" placeholder="Working Hours" required />
+      <input [(ngModel)]="newShoppingCenter.openingTimeString" name="openingTime" placeholder="Opening Time (HH:MM)" required />
+      <input [(ngModel)]="newShoppingCenter.closingTimeString" name="closingTime" placeholder="Closing Time (HH:MM)" required />
+
+      <input type="file" (change)="onFileSelected($event)" />
       <button type="submit">Add Shopping Center</button>
     </form>
     <p *ngIf="feedbackMessage" class="feedback">{{ feedbackMessage }}</p>
   </div>
-</div>
+
+

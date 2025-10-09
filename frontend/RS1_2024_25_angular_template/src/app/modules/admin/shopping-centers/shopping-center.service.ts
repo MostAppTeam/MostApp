@@ -35,28 +35,48 @@ export class ShoppingCenterService {
     );
   }
 
-  // Kreiranje novog shopping centra
-  createShoppingCenter(center: Omit<ShoppingCenter, 'id' | 'city'>): Observable<any> {
-    return this.http.post<any>(
-      this.apiUrl,
-      center,
-      { headers: this.getAuthHeaders() }
-    );
+  createShoppingCenter(centerData: FormData): Observable<any> {
+    const token = this.authService.getToken();
+    const headers = new HttpHeaders({
+      'my-auth-token': `Bearer ${token}` // ✅ kao u muzeju
+    });
+
+    return this.http.post<any>(this.apiUrl, centerData, { headers });
   }
 
 
-  // Brisanje shopping centra
-  deleteShoppingCenter(centerId: number): Observable<void> {
-    return this.http.delete<void>(
-      `${this.apiUrl}/${centerId}`,
-      { headers: this.getAuthHeaders() }
-    );
+
+  deleteShoppingCenter(centerId: number): Observable<any> {
+    const token = this.authService.getToken();
+    const headers = new HttpHeaders({
+      'my-auth-token': `Bearer ${token}`
+    });
+
+    return this.http.delete<any>(`${this.apiUrl}/${centerId}`, { headers });
   }
+
+
 
   uploadImage(file: File): Observable<{ imageUrl: string }> {
+    const token = this.authService.getToken();
+    if (!token) {
+      throw new Error('No token found');
+    }
+
+    const headers = new HttpHeaders({
+      'my-auth-token': `Bearer ${token}` // isto kao za muzeje
+    });
+
     const formData = new FormData();
     formData.append('file', file, file.name);
 
-    return this.http.post<{ imageUrl: string }>(`${this.apiUrl}/upload-image`, formData);
+    return this.http.post<{ imageUrl: string }>(
+      `${this.apiUrl}/upload-image`,
+      formData,
+      { headers }
+    );
   }
+
+
+
 }

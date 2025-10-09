@@ -1,33 +1,41 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Event } from './event.model';
+import { MyAuthService } from '../../../services/auth-services/my-auth.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class EventService {
-  private apiUrl = 'https://localhost:7000/api/Event'; // Endpoint za Event API
+  private apiUrl = 'https://localhost:7000/api/Event';
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private authService: MyAuthService) {}
 
-  // Dobijanje svih događaja
+  private getAuthHeaders(): HttpHeaders {
+    const token = this.authService.getToken();
+    return new HttpHeaders({
+      'my-auth-token': token ? `Bearer ${token}` : '',
+      'Content-Type': 'application/json',
+    });
+  }
+
   getEvents(): Observable<Event[]> {
     return this.http.get<Event[]>(this.apiUrl);
   }
 
-  // Dodavanje novog događaja
   createEvent(event: Omit<Event, 'id'>): Observable<Event> {
-    return this.http.post<Event>(this.apiUrl, event);
+    return this.http.post<Event>(this.apiUrl, event, {
+      headers: this.getAuthHeaders() });
   }
 
-  // Ažuriranje događaja
   updateEvent(event: Event): Observable<Event> {
-    return this.http.put<Event>(`${this.apiUrl}/${event.id}`, event);
+    return this.http.put<Event>(`${this.apiUrl}/${event.id}`, event, {
+      headers: this.getAuthHeaders() });
   }
 
-  // Brisanje događaja
   deleteEvent(id: number): Observable<void> {
-    return this.http.delete<void>(`${this.apiUrl}/${id}`);
+    return this.http.delete<void>(`${this.apiUrl}/${id}`, {
+      headers: this.getAuthHeaders() });
   }
 }

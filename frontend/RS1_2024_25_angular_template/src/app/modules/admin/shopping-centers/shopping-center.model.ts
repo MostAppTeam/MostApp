@@ -3,9 +3,9 @@ export interface ShoppingCenter {
   name: string;
   address: string;
   workingHours: string;
-  openingTime: string;
-  closingTime: string;
+  openingTime: string;   // ISO string (DateTime)
+  closingTime: string;   // ISO string (DateTime)
   cityID: number;
-  city?: any; // Ostavljen kao `any` dok se ne definiše struktura
+  city?: any;
   imageUrl?: string;
 }

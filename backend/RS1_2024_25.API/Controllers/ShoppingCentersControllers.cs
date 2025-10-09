@@ -1,98 +1,100 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using RS1_2024_25.API.Data.Models;
 using RS1_2024_25.API.Data;
-using RS1_2024_25.API.Services;
+using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using RS1_2024_25.API.Helper.Auth;
+using System.IO;
+using Microsoft.AspNetCore.Http;
 
-namespace RS1_2024_25.API.Controllers
+[Route("api/[controller]")]
+[ApiController]
+public class ShoppingCentersController : ControllerBase
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class ShoppingCentersController : ControllerBase
+    private readonly ApplicationDbContext _context;
+
+    public ShoppingCentersController(ApplicationDbContext context)
     {
-        private readonly ApplicationDbContext _context;
+        _context = context;
+    }
 
-        public ShoppingCentersController(ApplicationDbContext context)
+    public class ShoppingCenterDto
+    {
+        public string Name { get; set; }
+        public string Address { get; set; }
+        public string WorkingHours { get; set; }
+        public string OpeningTime { get; set; } // HH:mm
+        public string ClosingTime { get; set; } // HH:mm
+        public int CityID { get; set; }
+        public IFormFile? ImageFile { get; set; }
+    }
+
+    // GET: api/ShoppingCenters
+    [HttpGet]
+    public async Task<ActionResult<IEnumerable<ShoppingCenter>>> GetShoppingCenters(
+        [FromQuery] string? name = null,
+        [FromQuery] string sortBy = "name",
+        [FromQuery] string sortDirection = "asc")
+    {
+        var centers = _context.ShoppingCenters.AsQueryable();
+
+        if (!string.IsNullOrEmpty(name))
+            centers = centers.Where(c => c.Name.Contains(name));
+
+        centers = sortBy.ToLower() switch
         {
-            _context = context;
-        }
+            "name" => sortDirection.ToLower() == "desc" ? centers.OrderByDescending(c => c.Name) : centers.OrderBy(c => c.Name),
+            "address" => sortDirection.ToLower() == "desc" ? centers.OrderByDescending(c => c.Address) : centers.OrderBy(c => c.Address),
+            "workinghours" => sortDirection.ToLower() == "desc" ? centers.OrderByDescending(c => c.WorkingHours) : centers.OrderBy(c => c.WorkingHours),
+            _ => centers.OrderBy(c => c.Name)
+        };
 
-        // GET: api/ShoppingCenters
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<ShoppingCenter>>> GetShoppingCenters(
-            [FromQuery] string? name = null,
-            [FromQuery] string sortBy = "name",
-            [FromQuery] string sortDirection = "asc")
+        return Ok(await centers.ToListAsync());
+    }
 
+    // POST: api/ShoppingCenters
+    [HttpPost]
+    [Consumes("multipart/form-data")]
+    [MyAuthorization(isAdmin: true, isManager: true)]
+    public async Task<ActionResult<ShoppingCenter>> CreateShoppingCenter([FromForm] ShoppingCenterDto dto)
+    {
+        var shoppingCenter = new ShoppingCenter
         {
-            var shoppingCenters = _context.ShoppingCenters.AsQueryable();
+            Name = dto.Name,
+            Address = dto.Address,
+            WorkingHours = dto.WorkingHours,
+            CityID = dto.CityID,
+            OpeningTime = TimeSpan.Parse(dto.OpeningTime),
+            ClosingTime = TimeSpan.Parse(dto.ClosingTime)
+        };
 
-            // Filtriranje
-            if (!string.IsNullOrWhiteSpace(name))
+        if (dto.ImageFile != null && dto.ImageFile.Length > 0)
+        {
+            var uploadPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images", "shoppingcenters");
+            if (!Directory.Exists(uploadPath))
+                Directory.CreateDirectory(uploadPath);
+
+            var fileName = $"{Guid.NewGuid()}{Path.GetExtension(dto.ImageFile.FileName)}";
+            var filePath = Path.Combine(uploadPath, fileName);
+
+            using (var stream = new FileStream(filePath, FileMode.Create))
             {
-                shoppingCenters = shoppingCenters.Where(s => s.Name.Contains(name));
+                await dto.ImageFile.CopyToAsync(stream);
             }
 
-            // Sortiranje
-            shoppingCenters = sortBy switch
-            {
-                "name" => shoppingCenters.OrderBy(s => s.Name),
-                _ => shoppingCenters.OrderBy(s => s.ID) // Defaultno sortiranje po ID-u
-            };
-
-            shoppingCenters = sortBy.ToLower() switch
-            {
-                "name" => sortDirection.ToLower() == "desc"
-                            ? shoppingCenters.OrderByDescending(s => s.Name)
-                            : shoppingCenters.OrderBy(s => s.Name),
-                "address" => sortDirection.ToLower() == "desc"
-                            ? shoppingCenters.OrderByDescending(s => s.Address)
-                            : shoppingCenters.OrderBy(s => s.Address),
-                "workinghours" => sortDirection.ToLower() == "desc"
-                            ? shoppingCenters.OrderByDescending(s => s.WorkingHours)
-                            : shoppingCenters.OrderBy(s => s.WorkingHours),
-                _ => shoppingCenters.OrderBy(s => s.Name)
-            };
-
-            return Ok(await shoppingCenters.ToListAsync());
+            shoppingCenter.ImageUrl = $"/images/shoppingcenters/{fileName}";
         }
 
-        // GET: api/ShoppingCenters/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<ShoppingCenter>> GetShoppingCenter(int id)
-        {
-            var shoppingCenter = await _context.ShoppingCenters.FindAsync(id);
+        _context.ShoppingCenters.Add(shoppingCenter);
+        await _context.SaveChangesAsync();
 
-            if (shoppingCenter == null)
-            {
-                return NotFound(new { Message = $"Shopping Center with ID {id} not found." });
-            }
+        return CreatedAtAction(nameof(GetShoppingCenters), new { id = shoppingCenter.ID }, shoppingCenter);
+    }
 
-            return Ok(shoppingCenter);
-        }
-
-        // POST: api/ShoppingCenters
-        [HttpPost]
-        [MyAuthorization(isAdmin: true, isManager: true)]
-        public async Task<ActionResult<ShoppingCenter>> PostShoppingCenter(ShoppingCenter shoppingCenter)
-        {
-            if (shoppingCenter == null)
-            {
-                return BadRequest(new { Message = "Shopping Center data is invalid." });
-            }
-
-            _context.ShoppingCenters.Add(shoppingCenter);
-            await _context.SaveChangesAsync();
-
-            return CreatedAtAction(nameof(GetShoppingCenter), new { id = shoppingCenter.ID }, shoppingCenter);
-        }
-
-        // PUT: api/ShoppingCenters/5
-        [HttpPut("{id}")]
+    // PUT: api/ShoppingCenters/5
+    [HttpPut("{id}")]
         [MyAuthorization(isAdmin: true, isManager: true)]
         public async Task<IActionResult> PutShoppingCenter(int id, ShoppingCenter shoppingCenter)
         {
@@ -162,4 +164,3 @@ namespace RS1_2024_25.API.Controllers
         }
 
     }
-}

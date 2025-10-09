@@ -153,7 +153,37 @@ export class EventsComponent implements OnInit {
     this.updateMapMarkers();
   }
 
-  // Edit event
+
+  addEvent(): void {
+    if (!this.isAdminOrManager) {
+      this.feedbackMessage = 'You do not have permission to add events.';
+      setTimeout(() => (this.feedbackMessage = null), 3000);
+      return;
+    }
+
+    const { name, date, location, description } = this.newEvent;
+    if (!name || !date || !location || !description) {
+      this.feedbackMessage = 'Please fill out all fields!';
+      setTimeout(() => (this.feedbackMessage = null), 3000);
+      return;
+    }
+
+    this.eventService.createEvent(this.newEvent).subscribe(
+      (response) => {
+        this.feedbackMessage = 'Event successfully added!';
+        this.newEvent = { name: '', date: '', location: '', description: '' };
+        this.loadEvents();
+        setTimeout(() => (this.feedbackMessage = null), 3000);
+      },
+      (error) => {
+        console.error('Error adding event:', error);
+        this.feedbackMessage = 'Error adding the event.';
+        setTimeout(() => (this.feedbackMessage = null), 3000);
+      }
+    );
+  }
+
+
   editEvent(event: Event): void {
     if (!this.isAdminOrManager) {
       this.feedbackMessage = 'You do not have permission to edit events.';
@@ -161,8 +191,7 @@ export class EventsComponent implements OnInit {
       return;
     }
 
-    const updatedEvent = { ...event, name: `${event.name} (Updated)` };
-    this.eventService.updateEvent(updatedEvent).subscribe(
+    this.eventService.updateEvent(event /*, this.selectedFile */).subscribe(
       () => {
         this.feedbackMessage = 'Event successfully updated!';
         this.loadEvents();
@@ -176,7 +205,6 @@ export class EventsComponent implements OnInit {
     );
   }
 
-  // Delete event
   deleteEvent(id: number): void {
     if (!this.isAdminOrManager) {
       this.feedbackMessage = 'You do not have permission to delete events.';
@@ -197,35 +225,6 @@ export class EventsComponent implements OnInit {
           setTimeout(() => (this.feedbackMessage = null), 3000);
         }
       );
-    }
-  }
-
-  // Add event
-  addEvent(): void {
-    if (!this.isAdminOrManager) {
-      this.feedbackMessage = 'You do not have permission to add events.';
-      setTimeout(() => (this.feedbackMessage = null), 3000);
-      return;
-    }
-
-    const { name, date, location, description } = this.newEvent;
-    if (name.trim() && date.trim() && location.trim() && description.trim()) {
-      this.eventService.createEvent(this.newEvent).subscribe(
-        () => {
-          this.feedbackMessage = 'Event successfully added!';
-          this.newEvent = { name: '', date: '', location: '', description: '' };
-          this.loadEvents();
-          setTimeout(() => (this.feedbackMessage = null), 3000);
-        },
-        (error) => {
-          console.error('Error adding event:', error);
-          this.feedbackMessage = 'Error adding the event.';
-          setTimeout(() => (this.feedbackMessage = null), 3000);
-        }
-      );
-    } else {
-      this.feedbackMessage = 'Please fill out all fields!';
-      setTimeout(() => (this.feedbackMessage = null), 3000);
     }
   }
 

@@ -97,8 +97,9 @@ export class MuseumsComponent implements OnInit {
     formData.append("workingHours", this.newMuseum.workingHours);
 
     if (this.selectedFile) {
-      formData.append("file", this.selectedFile);
+      formData.append("ImageFile", this.selectedFile); // <--- isto ime kao DTO
     }
+
 
     this.museumService.createMuseum(formData).subscribe(
       (response) => {

@@ -38,8 +38,15 @@ export class MuseumService {
   }*/
 
   createMuseum(museumData: FormData): Observable<Museum> {
-    return this.http.post<Museum>(this.apiUrl, museumData);
+    const token = this.authService.getToken();
+    const headers = new HttpHeaders({
+      'my-auth-token': `Bearer ${token}` // backend očekuje ovaj header
+    });
+
+    return this.http.post<Museum>(this.apiUrl, museumData, { headers });
   }
+
+
 
 
 
