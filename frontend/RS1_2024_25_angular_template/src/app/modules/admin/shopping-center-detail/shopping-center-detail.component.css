@@ -1,0 +1,111 @@
+/* --- Shopping Center Details Page --- */
+.shopping-detail {
+  max-width: 900px;
+  margin: 80px auto;
+  background: #ffffff;
+  border-radius: 16px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+  padding: 40px;
+  text-align: center;
+  font-family: 'Poppins', sans-serif;
+  animation: fadeIn 0.8s ease-in-out;
+}
+
+/* Title */
+.shopping-detail h2 {
+  font-size: 2.8rem;
+  color: #333;
+  margin-bottom: 25px;
+  letter-spacing: 1px;
+  font-weight: 700;
+}
+
+/* Large Image */
+.shopping-detail img {
+  width: 100%;
+  max-width: 700px;
+  height: auto;
+  border-radius: 16px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.2);
+  margin-bottom: 30px;
+  transition: transform 0.4s ease;
+}
+
+.shopping-detail img:hover {
+  transform: scale(1.03);
+}
+
+/* Info Paragraphs */
+.shopping-detail p {
+  font-size: 1.2rem;
+  color: #555;
+  line-height: 1.6;
+  margin: 12px 0;
+}
+
+.shopping-detail p strong {
+  color: #f7b731;
+}
+
+/* Back Button */
+.btn-back {
+  display: inline-block;
+  margin-top: 35px;
+  background: #f7b731;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 12px 25px;
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  box-shadow: 0 4px 10px rgba(247, 183, 49, 0.4);
+}
+
+.btn-back:hover {
+  background: #e6a722;
+  box-shadow: 0 6px 14px rgba(230, 167, 34, 0.5);
+  transform: translateY(-2px);
+}
+
+/* Loading Message */
+.shopping-detail-loading p {
+  font-size: 1.3rem;
+  color: #888;
+  text-align: center;
+  margin-top: 100px;
+}
+
+/* Fade-in Animation */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .shopping-detail {
+    padding: 25px;
+  }
+
+  .shopping-detail h2 {
+    font-size: 2rem;
+  }
+
+  .shopping-detail p {
+    font-size: 1rem;
+  }
+
+  .btn-back {
+    font-size: 1rem;
+    padding: 10px 20px;
+  }
+}

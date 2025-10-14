@@ -33,6 +33,7 @@ namespace RS1_2024_25.API.Data
         public DbSet<ActivityLog> ActivityLogs { get; set; }
         public DbSet<Notification> Notifications { get; set; }
         public DbSet<Order> Orders { get; set; }
+        public DbSet<AttractionOption> AttractionOptions { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

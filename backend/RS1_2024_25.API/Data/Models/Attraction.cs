@@ -12,9 +12,15 @@ namespace RS1_2024_25.API.Data.Models
         public string VirtualTourURL { get; set; }  
         public City City { get; set; }
 
+        public string Category { get; set; }  // npr. "Museum", "Park", "Shopping Center"
+
+
         public string? ImageUrl { get; set; }
 
 
+        // NOVO
+        public bool IsPaid { get; set; }  // Da li se plaća ulaz
+        public List<AttractionOption> Options { get; set; } = new List<AttractionOption>();
 
 
     }

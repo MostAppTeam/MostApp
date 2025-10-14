@@ -1,11 +1,20 @@
+export interface AttractionOption {
+  optionType: string;
+  optionValue: string;
+}
+
 export interface Attraction {
   id: number;
   name: string;
   description: string;
   cityID: number;
-  virtualTourURL?: string; // Ova stavka je opcionalna
+  virtualTourURL?: string;
+  isPaid: boolean;
+  options?: AttractionOption[];
   city?: {
     id: number;
-    name: string; // Dodaj sve potrebne atribute iz klase City ako je potrebno
+    name: string;
   };
+  category?: string;
+
 }

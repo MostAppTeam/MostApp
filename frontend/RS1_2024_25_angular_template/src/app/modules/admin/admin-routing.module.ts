@@ -12,6 +12,8 @@ import { EventsComponent } from './events/event.component';
 import { OffersComponent } from './offers/offers.component';
 import { UserRecommendationsComponent } from './user-recommendations/user-recommendations.component';
 import { ShoppingCentersComponent } from './shopping-centers/shopping-centers.component';
+import {AttractionDetailComponent} from './attraction-detail/attraction-detail.component';
+import {ShoppingCenterDetailComponent} from './shopping-center-detail/shopping-center-detail.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
@@ -22,10 +24,12 @@ const routes: Routes = [
   { path: 'destination', component: DestinationComponent },
   { path: 'order', component: ReservationComponent },
   { path: 'attractions', component: AttractionsComponent },
+  { path: 'attraction-detail/:id', component: AttractionDetailComponent },
   { path: 'museums', component: MuseumsComponent },
   { path: 'events', component: EventsComponent },
   { path: 'offers', component: OffersComponent },
   { path: 'shopping-centers', component: ShoppingCentersComponent },
+  { path: 'shopping-center-detail/:id', component: ShoppingCenterDetailComponent },
   { path: 'home', component: UserRecommendationsComponent },
   { path: '**', component: AdminErrorPageComponent },
 ];

@@ -1,0 +1,20 @@
+<div *ngIf="attraction" class="attraction-detail">
+  <h2>{{ attraction.name }}</h2>
+  <img *ngIf="attraction.virtualTourURL" [src]="attraction.virtualTourURL" alt="{{ attraction.name }}" />
+
+  <p class="category">Category: {{ attraction.category }}</p>
+  <p>{{ attraction.description }}</p>
+
+  <div *ngIf="attraction.isPaid" class="price">Entrance: Paid</div>
+  <div *ngIf="!attraction.isPaid" class="price">Entrance: Free</div>
+
+  <div *ngIf="attraction.options?.length" class="options">
+    <h4>Available Options</h4>
+    <div *ngFor="let opt of attraction.options" class="option-item">
+      <label>{{ opt.optionType }}</label>
+      <span>{{ opt.optionValue }}</span>
+    </div>
+  </div>
+
+  <button class="btn-action">Book Now</button>
+</div>

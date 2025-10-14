@@ -3,6 +3,7 @@ import { ShoppingCenterService } from './shopping-center.service';
 import { ShoppingCenter } from './shopping-center.model';
 import { MyAuthService } from '../../../services/auth-services/my-auth.service';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
+import {Router} from '@angular/router';
 
 @Component({
   selector: 'app-shopping-centers',
@@ -41,9 +42,10 @@ export class ShoppingCentersComponent implements OnInit {
   isAdminOrManager: boolean = false;
   loggedInUser: any = null;
 
+
   constructor(
     private shoppingCenterService: ShoppingCenterService,
-    private authService: MyAuthService
+    private authService: MyAuthService, private router: Router
   ) {}
 
   ngOnInit(): void {
@@ -224,5 +226,9 @@ export class ShoppingCentersComponent implements OnInit {
     return now.toISOString(); // format koji .NET DateTime očekuje
   }
 
+  goToDetail(id: number): void {
+    this.router.navigate(['/shopping-center-detail', id]);
+
+  }
 
 }

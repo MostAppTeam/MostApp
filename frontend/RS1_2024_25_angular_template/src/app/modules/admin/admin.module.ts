@@ -21,6 +21,8 @@ import { ShoppingCentersComponent } from './shopping-centers/shopping-centers.co
 import {ResetPasswordComponent} from './reset-password/reset-password.component';
 import {InviteFriendComponent} from './ invite-friend/invite-friend.component';
 import {ActivateAccountComponent} from './activate-account/activate-account.component';
+import {AttractionDetailComponent} from './attraction-detail/attraction-detail.component';
+import {ShoppingCenterDetailComponent} from './shopping-center-detail/shopping-center-detail.component';
 
 
 @NgModule({
@@ -32,11 +34,13 @@ import {ActivateAccountComponent} from './activate-account/activate-account.comp
     CitiesComponent,
     CitiesEditComponent,
     AttractionsComponent,
+    AttractionDetailComponent,
     MuseumsComponent,
     EventsComponent,
     OffersComponent,
     UserRecommendationsComponent,
     ShoppingCentersComponent,
+    ShoppingCenterDetailComponent,
     InviteFriendComponent,
     ActivateAccountComponent,
     ResetPasswordComponent,

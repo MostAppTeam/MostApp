@@ -7,6 +7,15 @@
   <!-- Sorting Section -->
   <div class="sorting-container">
     <div class="sorting-item">
+      <label for="category">Category:</label>
+      <select id="category" [(ngModel)]="selectedCategory" (change)="updateCategory()">
+        <option *ngFor="let cat of categories" [value]="cat">{{ cat }}</option>
+      </select>
+    </div>
+
+
+    <div class="sorting-item">
+
       <label for="sort-by">Sort by:</label>
       <select id="sort-by" [(ngModel)]="sortBy">
         <option value="name">Name</option>
@@ -37,7 +46,9 @@
         <img [src]="attraction.virtualTourURL" alt="{{ attraction.name }}" />
         <a [href]="attraction.virtualTourURL" target="_blank" class="btn-virtual-tour">Virtual Tour</a>
       </div>
+      <button (click)="goToDetail(attraction.id)">More</button>
     </div>
+
   </div>
 
   <ng-template #noData>

@@ -77,6 +77,11 @@ export class ShoppingCenterService {
     );
   }
 
+  getShoppingCenterById(id: number): Observable<ShoppingCenter> {
+    return this.http.get<ShoppingCenter>(`${this.apiUrl}/${id}`);
+  }
+
+
 
 
 }

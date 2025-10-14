@@ -1,0 +1,22 @@
+<div *ngIf="shoppingCenter as sc" class="shopping-detail">
+  <h2>{{ sc.name }}</h2>
+
+  <img
+    *ngIf="sc.imageUrl"
+    [src]="getImageUrl()"
+    alt="{{ sc.name }}"
+    width="400"
+  />
+
+  <p><strong>Address:</strong> {{ sc.address }}</p>
+  <p><strong>Working Hours:</strong> {{ sc.workingHours }}</p>
+  <p><strong>Opens:</strong> {{ sc.openingTime }}</p>
+  <p><strong>Closes:</strong> {{ sc.closingTime }}</p>
+  <p><strong>City:</strong> {{ sc.city?.name }}</p>
+
+  <button routerLink="/shopping-centers" class="btn-back">Back</button>
+</div>
+
+<ng-container *ngIf="!shoppingCenter">
+  <p>Loading shopping center details...</p>
+</ng-container>

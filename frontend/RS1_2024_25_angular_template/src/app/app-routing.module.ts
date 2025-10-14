@@ -12,6 +12,9 @@ import { ShoppingCentersComponent } from './modules/admin/shopping-centers/shopp
 import {InviteFriendComponent} from './modules/admin/ invite-friend/invite-friend.component';
 import {ResetPasswordComponent} from './modules/admin/reset-password/reset-password.component';
 import {ActivateAccountComponent} from './modules/admin/activate-account/activate-account.component';
+import {AttractionDetailComponent} from './modules/admin/attraction-detail/attraction-detail.component';
+import {ShoppingCenterDetailComponent} from './modules/admin/shopping-center-detail/shopping-center-detail.component';
+import {AdminModule} from './modules/admin/admin.module';
 
 const routes: Routes = [
   { path: '', redirectTo: '/home', pathMatch: 'full' },
@@ -20,9 +23,11 @@ const routes: Routes = [
   { path: 'museums', component: MuseumsComponent },
   { path: 'events', component: EventsComponent },
   { path: 'attractions', component: AttractionsComponent },
+  { path: 'attraction-detail/:id', component: AttractionDetailComponent },
   { path: 'login', component: LoginComponent },
   { path: 'signup', component: SignUpComponent },
   {path: 'shopping-centers', component: ShoppingCentersComponent },
+  { path: 'shopping-center-detail/:id', component: ShoppingCenterDetailComponent },
   { path: 'reset-password', component: ResetPasswordComponent },
   { path: 'activate-account', component: ActivateAccountComponent },
   { path: 'invite-friend', component: InviteFriendComponent },

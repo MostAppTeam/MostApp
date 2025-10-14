@@ -38,23 +38,26 @@
       *ngFor="let center of filteredShoppingCenters"
       cdkDrag
     >
+      <img *ngIf="center.imageUrl" [src]="getShoppingCenterImageUrl(center)" alt="Shopping Center
+      Image" width="250" />
       <h4>{{ center.name }}</h4>
-      <img *ngIf="center.imageUrl" [src]="getShoppingCenterImageUrl(center)" alt="Shopping Center Image" width="250" />
 
+      <div class="card-buttons">
+        <button class="btn-more" (click)="goToDetail(center.id)">More</button>
+      </div>
 
-      <p><strong>Address:</strong> {{ center.address }}</p>
-      <p><strong>Working Hours:</strong> {{ center.workingHours }}</p>
-      <p><strong>Opening:</strong> {{ center.openingTime }}</p>
-      <p><strong>Closing:</strong> {{ center.closingTime }}</p>
-      <button *ngIf="isAdminOrManager" (click)="deleteShoppingCenter(center.id)">
-        Delete
-      </button>
+      <div class="card-footer" *ngIf="isAdminOrManager">
+        <button class="btn-delete" (click)="deleteShoppingCenter(center.id)">
+          Delete
+        </button>
+      </div>
+
     </div>
-  </div>
 
 
 
-  <!-- Poruka kada nema shopping centara -->
+
+    <!-- Poruka kada nema shopping centara -->
   <ng-container *ngIf="filteredShoppingCenters?.length === 0">
     <p>No shopping centers available.</p>
   </ng-container>

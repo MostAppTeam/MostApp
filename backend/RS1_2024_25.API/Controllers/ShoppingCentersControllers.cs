@@ -139,7 +139,21 @@ public class ShoppingCentersController : ControllerBase
             return NoContent();
         }
 
-        [HttpPost("upload-image")]
+    [HttpGet("{id}")]
+    public async Task<IActionResult> GetById(int id)
+    {
+        var shoppingCenter = await _context.ShoppingCenters
+            .Include(s => s.City)
+            .FirstOrDefaultAsync(s => s.ID == id);
+
+        if (shoppingCenter == null)
+            return NotFound();
+
+        return Ok(shoppingCenter);
+    }
+
+
+    [HttpPost("upload-image")]
         [MyAuthorization(isAdmin: true, isManager: true)]
         public async Task<IActionResult> UploadImage([FromForm] IFormFile file)
         {

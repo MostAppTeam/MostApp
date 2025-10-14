@@ -38,11 +38,11 @@ namespace RS1_2024_25.API.Migrations
                 oldType: "varbinary(max)",
                 oldNullable: true);
 
-            migrationBuilder.AddColumn<string>(
-                name: "ImageUrl",
-                table: "Museums",
-                type: "nvarchar(max)",
-                nullable: true);
+            //migrationBuilder.AddColumn<string>(
+            //    name: "ImageUrl",
+            //    table: "Museums",
+            //    type: "nvarchar(max)",
+            //    nullable: true);
 
             migrationBuilder.AlterColumn<string>(
                 name: "ImageUrl",
@@ -66,9 +66,9 @@ namespace RS1_2024_25.API.Migrations
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropColumn(
-                name: "ImageUrl",
-                table: "Museums");
+            //migrationBuilder.DropColumn(
+            //    name: "ImageUrl",
+            //    table: "Museums");
 
             migrationBuilder.AlterColumn<byte[]>(
                 name: "ImageUrl",

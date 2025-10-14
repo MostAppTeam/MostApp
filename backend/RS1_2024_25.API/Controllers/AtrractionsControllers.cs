@@ -18,22 +18,24 @@ public class AttractionsController : ControllerBase
         _context = context;
     }
 
-    // GET: api/Attractions
     [HttpGet]
     public async Task<ActionResult<IEnumerable<object>>> GetAttractions(
-     [FromQuery] string name = null,
-     [FromQuery] string sortBy = "name",
-     [FromQuery] string sortDirection = "asc")
+       [FromQuery] string name = null,
+       [FromQuery] string category = null,
+       [FromQuery] string sortBy = "name",
+       [FromQuery] string sortDirection = "asc")
     {
         var attractions = _context.Attractions.AsQueryable();
 
         // Filtriranje po imenu
         if (!string.IsNullOrEmpty(name))
-        {
             attractions = attractions.Where(a => a.Name.Contains(name));
-        }
 
-        // Dinamično sortiranje po podržanim poljima
+        // Filtriranje po kategoriji
+        if (!string.IsNullOrEmpty(category) && category != "All")
+            attractions = attractions.Where(a => a.Category == category);
+
+        // Sortiranje
         attractions = sortBy.ToLower() switch
         {
             "name" => sortDirection.ToLower() == "desc"
@@ -42,31 +44,31 @@ public class AttractionsController : ControllerBase
             "description" => sortDirection.ToLower() == "desc"
                         ? attractions.OrderByDescending(a => a.Description)
                         : attractions.OrderBy(a => a.Description),
-            "virtualtoururl" => sortDirection.ToLower() == "desc"
-                        ? attractions.OrderByDescending(a => a.VirtualTourURL)
-                        : attractions.OrderBy(a => a.VirtualTourURL),
-            _ => attractions.OrderBy(a => a.Name) // Defaultno sortiranje po imenu
+            _ => attractions.OrderBy(a => a.Name)
         };
 
-        // Projekcija podataka u rezultat
         var result = await attractions
             .Select(a => new
             {
                 a.ID,
                 a.Name,
                 a.Description,
-                a.VirtualTourURL // Vraćanje ovog polja u odgovoru
+                a.VirtualTourURL,
+                a.Category
             })
             .ToListAsync();
 
         return Ok(result);
     }
 
+
+
     // GET: api/Attractions/5
     [HttpGet("{id}")]
     public async Task<ActionResult<object>> GetAttraction(int id)
     {
         var attraction = await _context.Attractions
+            .Include(a => a.Options) // Include opcije
             .Where(a => a.ID == id)
             .Select(a => new
             {
@@ -74,17 +76,18 @@ public class AttractionsController : ControllerBase
                 a.Name,
                 a.Description,
                 a.CityID,
-                a.VirtualTourURL
+                a.VirtualTourURL,
+                a.IsPaid,
+                Options = a.Options.Select(o => new { o.OptionType, o.OptionValue }).ToList()
             })
             .FirstOrDefaultAsync();
 
         if (attraction == null)
-        {
             return NotFound();
-        }
 
         return Ok(attraction);
     }
+
 
     [HttpPost]
     [MyAuthorization(isAdmin: true, isManager: true)]

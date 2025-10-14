@@ -1,0 +1,93 @@
+/* ===== Attraction Detail Page ===== */
+.attraction-detail {
+  max-width: 900px;
+  margin: 80px auto;
+  background-color: #ffffff;
+  padding: 30px 40px;
+  border-radius: 15px;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+  font-family: Arial, sans-serif;
+  text-align: left;
+}
+
+.attraction-detail h2 {
+  font-size: 2rem;
+  color: #f7b731;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.attraction-detail img {
+  display: block;
+  width: 100%;
+  max-height: 400px;
+  object-fit: cover;
+  border-radius: 10px;
+  margin-bottom: 20px;
+}
+
+.attraction-detail p {
+  font-size: 1.1rem;
+  color: #444;
+  line-height: 1.6;
+  margin-bottom: 15px;
+}
+
+.attraction-detail p:nth-child(3) {
+  background-color: #fdf2e9;
+  padding: 10px 15px;
+  border-radius: 8px;
+  display: inline-block;
+}
+
+.attraction-options {
+  background-color: #f9f9f9;
+  padding: 20px;
+  border-radius: 10px;
+  margin-top: 25px;
+}
+
+.attraction-options h4 {
+  color: #333;
+  margin-bottom: 15px;
+  font-size: 1.3rem;
+  text-align: center;
+}
+
+.attraction-options ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.attraction-options li {
+  background-color: #fff;
+  border: 1px solid #eee;
+  padding: 10px 15px;
+  border-radius: 8px;
+  margin-bottom: 10px;
+  font-size: 1rem;
+  color: #555;
+  transition: background-color 0.3s;
+}
+
+.attraction-options li:hover {
+  background-color: #fff5e1;
+}
+
+/* Button for possible action (e.g. Book Now) */
+.btn-action {
+  display: inline-block;
+  background-color: #f7b731;
+  color: #fff;
+  padding: 10px 20px;
+  border-radius: 8px;
+  border: none;
+  font-size: 1.1rem;
+  cursor: pointer;
+  margin-top: 20px;
+  transition: background-color 0.3s ease;
+}
+
+.btn-action:hover {
+  background-color: #e6a722;
+}

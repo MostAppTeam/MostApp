@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { AttractionsService } from './attractions.service';
 import { Attraction } from './attractions.model';
 
@@ -9,19 +10,21 @@ import { Attraction } from './attractions.model';
 })
 export class AttractionsComponent implements OnInit {
   attractions: Attraction[] = [];
-  sortBy: string = 'name'; // Defaultno sortiranje po imenu
-  sortDirection: string = 'asc'; // Defaultno sortiranje uzlazno
+  sortBy: string = 'name';
+  sortDirection: string = 'asc';
+  selectedCategory: string = 'All';
+  categories: string[] = ['All', 'Museums', 'Parks', 'Shopping Centers', 'Historical Sites'];
 
-  constructor(private attractionsService: AttractionsService) {}
+
+  constructor(private attractionsService: AttractionsService, private router: Router) {}
 
   ngOnInit(): void {
-    this.loadAttractions(); // Učitaj atrakcije kada se komponenta inicijalizuje
+    this.loadAttractions();
   }
 
   loadAttractions(): void {
-    this.attractionsService.getAttractions(this.sortBy, this.sortDirection).subscribe(
+    this.attractionsService.getAttractions(this.sortBy, this.sortDirection, this.selectedCategory).subscribe(
       (data: Attraction[]) => {
-        console.log('Attractions loaded:', data);
         this.attractions = data;
       },
       (error) => {
@@ -30,8 +33,21 @@ export class AttractionsComponent implements OnInit {
       }
     );
   }
+  updateCategory(): void {
+    this.loadAttractions();
+  }
+
 
   updateSort(): void {
-    this.loadAttractions(); // Ponovno učitaj atrakcije sa novim parametrima za sortiranje
+    this.loadAttractions();
   }
+
+  goToDetail(id: number): void {
+    console.log('Navigating to attraction', id);
+    this.router.navigate(['/attraction-detail', id]);
+  }
+
+
+
+
 }
