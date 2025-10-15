@@ -18,7 +18,7 @@ export class EventsComponent implements OnInit {
     date: '',
     location: '',
     description: '',
-    // imageUrl je opciono; popunjavamo nakon uploada
+    // imageUrl optional, will be filled after upload
   };
 
   feedbackMessage: string | null = null;
@@ -30,18 +30,36 @@ export class EventsComponent implements OnInit {
     id: null as number | null,
   };
 
-  // --- Upload / selekcija (kao offers) ---
+  // Upload / selection
   selectedFile: File | null = null;
   uploadedImageUrl: string | null = null;
   selectedEventId: number | null = null;
 
-  // --- Sort ---
+  // Sort
   sortOption: string = 'nameAsc';
 
   private map!: L.Map;
   private markers: L.Marker[] = [];
   isAdminOrManager: boolean = false;
   loggedInUser: any = null;
+
+  // ===== Image Viewer (Zoom & Pan) =====
+  viewerOpen = false;
+  viewerImageUrl = '';
+
+  // Same API as your friend's code
+  zoomScale: number = 1;
+  minZoomScale: number = 1;
+  maxZoomScale: number = 3;
+
+  // Pan state
+  private isPanning = false;
+  private startX = 0;
+  private startY = 0;
+  private translateX = 0;
+  private translateY = 0;
+  private lastTranslateX = 0;
+  private lastTranslateY = 0;
 
   constructor(
     private eventService: EventService,
@@ -134,7 +152,7 @@ export class EventsComponent implements OnInit {
       (data) => {
         this.events = data;
         this.filteredEvents = [...this.events];
-        this.applySorting(); // zadrži trenutno sortiranje
+        this.applySorting();
         this.updateMapMarkers();
       },
       (error) => {
@@ -251,9 +269,8 @@ export class EventsComponent implements OnInit {
     }
   }
 
-  // --- Upload helpers (isto kao offers) ---
+  // --- Upload helpers ---
 
-  /** Za polje u formi "Add Event" */
   onNewEventFileSelected(event: any): void {
     const file = event?.target?.files?.[0] as File | undefined;
     if (!file) {
@@ -265,7 +282,6 @@ export class EventsComponent implements OnInit {
     this.eventService.uploadImage(this.selectedFile).subscribe({
       next: (res) => {
         this.uploadedImageUrl = res.imageUrl;
-        // upiši URL u formu za novi event
         (this.newEvent as any).imageUrl = res.imageUrl;
         alert('Image uploaded successfully!');
         console.log('Uploaded image:', res.imageUrl);
@@ -277,17 +293,14 @@ export class EventsComponent implements OnInit {
     });
   }
 
-  /** Za promjenu slike na postojećoj kartici eventa (iz HTML-a: onEventImageChange($event, event)) */
   onEventImageChange(eventDom: any, ev: Event): void {
     const file = eventDom?.target?.files?.[0] as File | undefined;
     if (!file) return;
 
     this.eventService.uploadImage(file).subscribe({
       next: (res) => {
-        // ako backend ima PUT /{id}/image
         this.eventService.setEventImage(ev.id, res.imageUrl).subscribe({
           next: () => {
-            // ažuriraj lokalno
             const found = this.filteredEvents.find((x) => x.id === ev.id);
             if (found) found.imageUrl = res.imageUrl;
             const found2 = this.events.find((x) => x.id === ev.id);
@@ -307,7 +320,6 @@ export class EventsComponent implements OnInit {
     });
   }
 
-  /** Ručni upload ako ti treba posebna akcija */
   uploadImage(): void {
     if (!this.selectedFile) {
       alert('Please select an image to upload!');
@@ -321,13 +333,11 @@ export class EventsComponent implements OnInit {
         console.log('Uploaded image:', res.imageUrl);
 
         if (this.selectedEventId) {
-          // ažuriraj prikaz
           const ev = this.events.find((x) => x.id === this.selectedEventId);
           if (ev) ev.imageUrl = res.imageUrl;
           const ev2 = this.filteredEvents.find((x) => x.id === this.selectedEventId);
           if (ev2) ev2.imageUrl = res.imageUrl;
         } else {
-          // ako je za novi event
           (this.newEvent as any).imageUrl = res.imageUrl;
         }
       },
@@ -338,12 +348,10 @@ export class EventsComponent implements OnInit {
     });
   }
 
-  /** Selektuj event (ako želiš koristiti ručni upload dugme) */
   selectEventForImage(ev: Event): void {
     this.selectedEventId = ev.id;
   }
 
-  /** Helper: vrati absolutni URL slike za <img> */
   getEventImageUrl(ev: Event): string {
     const url = ev.imageUrl || '';
     if (!url) return '';
@@ -382,6 +390,71 @@ export class EventsComponent implements OnInit {
     img.onerror = () => {
       console.error('Failed to load image:', imgUrl);
       alert('Failed to load image for the PDF.');
+    };
+  }
+
+  // ====== Lightbox: zoom & pan handlers ======
+  openViewer(imageUrl: string): void {
+    if (!imageUrl) return;
+    this.viewerOpen = true;
+    this.viewerImageUrl = imageUrl;
+    this.resetView();
+  }
+
+  closeViewer(): void {
+    this.viewerOpen = false;
+  }
+
+  setZoomLevel(scale: number): void {
+    const clamped = Math.min(this.maxZoomScale, Math.max(this.minZoomScale, scale));
+    const wasAtOne = this.zoomScale === 1;
+    this.zoomScale = clamped;
+    if (this.zoomScale === 1 && !wasAtOne) {
+      this.translateX = 0;
+      this.translateY = 0;
+    }
+  }
+
+  onWheelZoom(event: WheelEvent): void {
+    const zoomFactor = event.deltaY < 0 ? 0.1 : -0.1;
+    this.setZoomLevel(this.zoomScale + zoomFactor);
+    event.preventDefault();
+  }
+
+  onMouseDown(event: MouseEvent): void {
+    if (this.zoomScale <= 1) return;
+    this.isPanning = true;
+    this.startX = event.clientX;
+    this.startY = event.clientY;
+    this.lastTranslateX = this.translateX;
+    this.lastTranslateY = this.translateY;
+  }
+
+  onMouseMove(event: MouseEvent): void {
+    if (!this.isPanning) return;
+    const dx = event.clientX - this.startX;
+    const dy = event.clientY - this.startY;
+    this.translateX = this.lastTranslateX + dx;
+    this.translateY = this.lastTranslateY + dy;
+  }
+
+  onMouseUp(): void {
+    this.isPanning = false;
+  }
+
+  resetView(): void {
+    this.zoomScale = 1;
+    this.translateX = 0;
+    this.translateY = 0;
+  }
+
+  getZoomStyle(): Record<string, string> {
+    return {
+      transform: `translate(${this.translateX}px, ${this.translateY}px) scale(${this.zoomScale})`,
+      'transform-origin': 'center center',
+      'will-change': 'transform',
+      'user-select': 'none',
+      'pointer-events': 'auto'
     };
   }
 }

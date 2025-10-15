@@ -108,6 +108,7 @@ export class AttractionsComponent implements OnInit {
       },
     });
   }
+
   uploadImage(): void {
     if (!this.selectedFile) {
       alert('Please select an image first!');
@@ -136,6 +137,94 @@ export class AttractionsComponent implements OnInit {
       cityID: this.DEFAULT_CITY_ID,
       virtualTourURL: '',
       imageUrl: ''
+    };
+  }
+
+  // =========================
+  // Image Viewer (Zoom & Pan)
+  // =========================
+  viewerOpen = false;
+  viewerImageUrl = '';
+
+  // Zoom stil kao kod prijateljice
+  zoomScale: number = 1;
+  minZoomScale: number = 1;
+  maxZoomScale: number = 3;
+
+  // Pan state
+  private isPanning = false;
+  private startX = 0;
+  private startY = 0;
+  private translateX = 0;
+  private translateY = 0;
+  private lastTranslateX = 0;
+  private lastTranslateY = 0;
+
+  openViewer(imageUrl: string): void {
+    if (!imageUrl) return;
+    this.viewerOpen = true;
+    this.viewerImageUrl = imageUrl;
+    this.resetView();
+  }
+
+  closeViewer(): void {
+    this.viewerOpen = false;
+  }
+
+  // Isto ime i ponašanje kao kod prijateljice
+  setZoomLevel(scale: number): void {
+    const clamped = Math.min(this.maxZoomScale, Math.max(this.minZoomScale, scale));
+    // Ako smanjujemo na 1x, resetuj pan da slika ostane centrirana
+    const wasAtOne = this.zoomScale === 1;
+    this.zoomScale = clamped;
+    if (this.zoomScale === 1 && !wasAtOne) {
+      this.translateX = 0;
+      this.translateY = 0;
+    }
+  }
+
+  onWheelZoom(event: WheelEvent): void {
+    const zoomFactor = event.deltaY < 0 ? 0.1 : -0.1;
+    this.setZoomLevel(this.zoomScale + zoomFactor);
+    event.preventDefault();
+  }
+
+  // Pan mišem dok je uvećano
+  onMouseDown(event: MouseEvent): void {
+    if (this.zoomScale <= 1) return;
+    this.isPanning = true;
+    this.startX = event.clientX;
+    this.startY = event.clientY;
+    this.lastTranslateX = this.translateX;
+    this.lastTranslateY = this.translateY;
+  }
+
+  onMouseMove(event: MouseEvent): void {
+    if (!this.isPanning) return;
+    const dx = event.clientX - this.startX;
+    const dy = event.clientY - this.startY;
+    this.translateX = this.lastTranslateX + dx;
+    this.translateY = this.lastTranslateY + dy;
+  }
+
+  onMouseUp(): void {
+    this.isPanning = false;
+  }
+
+  resetView(): void {
+    this.zoomScale = 1;
+    this.translateX = 0;
+    this.translateY = 0;
+  }
+
+  // Primjena transformacija na <img>
+  getZoomStyle(): Record<string, string> {
+    return {
+      transform: `translate(${this.translateX}px, ${this.translateY}px) scale(${this.zoomScale})`,
+      'transform-origin': 'center center',
+      'will-change': 'transform',
+      'user-select': 'none',
+      'pointer-events': 'auto'
     };
   }
 }

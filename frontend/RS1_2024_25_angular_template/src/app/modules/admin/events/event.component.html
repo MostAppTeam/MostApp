@@ -1,5 +1,5 @@
 <div id="events-container">
-  <!-- User info u uglu -->
+  <!-- User info -->
   <div class="user-info">
     <p><strong>Logged in as:</strong> {{ loggedInUser?.username || 'Guest' }}</p>
     <p><strong>Role:</strong> {{ loggedInUser?.isAdmin ? 'Admin' : loggedInUser?.isManager ? 'Manager' : 'User' }}</p>
@@ -9,8 +9,8 @@
   <div id="sort-container">
     <h3>Sort Events</h3>
     <select [(ngModel)]="sortOption" (change)="applySorting()">
-      <option value="nameAsc">Name (A-Z)</option>
-      <option value="nameDesc">Name (Z-A)</option>
+      <option value="nameAsc">Name (A–Z)</option>
+      <option value="nameDesc">Name (Z–A)</option>
       <option value="dateAsc">Date (Newest First)</option>
       <option value="dateDesc">Date (Oldest First)</option>
     </select>
@@ -21,26 +21,29 @@
     <div class="event-card" *ngFor="let event of filteredEvents">
       <h4>{{ event.name }}</h4>
 
-      <!-- Slika eventa (ako postoji) -->
-      <img
+      <!-- Event image (click to zoom) -->
+      <div
         *ngIf="event.imageUrl"
-        [src]="getEventImageUrl(event)"
-        alt="{{ event.name }}"
-        width="250"
-      />
+        class="img-wrap"
+        (click)="openViewer(getEventImageUrl(event))"
+      >
+        <img
+          [src]="getEventImageUrl(event)"
+          alt="{{ event.name }}"
+          width="250"
+          class="zoomable"
+        />
+        <span class="zoom-hint">Click to zoom</span>
+      </div>
 
       <p>{{ event.description }}</p>
       <p><strong>Date:</strong> {{ event.date }}</p>
       <p><strong>Location:</strong> {{ event.location }}</p>
 
-
-      <!-- Admin/Manager akcije -->
+      <!-- Admin/Manager actions -->
       <div class="event-actions" *ngIf="isAdminOrManager">
         <button (click)="editEvent(event)">Edit</button>
         <button (click)="deleteEvent(event.id)">Delete</button>
-
-
-
       </div>
     </div>
   </div>
@@ -66,10 +69,10 @@
       <input [(ngModel)]="newEvent.location" placeholder="Location" name="location" required />
       <textarea [(ngModel)]="newEvent.description" placeholder="Description" name="description" required></textarea>
 
-      <!-- Image URL polje se popunjava nakon uploada -->
+      <!-- Image URL gets filled after upload -->
       <input [(ngModel)]="newEvent.imageUrl" placeholder="Image URL" name="imageUrl" readonly />
 
-      <!-- Upload fajla za novi event -->
+      <!-- Upload file for new event -->
       <input type="file" (change)="onNewEventFileSelected($event)" />
 
       <button type="submit">Add Event</button>
@@ -93,4 +96,45 @@
 
   <!-- Map -->
   <div id="map" style="height: 400px;"></div>
+
+  <!-- LIGHTBOX / IMAGE VIEWER -->
+  <div
+    *ngIf="viewerOpen"
+    class="lightbox"
+    (click)="closeViewer()"
+    (window:keydown.escape)="closeViewer()"
+  >
+    <div
+      class="lightbox-content"
+      (click)="$event.stopPropagation()"
+      (wheel)="onWheelZoom($event)"
+      (mousedown)="onMouseDown($event)"
+      (mousemove)="onMouseMove($event)"
+      (mouseup)="onMouseUp()"
+      (mouseleave)="onMouseUp()"
+      (dblclick)="resetView()"
+      tabindex="0"
+    >
+      <img
+        [src]="viewerImageUrl"
+        alt="Event image"
+        [ngStyle]="getZoomStyle()"
+        draggable="false"
+        class="zoom-target"
+      />
+    </div>
+
+    <!-- Zoom controls (same UX as your friend) -->
+    <div class="lightbox-controls" (click)="$event.stopPropagation()">
+      <div class="zoom-controls">
+        <button (click)="setZoomLevel(zoomScale + 0.2)" class="zoom-btn">+</button>
+        <button (click)="setZoomLevel(zoomScale - 0.2)" class="zoom-btn">−</button>
+      </div>
+      <button type="button" class="close-btn" (click)="closeViewer()">✕</button>
+    </div>
+
+    <div class="lightbox-tip">
+      Use scroll to zoom, drag to move, and double-click to reset.
+    </div>
+  </div>
 </div>
