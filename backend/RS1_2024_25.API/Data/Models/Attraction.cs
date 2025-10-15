@@ -8,9 +8,9 @@ namespace RS1_2024_25.API.Data.Models
         public string Name { get; set; }
         public string Description { get; set; }
         public int CityID { get; set; }
-        public string WorkingHours { get; set; }
+        public string? WorkingHours { get; set; }
         public string VirtualTourURL { get; set; }  
-        public City City { get; set; }
+        public City? City { get; set; }
 
         public string? ImageUrl { get; set; }
 

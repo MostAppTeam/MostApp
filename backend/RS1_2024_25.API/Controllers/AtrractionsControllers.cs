@@ -2,16 +2,23 @@
 using Microsoft.EntityFrameworkCore;
 using RS1_2024_25.API.Data.Models;
 using RS1_2024_25.API.Data;
-using System.Linq;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 using RS1_2024_25.API.Helper.Auth;
+using Microsoft.AspNetCore.Http;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Threading.Tasks;
 
 [Route("api/[controller]")]
 [ApiController]
 public class AttractionsController : ControllerBase
 {
     private readonly ApplicationDbContext _context;
+
+    // dozvoljene ekstenzije i mime tipovi (po želji proširi)
+    private static readonly string[] AllowedExtensions = new[] { ".jpg", ".jpeg", ".png", ".webp" };
+    private static readonly string[] AllowedContentTypes = new[] { "image/jpeg", "image/png", "image/webp" };
 
     public AttractionsController(ApplicationDbContext context)
     {
@@ -21,19 +28,15 @@ public class AttractionsController : ControllerBase
     // GET: api/Attractions
     [HttpGet]
     public async Task<ActionResult<IEnumerable<object>>> GetAttractions(
-     [FromQuery] string name = null,
-     [FromQuery] string sortBy = "name",
-     [FromQuery] string sortDirection = "asc")
+      [FromQuery] string name = null,
+      [FromQuery] string sortBy = "name",
+      [FromQuery] string sortDirection = "asc")
     {
         var attractions = _context.Attractions.AsQueryable();
 
-        // Filtriranje po imenu
         if (!string.IsNullOrEmpty(name))
-        {
             attractions = attractions.Where(a => a.Name.Contains(name));
-        }
 
-        // Dinamično sortiranje po podržanim poljima
         attractions = sortBy.ToLower() switch
         {
             "name" => sortDirection.ToLower() == "desc"
@@ -45,17 +48,17 @@ public class AttractionsController : ControllerBase
             "virtualtoururl" => sortDirection.ToLower() == "desc"
                         ? attractions.OrderByDescending(a => a.VirtualTourURL)
                         : attractions.OrderBy(a => a.VirtualTourURL),
-            _ => attractions.OrderBy(a => a.Name) // Defaultno sortiranje po imenu
+            _ => attractions.OrderBy(a => a.Name)
         };
 
-        // Projekcija podataka u rezultat
         var result = await attractions
             .Select(a => new
             {
                 a.ID,
                 a.Name,
                 a.Description,
-                a.VirtualTourURL // Vraćanje ovog polja u odgovoru
+                a.VirtualTourURL,
+                a.ImageUrl   // ✅ vrati sliku u listi
             })
             .ToListAsync();
 
@@ -74,22 +77,32 @@ public class AttractionsController : ControllerBase
                 a.Name,
                 a.Description,
                 a.CityID,
-                a.VirtualTourURL
+                a.VirtualTourURL,
+                a.ImageUrl   // ✅ vrati sliku u detaljima
             })
             .FirstOrDefaultAsync();
 
         if (attraction == null)
-        {
             return NotFound();
-        }
 
         return Ok(attraction);
     }
 
+    // POST: api/Attractions
     [HttpPost]
     [MyAuthorization(isAdmin: true, isManager: true)]
-    public async Task<ActionResult<Attraction>> PostAttraction(Attraction attraction)
+    public async Task<ActionResult<Attraction>> PostAttraction([FromBody] Attraction attraction)
     {
+        // ✅ spriječi IDENTITY_INSERT grešku
+        attraction.ID = 0;
+
+        // ✅ ako stigne ugniježden City, mapiraj na FK i null-iraj navigaciju
+        if (attraction.City != null)
+        {
+            attraction.CityID = attraction.City.ID;
+            attraction.City = null;
+        }
+
         _context.Attractions.Add(attraction);
         await _context.SaveChangesAsync();
 
@@ -99,11 +112,19 @@ public class AttractionsController : ControllerBase
     // PUT: api/Attractions/5
     [HttpPut("{id}")]
     [MyAuthorization(isAdmin: true, isManager: true)]
-    public async Task<IActionResult> PutAttraction(int id, Attraction attraction)
+    public async Task<IActionResult> PutAttraction(int id, [FromBody] Attraction attraction)
     {
         if (id != attraction.ID)
-        {
             return BadRequest();
+
+        // ✅ ne dirati identity ID
+        _context.Entry(attraction).Property(a => a.ID).IsModified = false;
+
+        // ✅ ako stigne ugniježden City, mapiraj na FK i null-iraj navigaciju
+        if (attraction.City != null)
+        {
+            attraction.CityID = attraction.City.ID;
+            attraction.City = null;
         }
 
         _context.Entry(attraction).State = EntityState.Modified;
@@ -115,13 +136,9 @@ public class AttractionsController : ControllerBase
         catch (DbUpdateConcurrencyException)
         {
             if (!_context.Attractions.Any(e => e.ID == id))
-            {
                 return NotFound();
-            }
             else
-            {
                 throw;
-            }
         }
 
         return NoContent();
@@ -134,13 +151,44 @@ public class AttractionsController : ControllerBase
     {
         var attraction = await _context.Attractions.FindAsync(id);
         if (attraction == null)
-        {
             return NotFound();
-        }
 
         _context.Attractions.Remove(attraction);
         await _context.SaveChangesAsync();
 
         return NoContent();
+    }
+
+    // POST: api/Attractions/upload-image
+    [HttpPost("upload-image")]
+    [RequestSizeLimit(10_000_000)] // ~10 MB, po potrebi promijeni
+    public async Task<IActionResult> UploadImage([FromForm] IFormFile file)
+    {
+        if (file == null || file.Length == 0)
+            return BadRequest("No file uploaded.");
+
+        // Provjeri tip i ekstenziju
+        var ext = Path.GetExtension(file.FileName).ToLowerInvariant();
+        if (!AllowedExtensions.Contains(ext) || !AllowedContentTypes.Contains(file.ContentType))
+            return BadRequest("Unsupported file type. Allowed: .jpg, .jpeg, .png, .webp");
+
+        // Kreiraj folder ako ne postoji
+        var uploadPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images", "attractions");
+        if (!Directory.Exists(uploadPath))
+            Directory.CreateDirectory(uploadPath);
+
+        // Jedinstveno ime
+        var fileName = $"{Guid.NewGuid()}{ext}";
+        var filePath = Path.Combine(uploadPath, fileName);
+
+        // Snimi
+        using (var stream = new FileStream(filePath, FileMode.Create))
+        {
+            await file.CopyToAsync(stream);
+        }
+
+        // Relativni URL za front ili za upis u bazu
+        var relativePath = $"/images/attractions/{fileName}";
+        return Ok(new { imageUrl = relativePath });
     }
 }
