@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Attraction } from './attractions.model';
 import { MyAuthService } from '../../../services/auth-services/my-auth.service';
+
 type CreateAttractionPayload = {
   name: string;
   description?: string;
@@ -18,9 +19,8 @@ export class AttractionsService {
 
   constructor(private http: HttpClient, private authService: MyAuthService) {}
 
-  /** Header kao u MuseumService: my-auth-token: Bearer <token> */
   private buildAuthHeaders(): HttpHeaders {
-    const token = this.authService.getToken(); // npr. vrati JWT ili custom token string
+    const token = this.authService.getToken();
     let headers = new HttpHeaders();
     if (token) {
       headers = headers.set('my-auth-token', `Bearer ${token}`);
@@ -28,29 +28,22 @@ export class AttractionsService {
     return headers;
   }
 
-  /** Public GET (bez auth headera) */
-  getAttractions(sortBy: string, sortDirection: string): Observable<Attraction[]> {
-    const params = new HttpParams().set('sortBy', sortBy).set('sortDirection', sortDirection);
-    return this.http.get<Attraction[]>(this.apiUrl, { params });
-  }
-
-  /** POST kreiranje (zaštićeno) */
-  createAttraction(payload: CreateAttractionPayload): Observable<Attraction> {
-    const headers = this.buildAuthHeaders();
-    return this.http.post<Attraction>(this.apiUrl, payload, { headers });
-  }
-
-  /** Upload slike (zaštićeno). Ne postavljati Content-Type ručno za FormData. */
-  uploadImage(file: File): Observable<{ imageUrl: string }> {
-    const fd = new FormData();
-    fd.append('file', file);
-    const headers = this.buildAuthHeaders();
-    return this.http.post<{ imageUrl: string }>(`${this.apiUrl}/upload-image`, fd, { headers });
   getAttractions(sortBy: string, sortDirection: string, category: string = 'All'): Observable<Attraction[]> {
     const url = `${this.apiUrl}?sortBy=${sortBy}&sortDirection=${sortDirection}&category=${category}`;
     return this.http.get<Attraction[]>(url);
   }
 
+  createAttraction(payload: CreateAttractionPayload): Observable<Attraction> {
+    const headers = this.buildAuthHeaders();
+    return this.http.post<Attraction>(this.apiUrl, payload, { headers });
+  }
+
+  uploadImage(file: File): Observable<{ imageUrl: string }> {
+    const fd = new FormData();
+    fd.append('file', file);
+    const headers = this.buildAuthHeaders();
+    return this.http.post<{ imageUrl: string }>(`${this.apiUrl}/upload-image`, fd, { headers });
+  }
 
   getAttraction(id: number): Observable<Attraction> {
     return this.http.get<Attraction>(`${this.apiUrl}/${id}`);

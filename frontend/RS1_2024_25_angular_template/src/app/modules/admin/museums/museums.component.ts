@@ -26,6 +26,14 @@ export class MuseumsComponent implements OnInit {
   selectedFile: File | null = null;
   selectedMuseumId: number | null = null;
   uploadedImageUrl: string | null = null;
+  // === Lightbox / Zoom ===
+  viewerOpen = false;
+  viewerImageUrl = '';
+  zoomScale = 1;
+  zoomTranslate = { x: 0, y: 0 };
+  isDragging = false;
+  lastMousePos = { x: 0, y: 0 };
+
 
   // Default values for sorting
   sortBy: string = 'name';
@@ -285,4 +293,57 @@ export class MuseumsComponent implements OnInit {
 
     doc.save('Museums_All.pdf');
   }
+
+  // ======== Lightbox / Zoom ========
+  openViewer(url: string): void {
+    this.viewerImageUrl = url;
+    this.viewerOpen = true;
+    this.zoomScale = 1;
+    this.zoomTranslate = { x: 0, y: 0 };
+  }
+
+  closeViewer(): void {
+    this.viewerOpen = false;
+  }
+
+  onWheelZoom(event: WheelEvent): void {
+    event.preventDefault();
+    const delta = event.deltaY > 0 ? -0.1 : 0.1;
+    this.setZoomLevel(this.zoomScale + delta);
+  }
+
+  setZoomLevel(level: number): void {
+    this.zoomScale = Math.max(0.5, Math.min(level, 5));
+  }
+
+  onMouseDown(event: MouseEvent): void {
+    this.isDragging = true;
+    this.lastMousePos = { x: event.clientX, y: event.clientY };
+  }
+
+  onMouseMove(event: MouseEvent): void {
+    if (!this.isDragging) return;
+    const dx = event.clientX - this.lastMousePos.x;
+    const dy = event.clientY - this.lastMousePos.y;
+    this.zoomTranslate.x += dx;
+    this.zoomTranslate.y += dy;
+    this.lastMousePos = { x: event.clientX, y: event.clientY };
+  }
+
+  onMouseUp(): void {
+    this.isDragging = false;
+  }
+
+  resetView(): void {
+    this.zoomScale = 1;
+    this.zoomTranslate = { x: 0, y: 0 };
+  }
+
+  getZoomStyle() {
+    return {
+      transform: `scale(${this.zoomScale}) translate(${this.zoomTranslate.x / this.zoomScale}px, ${this.zoomTranslate.y / this.zoomScale}px)`,
+      transition: this.isDragging ? 'none' : 'transform 0.1s ease-out'
+    };
+  }
+
 }
