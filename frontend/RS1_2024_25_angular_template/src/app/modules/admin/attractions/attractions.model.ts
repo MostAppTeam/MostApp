@@ -9,6 +9,7 @@ export interface Attraction {
   description: string;
   cityID: number;
   virtualTourURL?: string;
+  imageUrl? : string;
   isPaid: boolean;
   options?: AttractionOption[];
   city?: {

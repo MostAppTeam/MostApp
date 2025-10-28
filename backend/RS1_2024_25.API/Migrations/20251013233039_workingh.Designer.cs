@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using RS1_2024_25.API.Data;
 
@@ -11,9 +12,11 @@ using RS1_2024_25.API.Data;
 namespace RS1_2024_25.API.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20251013233039_workingh")]
+    partial class workingh
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -128,10 +131,6 @@ namespace RS1_2024_25.API.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
 
-                    b.Property<string>("Category")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<int?>("CategoryID")
                         .HasColumnType("int");
 
@@ -144,9 +143,6 @@ namespace RS1_2024_25.API.Migrations
 
                     b.Property<string>("ImageUrl")
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("IsPaid")
-                        .HasColumnType("bit");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -166,32 +162,6 @@ namespace RS1_2024_25.API.Migrations
                     b.HasIndex("CityID");
 
                     b.ToTable("Attractions");
-                });
-
-            modelBuilder.Entity("RS1_2024_25.API.Data.Models.AttractionOption", b =>
-                {
-                    b.Property<int>("ID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
-
-                    b.Property<int>("AttractionID")
-                        .HasColumnType("int");
-
-                    b.Property<string>("OptionType")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("OptionValue")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("ID");
-
-                    b.HasIndex("AttractionID");
-
-                    b.ToTable("AttractionOptions");
                 });
 
             modelBuilder.Entity("RS1_2024_25.API.Data.Models.Auth.MyAppUser", b =>
@@ -654,17 +624,6 @@ namespace RS1_2024_25.API.Migrations
                     b.Navigation("City");
                 });
 
-            modelBuilder.Entity("RS1_2024_25.API.Data.Models.AttractionOption", b =>
-                {
-                    b.HasOne("RS1_2024_25.API.Data.Models.Attraction", "Attraction")
-                        .WithMany("Options")
-                        .HasForeignKey("AttractionID")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-
-                    b.Navigation("Attraction");
-                });
-
             modelBuilder.Entity("RS1_2024_25.API.Data.Models.Auth.MyAuthenticationToken", b =>
                 {
                     b.HasOne("RS1_2024_25.API.Data.Models.Auth.MyAppUser", "MyAppUser")
@@ -794,11 +753,6 @@ namespace RS1_2024_25.API.Migrations
                     b.Navigation("Attractions");
 
                     b.Navigation("Offers");
-                });
-
-            modelBuilder.Entity("RS1_2024_25.API.Data.Models.Attraction", b =>
-                {
-                    b.Navigation("Options");
                 });
 #pragma warning restore 612, 618
         }

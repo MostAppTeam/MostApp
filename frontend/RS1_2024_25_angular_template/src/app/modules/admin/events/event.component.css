@@ -251,7 +251,127 @@
 .pdf-download-container .btn-download:hover {
   background-color: #f7b731;;
 }
+.upload-section {
+  margin: 20px 0;
+  text-align: center;
+}
 
+.upload-section img {
+  margin-top: 10px;
+  border-radius: 10px;
+}
+
+.btn-upload {
+  background-color: #3c8dbc;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 6px;
+  margin-left: 10px;
+  cursor: pointer;
+}
+/* Thumbnail with hint */
+.img-wrap {
+  position: relative;
+  display: inline-block;
+  cursor: zoom-in;
+}
+.img-wrap .zoomable {
+  border-radius: 10px;
+  display: block;
+}
+.zoom-hint {
+  position: absolute;
+  right: 8px;
+  bottom: 8px;
+  background: rgba(0,0,0,0.55);
+  color: #fff;
+  font-size: 12px;
+  padding: 4px 8px;
+  border-radius: 999px;
+  pointer-events: none;
+}
+
+/* Lightbox overlay */
+.lightbox {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.85);
+  display: grid;
+  place-items: center;
+  z-index: 9999;
+}
+
+.lightbox-content {
+  position: relative;
+  width: min(92vw, 1400px);
+  height: min(86vh, 900px);
+  overflow: hidden;
+  background: #111;
+  border-radius: 12px;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+  cursor: grab;
+}
+.lightbox-content:active { cursor: grabbing; }
+
+.lightbox-content img {
+  max-width: 100%;
+  max-height: 100%;
+  display: block;
+  margin: 0 auto;
+  user-select: none;
+  -webkit-user-drag: none;
+}
+
+/* Controls (+ / −) + close */
+.lightbox-controls {
+  position: fixed;
+  top: 20px;
+  right: 24px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.zoom-controls {
+  display: inline-flex;
+  gap: 8px;
+}
+
+.zoom-btn {
+  background: #fff;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 10px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.close-btn {
+  background: #ff4d4f;
+  color: #fff;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 10px;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.lightbox-tip {
+  position: fixed;
+  bottom: 18px;
+  left: 50%;
+  transform: translateX(-50%);
+  color: #fff;
+  font-size: 13px;
+  background: rgba(0,0,0,0.45);
+  padding: 6px 10px;
+  border-radius: 8px;
+}
+
+.btn-upload:hover {
+  background-color: #357ca5;
+}
 /* Fade-in Animation */
 @keyframes fadeIn {
   from {

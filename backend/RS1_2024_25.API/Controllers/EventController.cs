@@ -60,6 +60,32 @@ namespace RS1_2024_25.API.Controllers
 
             return Ok(await events.ToListAsync());
         }
+        // POST: api/Event/upload-image
+        [HttpPost("upload-image")]
+        public async Task<IActionResult> UploadImage([FromForm] IFormFile file)
+        {
+            if (file == null || file.Length == 0)
+                return BadRequest("No file uploaded.");
+
+            // Kreiraj folder ako ne postoji
+            var uploadPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images", "events");
+            if (!Directory.Exists(uploadPath))
+                Directory.CreateDirectory(uploadPath);
+
+            // Jedinstveno ime fajla
+            var fileName = $"{Guid.NewGuid()}{Path.GetExtension(file.FileName)}";
+            var filePath = Path.Combine(uploadPath, fileName);
+
+            // Snimi fajl
+            using (var stream = new FileStream(filePath, FileMode.Create))
+            {
+                await file.CopyToAsync(stream);
+            }
+
+            // Vrati relativni put koji možeš upisati u bazu / prikazati na frontendu
+            var relativePath = $"/images/events/{fileName}";
+            return Ok(new { imageUrl = relativePath });
+        }
 
         // GET: api/EventControllers/5
         [HttpGet("{id}")]

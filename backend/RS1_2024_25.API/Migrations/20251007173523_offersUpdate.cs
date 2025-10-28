@@ -38,11 +38,33 @@ namespace RS1_2024_25.API.Migrations
                 oldType: "varbinary(max)",
                 oldNullable: true);
 
-            //migrationBuilder.AddColumn<string>(
-            //    name: "ImageUrl",
-            //    table: "Museums",
-            //    type: "nvarchar(max)",
-            //    nullable: true);
+            // prije ALTER-a za ImageData u Museums (ili odmah nakon njega)
+            migrationBuilder.Sql(@"
+IF COL_LENGTH('dbo.Museums', 'ImageUrl') IS NULL
+BEGIN
+    ALTER TABLE [dbo].[Museums] ADD [ImageUrl] nvarchar(max) NULL;
+END
+");
+
+            migrationBuilder.Sql(@"
+IF COL_LENGTH('dbo.Museums', 'ImageData') IS NOT NULL
+BEGIN
+    DECLARE @dc sysname;
+    SELECT @dc = d.name
+    FROM sys.default_constraints d
+    JOIN sys.columns c 
+      ON d.parent_object_id = c.object_id AND d.parent_column_id = c.column_id
+    WHERE d.parent_object_id = OBJECT_ID(N'dbo.Museums')
+      AND c.name = N'ImageData';
+
+    IF @dc IS NOT NULL 
+        EXEC(N'ALTER TABLE [dbo].[Museums] DROP CONSTRAINT [' + @dc + ']');
+
+    UPDATE [dbo].[Museums] SET [ImageData] = 0x WHERE [ImageData] IS NULL;
+    ALTER TABLE [dbo].[Museums] ALTER COLUMN [ImageData] varbinary(max) NOT NULL;
+    ALTER TABLE [dbo].[Museums] ADD DEFAULT 0x FOR [ImageData];
+END
+");
 
             migrationBuilder.AlterColumn<string>(
                 name: "ImageUrl",

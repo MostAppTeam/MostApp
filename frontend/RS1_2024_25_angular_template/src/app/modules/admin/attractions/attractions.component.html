@@ -41,10 +41,35 @@
   <div *ngIf="attractions && attractions.length > 0; else noData" class="attractions-container">
     <div *ngFor="let attraction of attractions" class="attraction-card">
       <h3>{{ attraction.name }}</h3>
+
+      <!-- Image (CLICK TO OPEN ZOOM VIEWER) -->
+      <div
+        *ngIf="attraction.imageUrl"
+        class="img-wrap"
+        (click)="openViewer(getAttractionImageUrl(attraction))"
+      >
+        <img
+          [src]="getAttractionImageUrl(attraction)"
+          alt="{{ attraction.name }}"
+          width="250"
+          class="zoomable"
+        />
+        <span class="zoom-hint">Click to zoom</span>
+      </div>
+
+      <!-- Description -->
       <p>{{ attraction.description }}</p>
-      <div *ngIf="attraction.virtualTourURL">
-        <img [src]="attraction.virtualTourURL" alt="{{ attraction.name }}" />
-        <a [href]="attraction.virtualTourURL" target="_blank" class="btn-virtual-tour">Virtual Tour</a>
+
+      <!-- Links -->
+      <div class="attraction-links">
+        <a
+          *ngIf="attraction.virtualTourURL"
+          [href]="attraction.virtualTourURL"
+          target="_blank"
+          class="btn-virtual-tour"
+        >
+          Virtual Tour
+        </a>
       </div>
       <button (click)="goToDetail(attraction.id)">More</button>
     </div>
@@ -54,4 +79,97 @@
   <ng-template #noData>
     <p>No attractions available to display.</p>
   </ng-template>
+
+  <!-- Add New Attraction Form -->
+  <form (ngSubmit)="addAttraction()" #f="ngForm" id="add-attraction-form">
+    <h3>Add Attraction</h3>
+
+    <input [(ngModel)]="newAttraction.name" placeholder="Name" name="name" required />
+
+    <textarea
+      [(ngModel)]="newAttraction.description"
+      placeholder="Description"
+      name="description"
+      rows="3"
+    ></textarea>
+
+    <input
+      [(ngModel)]="newAttraction.virtualTourURL"
+      placeholder="Virtual Tour URL"
+      name="virtualTourURL"
+      type="url"
+    />
+
+    <input
+      [(ngModel)]="newAttraction.imageUrl"
+      placeholder="Image URL (auto-filled after upload)"
+      name="imageUrl"
+      readonly
+    />
+
+    <!-- Upload Image -->
+    <div class="upload-section">
+      <input type="file" (change)="onAttractionFileSelected($event)" />
+      <button
+        type="button"
+        class="btn-upload"
+        *ngIf="selectedFile"
+        (click)="uploadImage()"
+      >
+        Upload Image
+      </button>
+
+      <div *ngIf="uploadedImageUrl">
+        <img
+          [src]="uploadedImageUrl"
+          alt="Uploaded preview"
+          width="200"
+          style="margin-top: 10px; border-radius: 10px;"
+        />
+      </div>
+    </div>
+
+    <button type="submit">Add Attraction</button>
+  </form>
+
+  <!-- LIGHTBOX / IMAGE VIEWER -->
+  <div
+    *ngIf="viewerOpen"
+    class="lightbox"
+    (click)="closeViewer()"
+    (window:keydown.escape)="closeViewer()"
+  >
+    <div
+      class="lightbox-content"
+      (click)="$event.stopPropagation()"
+      (wheel)="onWheelZoom($event)"
+      (mousedown)="onMouseDown($event)"
+      (mousemove)="onMouseMove($event)"
+      (mouseup)="onMouseUp()"
+      (mouseleave)="onMouseUp()"
+      (dblclick)="resetView()"
+      tabindex="0"
+    >
+      <img
+        [src]="viewerImageUrl"
+        alt="Attraction"
+        [ngStyle]="getZoomStyle()"
+        draggable="false"
+        class="zoom-target"
+      />
+    </div>
+
+
+    <div class="lightbox-controls" (click)="$event.stopPropagation()">
+      <div class="zoom-controls">
+        <button (click)="setZoomLevel(zoomScale + 0.2)" class="zoom-btn">+</button>
+        <button (click)="setZoomLevel(zoomScale - 0.2)" class="zoom-btn">-</button>
+      </div>
+      <button type="button" class="close-btn" (click)="closeViewer()">✕</button>
+    </div>
+
+    <div class="lightbox-tip">
+      Use scroll to zoom, drag to move, and double-click to reset.
+    </div>
+  </div>
 </section>
