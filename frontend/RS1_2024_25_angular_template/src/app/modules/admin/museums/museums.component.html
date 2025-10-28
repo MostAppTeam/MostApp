@@ -38,12 +38,40 @@
   <div *ngIf="museums.length > 0; else noMuseumsMessage" class="museum-cards">
     <div class="museum-card" *ngFor="let museum of museums">
       <h4>{{ museum.name }}</h4>
-      <img
+      <!-- Image (CLICK TO OPEN ZOOM VIEWER) -->
+      <div
         *ngIf="museum.imageUrl"
-        [src]="getMuseumImageUrl(museum)"
-        alt="Museum Image"
-        width="250"
-      />
+        class="img-wrap"
+        (click)="openViewer(getMuseumImageUrl(museum))"
+      >
+        <img
+          [src]="getMuseumImageUrl(museum)"
+          alt="{{ museum.name }}"
+          width="250"
+          class="zoomable"
+        />
+      
+      </div>
+      <!-- LIGHTBOX VIEWER -->
+      <div
+        class="image-viewer-overlay"
+        *ngIf="viewerOpen"
+        (wheel)="onWheelZoom($event)"
+        (mousedown)="onMouseDown($event)"
+        (mousemove)="onMouseMove($event)"
+        (mouseup)="onMouseUp()"
+      >
+        <div class="image-viewer-content">
+          <img
+            [src]="viewerImageUrl"
+            [ngStyle]="getZoomStyle()"
+            alt="Zoomed museum image"
+          />
+          <button class="close-btn" (click)="closeViewer()">✕</button>
+          <button class="reset-btn" (click)="resetView()">Reset</button>
+        </div>
+      </div>
+
 
       <p>{{ museum.description }}</p>
       <p><strong>Location:</strong> {{ museum.location }}</p>

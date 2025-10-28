@@ -30,7 +30,7 @@ public class MuseumsController : ControllerBase
 
     // GET: api/Museums
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<Museum>>> GetMuseums(
+    public async Task<ActionResult<IEnumerable<object>>> GetMuseums(
         [FromQuery] string? name = null,
         [FromQuery] string sortBy = "name",
         [FromQuery] string sortDirection = "asc")
@@ -38,9 +38,7 @@ public class MuseumsController : ControllerBase
         var museums = _context.Museums.AsQueryable();
 
         if (!string.IsNullOrEmpty(name))
-        {
             museums = museums.Where(m => m.Name.Contains(name));
-        }
 
         museums = sortBy.ToLower() switch
         {
@@ -56,7 +54,18 @@ public class MuseumsController : ControllerBase
             _ => museums.OrderBy(m => m.Name)
         };
 
-        return Ok(await museums.ToListAsync());
+        var result = await museums
+            .Select(m => new
+            {
+                m.ID,
+                m.Name,
+                m.Location,
+                m.Description,
+                m.ImageUrl
+            })
+            .ToListAsync();
+
+        return Ok(result);
     }
 
     // GET: api/Museums/5

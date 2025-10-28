@@ -27,24 +27,19 @@ public class AttractionsController : ControllerBase
 
     [HttpGet]
     public async Task<ActionResult<IEnumerable<object>>> GetAttractions(
-       [FromQuery] string name = null,
-       [FromQuery] string category = null,
-       [FromQuery] string sortBy = "name",
-       [FromQuery] string sortDirection = "asc")
-      [FromQuery] string name = null,
-      [FromQuery] string sortBy = "name",
-      [FromQuery] string sortDirection = "asc")
+    [FromQuery] string name = null,
+    [FromQuery] string category = null,
+    [FromQuery] string sortBy = "name",
+    [FromQuery] string sortDirection = "asc")
     {
         var attractions = _context.Attractions.AsQueryable();
 
         if (!string.IsNullOrEmpty(name))
             attractions = attractions.Where(a => a.Name.Contains(name));
 
-        // Filtriranje po kategoriji
         if (!string.IsNullOrEmpty(category) && category != "All")
             attractions = attractions.Where(a => a.Category == category);
 
-        // Sortiranje
         attractions = sortBy.ToLower() switch
         {
             "name" => sortDirection.ToLower() == "desc"
@@ -66,8 +61,8 @@ public class AttractionsController : ControllerBase
                 a.Name,
                 a.Description,
                 a.VirtualTourURL,
-                a.Category
-                a.ImageUrl   // ✅ vrati sliku u listi
+                a.Category,
+                a.ImageUrl
             })
             .ToListAsync();
 
@@ -91,7 +86,7 @@ public class AttractionsController : ControllerBase
                 a.CityID,
                 a.VirtualTourURL,
                 a.IsPaid,
-                Options = a.Options.Select(o => new { o.OptionType, o.OptionValue }).ToList()
+                Options = a.Options.Select(o => new { o.OptionType, o.OptionValue }).ToList(),
                 a.ImageUrl   // ✅ vrati sliku u detaljima
             })
             .FirstOrDefaultAsync();
