@@ -65,7 +65,11 @@ export class ShoppingCentersComponent implements OnInit {
   }
 
   loadShoppingCenters(): void {
-    this.shoppingCenterService.getShoppingCenters(this.sortBy, this.sortDirection).subscribe(
+    const observable = this.isAdminOrManager
+      ? this.shoppingCenterService.getShoppingCenters(this.sortBy, this.sortDirection)
+      : this.shoppingCenterService.getShoppingCentersForAll(this.sortBy, this.sortDirection);
+
+    observable.subscribe(
       (data) => {
         this.shoppingCenters = data;
         this.applyFilters();
@@ -77,6 +81,7 @@ export class ShoppingCentersComponent implements OnInit {
       }
     );
   }
+
 
   applyFilters(): void {
     this.filteredShoppingCenters = this.shoppingCenters

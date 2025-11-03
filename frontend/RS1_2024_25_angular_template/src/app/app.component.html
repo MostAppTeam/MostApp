@@ -16,6 +16,16 @@
       </ul>
     </nav>
   </header>
+  <!-- Logout modal -->
+  <div class="logout-modal" *ngIf="showLogoutModal">
+    <div class="logout-modal-content">
+      <h3>Are you sure you want to log out?</h3>
+      <div class="logout-buttons">
+        <button class="btn-yes" (click)="confirmLogout()">Yes</button>
+        <button class="btn-no" (click)="cancelLogout()">No</button>
+      </div>
+    </div>
+  </div>
 
   <!-- Hero Section -->
   <section class="hero-header" *ngIf="showHeroSection">

@@ -1,66 +1,30 @@
 <div id="shopping-center-container">
-  <!-- Informacije o korisniku -->
   <div class="user-info">
     <p><strong>Logged in as:</strong> {{ loggedInUser?.username || 'Guest' }}</p>
-    <p>
-      <strong>Role:</strong>
-      {{ loggedInUser?.isAdmin ? 'Admin' : loggedInUser?.isManager ? 'Manager' : 'User' }}
-    </p>
+    <p><strong>Role:</strong> {{ loggedInUser?.isAdmin ? 'Admin' : loggedInUser?.isManager ? 'Manager' : 'User' }}</p>
   </div>
 
-  <!-- Filteri i sortiranje -->
   <h3>Shopping Centers in Mostar</h3>
   <div class="filter-sort-container">
-    <input
-      [(ngModel)]="searchQuery"
-      placeholder="Search by name"
-      (input)="applyFilters()"
-    />
+    <input [(ngModel)]="searchQuery" placeholder="Search by name" (input)="applyFilters()" />
     <select [(ngModel)]="sortBy" (change)="applyFilters()">
-      <option value="name">Name</option>
-      <option value="address">Address</option>
-      <option value="workingHours">Working Hours</option>
+      <option value="name">Name</option><option value="address">Address</option><option value="workingHours">Working Hours</option>
     </select>
     <select [(ngModel)]="sortDirection" (change)="applyFilters()">
-      <option value="asc">Ascending</option>
-      <option value="desc">Descending</option>
+      <option value="asc">Ascending</option><option value="desc">Descending</option>
     </select>
   </div>
 
-  <div
-    cdkDropList
-    [cdkDropListData]="filteredShoppingCenters"
-    (cdkDropListDropped)="drop($event)"
-    class="shopping-center-cards"
-  >
-    <div
-      class="shopping-center-card"
-      *ngFor="let center of filteredShoppingCenters"
-      cdkDrag
-    >
-      <img *ngIf="center.imageUrl" [src]="getShoppingCenterImageUrl(center)" alt="Shopping Center
-      Image" width="250" />
+  <div cdkDropList [cdkDropListData]="filteredShoppingCenters" (cdkDropListDropped)="drop($event)" class="shopping-center-cards">
+    <div class="shopping-center-card" *ngFor="let center of filteredShoppingCenters" cdkDrag>
+      <img *ngIf="center.imageUrl" [src]="getShoppingCenterImageUrl(center)" alt="Shopping Center Image" width="250" />
       <h4>{{ center.name }}</h4>
-
-      <div class="card-buttons">
-        <button class="btn-more" (click)="goToDetail(center.id)">More</button>
-      </div>
-
-      <div class="card-footer" *ngIf="isAdminOrManager">
-        <button class="btn-delete" (click)="deleteShoppingCenter(center.id)">
-          Delete
-        </button>
-      </div>
-
+      <div class="card-buttons"><button class="btn-more" (click)="goToDetail(center.id)">More</button></div>
+      <div class="card-footer" *ngIf="isAdminOrManager"><button class="btn-delete" (click)="deleteShoppingCenter(center.id)">Delete</button></div>
     </div>
 
-
-
-
-    <!-- Poruka kada nema shopping centara -->
-  <ng-container *ngIf="filteredShoppingCenters?.length === 0">
-    <p>No shopping centers available.</p>
-  </ng-container>
+    <ng-container *ngIf="filteredShoppingCenters?.length === 0"><p>No shopping centers available.</p></ng-container>
+  </div>
 
   <div *ngIf="isAdminOrManager" class="add-shopping-center-form">
     <h4>Add New Shopping Center</h4>
@@ -70,12 +34,9 @@
       <input [(ngModel)]="newShoppingCenter.workingHours" name="workingHours" placeholder="Working Hours" required />
       <input [(ngModel)]="newShoppingCenter.openingTimeString" name="openingTime" placeholder="Opening Time (HH:MM)" required />
       <input [(ngModel)]="newShoppingCenter.closingTimeString" name="closingTime" placeholder="Closing Time (HH:MM)" required />
-
       <input type="file" (change)="onFileSelected($event)" />
       <button type="submit">Add Shopping Center</button>
     </form>
     <p *ngIf="feedbackMessage" class="feedback">{{ feedbackMessage }}</p>
   </div>
-
-
 </div>

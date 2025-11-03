@@ -19,10 +19,11 @@ export class ShoppingCenterDetailComponent implements OnInit {
   ngOnInit(): void {
     const id = Number(this.route.snapshot.paramMap.get('id'));
     if (id) {
-      this.shoppingCenterService.getShoppingCenterById(id).subscribe({
+      this.shoppingCenterService.getShoppingCenterByIdForAll(id).subscribe({
         next: (data) => (this.shoppingCenter = data),
         error: (err) => console.error('Error loading shopping center details:', err),
       });
+
     }
   }
 
