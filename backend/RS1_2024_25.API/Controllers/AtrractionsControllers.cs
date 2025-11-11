@@ -28,7 +28,7 @@ public class AttractionsController : ControllerBase
     [HttpGet]
     public async Task<ActionResult<IEnumerable<object>>> GetAttractions(
     [FromQuery] string name = null,
-    [FromQuery] string category = null,
+  
     [FromQuery] string sortBy = "name",
     [FromQuery] string sortDirection = "asc")
     {
@@ -36,9 +36,6 @@ public class AttractionsController : ControllerBase
 
         if (!string.IsNullOrEmpty(name))
             attractions = attractions.Where(a => a.Name.Contains(name));
-
-        if (!string.IsNullOrEmpty(category) && category != "All")
-            attractions = attractions.Where(a => a.Category == category);
 
         attractions = sortBy.ToLower() switch
         {
@@ -61,7 +58,6 @@ public class AttractionsController : ControllerBase
                 a.Name,
                 a.Description,
                 a.VirtualTourURL,
-                a.Category,
                 a.ImageUrl
             })
             .ToListAsync();
