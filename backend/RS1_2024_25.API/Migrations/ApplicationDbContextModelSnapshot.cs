@@ -36,7 +36,7 @@ namespace RS1_2024_25.API.Migrations
 
                     b.HasKey("ID");
 
-                    b.ToTable("Categories");
+                    b.ToTable("Categories", (string)null);
                 });
 
             modelBuilder.Entity("Offer", b =>
@@ -78,7 +78,7 @@ namespace RS1_2024_25.API.Migrations
 
                     b.HasIndex("TouristAgencyId");
 
-                    b.ToTable("Offers");
+                    b.ToTable("Offers", (string)null);
                 });
 
             modelBuilder.Entity("PayPalCheckoutSdk.Orders.Order", b =>
@@ -88,7 +88,7 @@ namespace RS1_2024_25.API.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Orders");
+                    b.ToTable("Orders", (string)null);
                 });
 
             modelBuilder.Entity("RS1_2024_25.API.Data.Models.ActivityLog", b =>
@@ -117,7 +117,7 @@ namespace RS1_2024_25.API.Migrations
 
                     b.HasIndex("UserID");
 
-                    b.ToTable("ActivityLogs");
+                    b.ToTable("ActivityLogs", (string)null);
                 });
 
             modelBuilder.Entity("RS1_2024_25.API.Data.Models.Attraction", b =>
@@ -157,6 +157,7 @@ namespace RS1_2024_25.API.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("WorkingHours")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("ID");
@@ -165,7 +166,7 @@ namespace RS1_2024_25.API.Migrations
 
                     b.HasIndex("CityID");
 
-                    b.ToTable("Attractions");
+                    b.ToTable("Attractions", (string)null);
                 });
 
             modelBuilder.Entity("RS1_2024_25.API.Data.Models.AttractionOption", b =>
@@ -191,7 +192,7 @@ namespace RS1_2024_25.API.Migrations
 
                     b.HasIndex("AttractionID");
 
-                    b.ToTable("AttractionOptions");
+                    b.ToTable("AttractionOptions", (string)null);
                 });
 
             modelBuilder.Entity("RS1_2024_25.API.Data.Models.Auth.MyAppUser", b =>
@@ -230,7 +231,7 @@ namespace RS1_2024_25.API.Migrations
 
                     b.HasKey("ID");
 
-                    b.ToTable("MyAppUsers");
+                    b.ToTable("MyAppUsers", (string)null);
                 });
 
             modelBuilder.Entity("RS1_2024_25.API.Data.Models.Auth.MyAuthenticationToken", b =>
@@ -259,7 +260,7 @@ namespace RS1_2024_25.API.Migrations
 
                     b.HasIndex("MyAppUserId");
 
-                    b.ToTable("MyAuthenticationTokens");
+                    b.ToTable("MyAuthenticationTokens", (string)null);
                 });
 
             modelBuilder.Entity("RS1_2024_25.API.Data.Models.Booking", b =>
@@ -298,7 +299,7 @@ namespace RS1_2024_25.API.Migrations
 
                     b.HasIndex("UserID");
 
-                    b.ToTable("Bookings");
+                    b.ToTable("Bookings", (string)null);
                 });
 
             modelBuilder.Entity("RS1_2024_25.API.Data.Models.City", b =>
@@ -320,7 +321,7 @@ namespace RS1_2024_25.API.Migrations
 
                     b.HasIndex("CountryId");
 
-                    b.ToTable("Cities");
+                    b.ToTable("Cities", (string)null);
                 });
 
             modelBuilder.Entity("RS1_2024_25.API.Data.Models.Country", b =>
@@ -337,7 +338,7 @@ namespace RS1_2024_25.API.Migrations
 
                     b.HasKey("ID");
 
-                    b.ToTable("Countries");
+                    b.ToTable("Countries", (string)null);
                 });
 
             modelBuilder.Entity("RS1_2024_25.API.Data.Models.Event", b =>
@@ -369,7 +370,7 @@ namespace RS1_2024_25.API.Migrations
 
                     b.HasKey("ID");
 
-                    b.ToTable("Events");
+                    b.ToTable("Events", (string)null);
                 });
 
             modelBuilder.Entity("RS1_2024_25.API.Data.Models.Museum", b =>
@@ -397,7 +398,7 @@ namespace RS1_2024_25.API.Migrations
 
                     b.HasKey("ID");
 
-                    b.ToTable("Museums");
+                    b.ToTable("Museums", (string)null);
                 });
 
             modelBuilder.Entity("RS1_2024_25.API.Data.Models.Notification", b =>
@@ -429,7 +430,7 @@ namespace RS1_2024_25.API.Migrations
 
                     b.HasIndex("UserID");
 
-                    b.ToTable("Notifications");
+                    b.ToTable("Notifications", (string)null);
                 });
 
             modelBuilder.Entity("RS1_2024_25.API.Data.Models.Review", b =>
@@ -472,7 +473,7 @@ namespace RS1_2024_25.API.Migrations
 
                     b.HasIndex("UserID");
 
-                    b.ToTable("Reviews");
+                    b.ToTable("Reviews", (string)null);
                 });
 
             modelBuilder.Entity("RS1_2024_25.API.Data.Models.ShoppingCenter", b =>
@@ -511,7 +512,7 @@ namespace RS1_2024_25.API.Migrations
 
                     b.HasIndex("CityID");
 
-                    b.ToTable("ShoppingCenters");
+                    b.ToTable("ShoppingCenters", (string)null);
                 });
 
             modelBuilder.Entity("RS1_2024_25.API.Data.Models.TouristAgency", b =>
@@ -542,7 +543,7 @@ namespace RS1_2024_25.API.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("TouristAgencies");
+                    b.ToTable("TouristAgencies", (string)null);
                 });
 
             modelBuilder.Entity("User", b =>
@@ -579,7 +580,7 @@ namespace RS1_2024_25.API.Migrations
 
                     b.HasKey("ID");
 
-                    b.ToTable("Users");
+                    b.ToTable("Users", (string)null);
                 });
 
             modelBuilder.Entity("UserPreference", b =>
@@ -606,7 +607,7 @@ namespace RS1_2024_25.API.Migrations
 
                     b.HasKey("ID");
 
-                    b.ToTable("UserPreferences");
+                    b.ToTable("UserPreferences", (string)null);
                 });
 
             modelBuilder.Entity("Offer", b =>

@@ -147,10 +147,12 @@ export class EventsComponent implements OnInit {
   }
 
   // --- Load ---
+  // --- Load ---
   loadEvents(): void {
     this.eventService.getEvents().subscribe(
-      (data) => {
-        this.events = data;
+      (res: any) => {        // promijeni tip u 'any' ako backend vraća objekt
+        // Ako backend vraća { data: Event[], totalCount: number, ... }
+        this.events = res.data || [];
         this.filteredEvents = [...this.events];
         this.applySorting();
         this.updateMapMarkers();
@@ -162,6 +164,7 @@ export class EventsComponent implements OnInit {
       }
     );
   }
+
 
   // --- Filter ---
   applyFilter(): void {
