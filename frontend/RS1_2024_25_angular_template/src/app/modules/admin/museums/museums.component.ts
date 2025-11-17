@@ -294,7 +294,7 @@ export class MuseumsComponent implements OnInit {
     doc.save('Museums_All.pdf');
   }
 
-  // ======== Lightbox / Zoom ========
+  //Zoom
   openViewer(url: string): void {
     this.viewerImageUrl = url;
     this.viewerOpen = true;

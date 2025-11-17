@@ -362,7 +362,7 @@ export class EventsComponent implements OnInit {
     return `https://localhost:7000${url}`;
   }
 
-  // --- PDF ---
+
   downloadEventsPDF(): void {
     const doc = new jsPDF();
     const imgUrl = './assets/images/stari-most.PNG';

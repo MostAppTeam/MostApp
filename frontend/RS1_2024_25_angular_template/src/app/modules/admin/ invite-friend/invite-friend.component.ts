@@ -15,15 +15,15 @@ export class InviteFriendComponent {
   }
 
   sendInvite() {
-    console.log('Slanje pozivnice za email:', this.friendEmail);
+    console.log('Sending invitation to email:', this.friendEmail);
     this.accountService.sendInvite(this.friendEmail).subscribe({
       next: () => {
-        this.successMessage = 'Pozivnica je poslana!';
-        console.log('Pozivnica uspješno poslana.');
+        this.successMessage = 'Invitation has been sent!';
+        console.log('Invitation successfully sent.');
       },
       error: (err) => {
-        console.error('Greška pozivnice:', err);
-        this.errorMessage = err?.message || 'Greška prilikom slanja pozivnice.';
+        console.error('Invitation error:', err);
+        this.errorMessage = err?.message || 'Error while sending the invitation.';
       }
     });
   }

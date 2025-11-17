@@ -24,6 +24,13 @@ export class OffersComponent implements OnInit {
   constructor(private offerService: OfferService) {}
 
   ngOnInit(): void {
+
+    const savedData = localStorage.getItem('bookingData');
+    if (savedData) {
+      this.bookingData = JSON.parse(savedData);
+      console.log('Autosaved booking data restored:', this.bookingData);
+    }
+
     this.fetchOffers();
   }
 
@@ -31,7 +38,7 @@ export class OffersComponent implements OnInit {
     this.offerService.getOffers(this.filters || {}).subscribe(
       (data) => {
         this.offers = data;
-        this.sortOffers(); // Primijeni sortiranje nakon fetchanja
+        this.sortOffers(); // Primijeni sortiranje nakon fetchanjaI
         console.log('Fetched offers:', data);
       },
       (error) => {
@@ -143,7 +150,7 @@ export class OffersComponent implements OnInit {
     this.offerService.uploadImage(this.selectedFile).subscribe({
       next: (response) => {
         this.uploadedImageUrl = response.imageUrl;
-        alert('Image uploaded successfully!');
+        alert('Image uploaded successfully!');Z
         console.log('Uploaded image:', response.imageUrl);
 
         // Update offer u listi
